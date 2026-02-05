@@ -1,0 +1,114 @@
+[
+  {
+    "version_id": "20260131_162533",
+    "timestamp": "2026-01-31T16:25:33.609598",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260131_162533.pdf",
+    "output_path": "./data/output\\updated_20260131_162533.pdf",
+    "images_replaced": 0,
+    "text_replaced": 0,
+    "confidence": 0.0,
+    "changes_summary": {
+      "screenshots_processed": 0,
+      "text_changes": 0
+    }
+  },
+  {
+    "version_id": "20260131_164206",
+    "timestamp": "2026-01-31T16:42:06.537375",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260131_164206.pdf",
+    "output_path": "./data/output\\updated_20260131_164203.pdf",
+    "images_replaced": 1,
+    "text_replaced": 6,
+    "confidence": 0.8824033296593408,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 242
+    }
+  },
+  {
+    "version_id": "20260131_165256",
+    "timestamp": "2026-01-31T16:52:56.576731",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260131_165256.pdf",
+    "output_path": "./data/output\\updated_20260131_165253.pdf",
+    "images_replaced": 1,
+    "text_replaced": 6,
+    "confidence": 0.8824033296593408,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 242
+    }
+  },
+  {
+    "version_id": "20260205_010837",
+    "timestamp": "2026-02-05T01:08:37.497215",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260205_010837.pdf",
+    "output_path": "./data/output\\updated_20260205_010833.pdf",
+    "images_replaced": 1,
+    "text_replaced": 47,
+    "confidence": 0.8824031770714501,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 258
+    }
+  },
+  {
+    "version_id": "20260205_012143",
+    "timestamp": "2026-02-05T01:21:43.900295",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260205_012143.pdf",
+    "output_path": "./data/output\\updated_20260205_012140.pdf",
+    "images_replaced": 1,
+    "text_replaced": 53,
+    "confidence": 0.8824031770714501,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 258
+    }
+  },
+  {
+    "version_id": "20260205_013201",
+    "timestamp": "2026-02-05T01:32:01.370295",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260205_013201.pdf",
+    "output_path": "./data/output\\updated_20260205_013158.pdf",
+    "images_replaced": 1,
+    "text_replaced": 34,
+    "confidence": 0.8824031770714501,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 251
+    }
+  },
+  {
+    "version_id": "20260205_014843",
+    "timestamp": "2026-02-05T01:48:43.302960",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260205_014843.pdf",
+    "output_path": "./data/output\\updated_20260205_014840.pdf",
+    "images_replaced": 1,
+    "text_replaced": 16,
+    "confidence": 0.8824031770714501,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 10
+    }
+  },
+  {
+    "version_id": "20260205_020127",
+    "timestamp": "2026-02-05T02:01:27.449268",
+    "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\gradio\\8a725337f3fe0e12e0d09a944991d59b7983aca9202739db6dbb74c39a173e42\\EcoStruxure_User_Manual.pdf",
+    "backup_path": "./data/history\\backup_20260205_020127.pdf",
+    "output_path": "./data/output\\updated_20260205_020124.pdf",
+    "images_replaced": 1,
+    "text_replaced": 18,
+    "confidence": 0.8824031770714501,
+    "changes_summary": {
+      "screenshots_processed": 1,
+      "text_changes": 10
+    }
+  }
+]

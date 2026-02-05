@@ -1,0 +1,254 @@
+================================================================================
+                    ECOSTRUXURE DEVICE MANAGER - USER MANUAL
+                              Version 2.1.0
+================================================================================
+
+DOCUMENT INFORMATION
+--------------------
+Document Version: 2.1.0
+Last Updated: January 2026
+Product: EcoStruxure Device Manager
+Manufacturer: Schneider Electric
+
+================================================================================
+                              TABLE OF CONTENTS
+================================================================================
+
+1. INTRODUCTION
+2. SYSTEM REQUIREMENTS
+3. USER INTERFACE OVERVIEW
+4. DASHBOARD
+5. NAVIGATION MENU
+6. DEVICE MANAGEMENT
+7. TROUBLESHOOTING
+
+================================================================================
+                              1. INTRODUCTION
+================================================================================
+
+EcoStruxure Device Manager is a comprehensive platform for monitoring and 
+managing industrial electrical devices. This application provides real-time 
+visibility into your connected devices, enabling efficient energy management 
+and predictive maintenance.
+
+KEY FEATURES:
+- Real-time device monitoring
+- Centralized dashboard with system overview
+- Alert and notification management
+- User access control
+- Comprehensive reporting
+
+================================================================================
+                           2. SYSTEM REQUIREMENTS
+================================================================================
+
+Minimum Requirements:
+- Modern web browser (Chrome, Firefox, Edge)
+- Internet connection
+- Screen resolution: 1280x720 or higher
+- JavaScript enabled
+
+================================================================================
+                        3. USER INTERFACE OVERVIEW
+================================================================================
+
+The EcoStruxure Device Manager interface consists of the following main areas:
+
+3.1 HEADER BAR
+--------------
+Location: Top of the screen
+Background: Green gradient (#3dcd58 to #2c9c47)
+Components:
+  - Logo: "SE" icon followed by "EcoStruxure Device Manager" text
+  - Notifications button: Displays "🔔 Notifications"
+  - Settings button: Displays "⚙️ Settings"
+  - User information: Avatar with initials and username
+
+3.2 SIDEBAR NAVIGATION
+----------------------
+Location: Left side of the screen
+Background: Dark blue (#1a1a2e)
+Width: 250 pixels
+
+MAIN MENU Section:
+  - Dashboard (📊 icon) - System overview
+  - Devices (🔌 icon) - Device list and management
+  - Analytics (📈 icon) - Data analysis and trends
+  - Alerts (⚠️ icon) - Warning and notification center
+
+MANAGEMENT Section:
+  - Users (👥 icon) - User account management
+  - Reports (📋 icon) - Generate and view reports
+  - Configuration (🔧 icon) - System settings
+
+Active menu item indicator: Green left border (#3dcd58)
+
+3.3 MAIN CONTENT AREA
+---------------------
+Location: Center-right of the screen
+Background: Light gray (#f5f5f5)
+Contains: Dashboard content, device tables, forms
+
+================================================================================
+                              4. DASHBOARD
+================================================================================
+
+4.1 PAGE HEADER
+---------------
+Title: "Dashboard" (28px font size)
+Subtitle: "Welcome back, John! Here's your system overview."
+Primary Action Button: "+ Add New Device" (green button)
+
+4.2 STATISTICS CARDS
+--------------------
+Layout: 4 cards in a horizontal grid
+Card Style: White background, rounded corners (12px), shadow effect
+
+CARD 1 - Total Devices:
+  - Icon: Green plug symbol (🔌)
+  - Value: 24
+  - Label: "Total Devices"
+  - Change Indicator: "↑ 12% from last month" (green text)
+
+CARD 2 - Online Devices:
+  - Icon: Blue checkmark (✓)
+  - Value: 21
+  - Label: "Online Devices"
+  - Change Indicator: "↑ 5% from last week" (green text)
+
+CARD 3 - Warnings:
+  - Icon: Orange warning symbol (⚠)
+  - Value: 3
+  - Label: "Warnings"
+  - Change Indicator: "↑ 2 new today" (red text)
+
+CARD 4 - Critical Alerts:
+  - Icon: Red X symbol (✗)
+  - Value: 0
+  - Label: "Critical Alerts"
+  - Change Indicator: "No issues detected" (green text)
+
+4.3 CONNECTED DEVICES TABLE
+---------------------------
+Section Title: "Connected Devices"
+Search Box: Located at top right, placeholder text "Search devices..."
+
+TABLE COLUMNS:
+  1. Device Name - Includes icon, name, and device ID
+  2. Type - Device category
+  3. Location - Physical installation location
+  4. Status - Online/Offline/Warning indicator
+  5. Last Update - Time since last communication
+  6. Actions - View and Edit buttons
+
+STATUS INDICATORS:
+  - Online: Green badge with "● Online" text
+  - Offline: Gray badge with "○ Offline" text
+  - Warning: Orange badge with "⚠ Warning" text
+
+SAMPLE DEVICES:
+  1. Power Meter PM5560 (ID: DEV-001)
+     Type: Power Meter
+     Location: Building A - Floor 1
+     Status: Online
+     Last Update: 2 min ago
+
+  2. Temperature Sensor TS-200 (ID: DEV-002)
+     Type: Sensor
+     Location: Building A - Floor 2
+     Status: Online
+     Last Update: 5 min ago
+
+  3. Circuit Breaker CB-150 (ID: DEV-003)
+     Type: Breaker
+     Location: Building B - Basement
+     Status: Warning
+     Last Update: 15 min ago
+
+ACTION BUTTONS:
+  - View: Opens device details page
+  - Edit: Opens device configuration form
+
+================================================================================
+                           5. NAVIGATION MENU
+================================================================================
+
+5.1 ACCESSING MENU ITEMS
+------------------------
+Click on any menu item in the sidebar to navigate to that section.
+The currently active page is highlighted with:
+  - Green left border
+  - Green text color
+  - Slightly darker background
+
+5.2 MENU STRUCTURE
+------------------
+The navigation is organized into two sections:
+
+MAIN MENU:
+  ├── Dashboard     - Overview of all systems
+  ├── Devices       - Complete device inventory
+  ├── Analytics     - Charts and data analysis
+  └── Alerts        - Active warnings and alerts
+
+MANAGEMENT:
+  ├── Users         - User account administration
+  ├── Reports       - Report generation
+  └── Configuration - System configuration
+
+================================================================================
+                          6. DEVICE MANAGEMENT
+================================================================================
+
+6.1 ADDING A NEW DEVICE
+-----------------------
+1. Click the "+ Add New Device" button on the Dashboard
+2. Fill in the required device information
+3. Select device type from dropdown
+4. Assign location
+5. Click "Save" to add the device
+
+6.2 VIEWING DEVICE DETAILS
+--------------------------
+1. Locate the device in the Connected Devices table
+2. Click the "View" button in the Actions column
+3. Review device status, history, and configuration
+
+6.3 EDITING DEVICE SETTINGS
+---------------------------
+1. Click the "Edit" button next to the target device
+2. Modify the desired settings
+3. Click "Save" to apply changes
+
+================================================================================
+                           7. TROUBLESHOOTING
+================================================================================
+
+ISSUE: Device shows "Offline" status
+SOLUTION: 
+  - Check network connectivity
+  - Verify device power supply
+  - Restart the device if necessary
+
+ISSUE: Warning status displayed
+SOLUTION:
+  - Click on the device to view warning details
+  - Address the specific issue indicated
+  - Monitor device until status returns to "Online"
+
+================================================================================
+                              FOOTER INFORMATION
+================================================================================
+
+Application Footer:
+"© 2026 Schneider Electric. All rights reserved. | Version 2.1.0"
+
+================================================================================
+                           END OF USER MANUAL
+================================================================================
+
+For additional support, contact:
+- Technical Support: support@schneider-electric.com
+- Documentation: docs.schneider-electric.com
+
+Document ID: UM-ECOSTRUXURE-DM-2.1.0

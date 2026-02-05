@@ -1,0 +1,9 @@
+pillow
+gradio
+opencv-python
+scikit-image
+numpy
+pytesseract
+reportlab
+PyPDF2
+pdf2image

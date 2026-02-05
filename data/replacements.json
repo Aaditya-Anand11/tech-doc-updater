@@ -1,0 +1,24 @@
+{
+    "exact_phrases": {
+        "EcoStruxure Device Manager": "EcoStruxure Device Hub",
+        "Device Manager": "Device Hub",
+        "Add New Device": "Register Device",
+        "+ Add New Device": "+ Register Device",
+        "Online Devices": "Active Devices",
+        "Connected Devices": "Device Inventory",
+        "Last Updated": "Last Synced",
+        "Last Update": "Last Sync"
+    },
+    "visual_descriptions": {
+        "Green gradient": "Blue header",
+        "Green header": "Blue header",
+        "Green button": "Blue button",
+        "(green)": "(blue)",
+        "green left border": "blue left border",
+        "Dark blue (#1a1a2e)": "Royal blue (#2a52be)"
+    },
+    "button_labels": {
+        "Settings button": "Preferences button",
+        "Notifications button": "Alerts button"
+    }
+}
