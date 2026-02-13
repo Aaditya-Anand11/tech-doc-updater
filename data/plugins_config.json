@@ -1,0 +1,6 @@
+{
+  "enabled_plugins": {
+    "ai_llm": true
+  },
+  "plugin_settings": {}
+}

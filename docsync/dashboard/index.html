@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocSync – Documentation Synchronization Engine</title>
+    <meta name="description" content="Intelligent documentation synchronization engine for Schneider Electric">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <!-- ─── Login Overlay ────────────────────── -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-card">
+            <div class="login-brand">
+                <span class="login-icon">⚡</span>
+                <h1>DocSync</h1>
+                <p>Documentation Synchronization Engine</p>
+            </div>
+            <form id="loginForm" autocomplete="off">
+                <div class="login-field">
+                    <label for="loginUser">Username</label>
+                    <input type="text" id="loginUser" placeholder="Enter username" required autocomplete="username">
+                </div>
+                <div class="login-field">
+                    <label for="loginPass">Password</label>
+                    <input type="password" id="loginPass" placeholder="Enter password" required
+                        autocomplete="current-password">
+                </div>
+                <div class="login-error hidden" id="loginError">Invalid credentials</div>
+                <button type="submit" class="btn-primary btn-lg login-btn">🔓 Sign In</button>
+            </form>
+            <div class="login-hint">
+                <p>Demo accounts: <strong>admin</strong>/admin123 · <strong>editor</strong>/editor123 ·
+                    <strong>viewer</strong>/viewer123
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Sidebar ──────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">⚡</div>
+            <span class="brand-text">DocSync</span>
+            <span class="brand-version">v4.0</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-tab="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="process">
+                <span class="nav-icon">📄</span>
+                <span class="nav-text">Process Document</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="compare">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-text">Compare Images</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="history">
+                <span class="nav-icon">📜</span>
+                <span class="nav-text">Version History</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="plugins">
+                <span class="nav-icon">🔌</span>
+                <span class="nav-text">Plugins</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="settings">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-badge">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <div class="user-info">
+                    <span class="user-name" id="currentUser">Admin</span>
+                    <span class="user-role" id="currentRole">admin</span>
+                </div>
+            </div>
+            <button class="btn-logout" id="logoutBtn" title="Sign Out">🚪</button>
+        </div>
+    </aside>
+
+    <!-- ─── Main Content ──────────────────────── -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <div class="top-actions">
+                <div class="status-indicator" id="apiStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ─── Dashboard Tab ──────────────────── -->
+        <section class="tab-content active" id="tab-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card glow-green">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-value" id="totalProcessed">0</div>
+                    <div class="stat-label">Documents Processed</div>
+                </div>
+                <div class="stat-card glow-blue">
+                    <div class="stat-icon">📸</div>
+                    <div class="stat-value" id="totalImages">0</div>
+                    <div class="stat-label">Images Replaced</div>
+                </div>
+                <div class="stat-card glow-purple">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value" id="totalText">0</div>
+                    <div class="stat-label">Text Changes</div>
+                </div>
+                <div class="stat-card glow-orange">
+                    <div class="stat-icon">🔌</div>
+                    <div class="stat-value" id="totalPlugins">0</div>
+                    <div class="stat-label">Active Plugins</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card recent-activity">
+                    <div class="card-header">
+                        <h2>Recent Activity</h2>
+                    </div>
+                    <div class="card-body" id="recentActivity">
+                        <div class="empty-state">No recent activity</div>
+                    </div>
+                </div>
+
+                <div class="card system-health">
+                    <div class="card-header">
+                        <h2>System Health</h2>
+                    </div>
+                    <div class="card-body" id="systemHealth">
+                        <div class="health-item">
+                            <span class="health-label">API Server</span>
+                            <span class="health-status" id="healthApi">⏳</span>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-label">OCR Engine</span>
+                            <span class="health-status" id="healthOcr">⏳</span>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-label">PDF Engine</span>
+                            <span class="health-status" id="healthPdf">⏳</span>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-label">Ollama LLM</span>
+                            <span class="health-status" id="healthLlm">⏳</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Process Document Tab ───────────── -->
+        <section class="tab-content" id="tab-process">
+            <div class="card process-card">
+                <div class="card-header">
+                    <h2>📄 Process Document Update</h2>
+                    <p class="card-subtitle">Upload a PDF and screenshots to automatically detect and apply changes</p>
+                </div>
+                <div class="card-body">
+                    <div class="upload-grid">
+                        <div class="upload-zone" id="dropPdf">
+                            <input type="file" id="pdfDocument" accept=".pdf" hidden>
+                            <div class="upload-icon">📄</div>
+                            <div class="upload-label">PDF Document</div>
+                            <div class="upload-hint">Required – Click or drag & drop</div>
+                            <div class="upload-preview" id="previewPdf"></div>
+                        </div>
+                        <div class="upload-zone multi-upload" id="dropNew">
+                            <input type="file" id="newScreenshots" accept="image/*" multiple hidden>
+                            <div class="upload-icon">🆕</div>
+                            <div class="upload-label">New Screenshots</div>
+                            <div class="upload-hint">Required – Upload multiple updated GUI images</div>
+                            <div class="upload-file-list" id="newFileList"></div>
+                        </div>
+                        <div class="upload-zone optional" id="dropOld">
+                            <input type="file" id="oldScreenshot" accept="image/*" hidden>
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-label">Old Screenshot</div>
+                            <div class="upload-hint">Optional – For text diff detection</div>
+                            <div class="upload-preview" id="previewOld"></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary btn-lg" id="processBtn" disabled>
+                        <span class="btn-icon">⚡</span>
+                        Process Document
+                    </button>
+
+                    <!-- Progress -->
+                    <div class="progress-section hidden" id="progressSection">
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Initializing...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Changes -->
+            <div class="card match-review-card hidden" id="matchReviewCard">
+                <div class="card-header">
+                    <h2>🔍 Review Changes</h2>
+                    <div class="review-actions-top">
+                        <span class="review-summary" id="reviewSummary"></span>
+                        <button class="btn-secondary btn-sm" id="approveAllBtn">✅ Accept All</button>
+                        <button class="btn-secondary btn-sm" id="rejectAllBtn">❌ Skip All</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="match-list" id="matchList"></div>
+                    <button class="btn-primary btn-lg" id="applyBtn" disabled>
+                        <span class="btn-icon">⚡</span>
+                        Update Document (<span id="approvedCount">0</span> selected)
+                    </button>
+
+                    <!-- Apply progress -->
+                    <div class="progress-section hidden" id="applyProgress">
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" id="applyProgressBar"></div>
+                        </div>
+                        <div class="progress-text" id="applyProgressText">Updating document...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apply Results (Phase 2 results) -->
+            <div class="card results-card hidden" id="resultsCard">
+                <div class="card-header">
+                    <h2>✅ Done!</h2>
+                </div>
+                <div class="card-body">
+                    <div class="result-stats" id="resultStats"></div>
+                    <div class="result-details" id="resultDetails"></div>
+                    <div class="result-actions">
+                        <button class="btn-secondary" id="downloadPdf">📥 Download Updated File</button>
+                        <button class="btn-secondary" id="downloadReport">📋 Download Summary</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Compare Tab ────────────────────── -->
+        <section class="tab-content" id="tab-compare">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🔍 Batch Image Comparison</h2>
+                    <p class="card-subtitle">Upload multiple images – every pair is compared automatically</p>
+                </div>
+                <div class="card-body">
+                    <div class="upload-zone multi-upload" id="dropCompareMulti">
+                        <input type="file" id="compareImages" accept="image/*" multiple hidden>
+                        <div class="upload-icon">🖼️</div>
+                        <div class="upload-label">Drop Images Here</div>
+                        <div class="upload-hint">Upload 2 or more images – Click or drag & drop</div>
+                        <div class="upload-file-list" id="compareFileList"></div>
+                    </div>
+
+                    <button class="btn-primary btn-lg" id="compareBtn" disabled>
+                        <span class="btn-icon">🔍</span>
+                        Compare All Pairs
+                    </button>
+
+                    <div class="compare-results hidden" id="compareResults">
+                        <div class="compare-summary" id="compareSummary"></div>
+                        <div class="compare-pairs" id="comparePairs"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── History Tab ────────────────────── -->
+        <section class="tab-content" id="tab-history">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📜 Version History</h2>
+                    <button class="btn-secondary btn-sm" id="refreshHistory">↻ Refresh</button>
+                </div>
+                <div class="card-body">
+                    <div class="history-list" id="historyList">
+                        <div class="empty-state">Loading history...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Plugins Tab ────────────────────── -->
+        <section class="tab-content" id="tab-plugins">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🔌 Plugin Manager</h2>
+                    <button class="btn-secondary btn-sm" id="refreshPlugins">↻ Refresh</button>
+                </div>
+                <div class="card-body">
+                    <div class="plugin-grid" id="pluginGrid">
+                        <div class="empty-state">Loading plugins...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin: Add User (shown only to admins) -->
+            <div class="card admin-only" id="userManagementCard">
+                <div class="card-header">
+                    <h2>👥 User Management</h2>
+                </div>
+                <div class="card-body">
+                    <div class="user-list" id="userList"></div>
+                    <div class="add-user-form">
+                        <h3>Add User</h3>
+                        <div class="form-row">
+                            <input type="text" id="newUsername" placeholder="Username" class="input-text">
+                            <input type="password" id="newPassword" placeholder="Password" class="input-text">
+                            <select id="newRole" class="input-text">
+                                <option value="viewer">Viewer</option>
+                                <option value="editor">Editor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <button class="btn-primary btn-sm" id="addUserBtn">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Settings Tab ───────────────────── -->
+        <section class="tab-content" id="tab-settings">
+            <div class="card">
+                <div class="card-header">
+                    <h2>⚙️ Configuration</h2>
+                </div>
+                <div class="card-body settings-body">
+                    <div class="settings-group">
+                        <h3>Image Comparison</h3>
+                        <div class="setting-row">
+                            <label>SSIM Weight</label>
+                            <input type="range" min="0" max="100" value="35" id="settingSsim">
+                            <span class="setting-value" id="valSsim">0.35</span>
+                        </div>
+                        <div class="setting-row">
+                            <label>Histogram Weight</label>
+                            <input type="range" min="0" max="100" value="20" id="settingHist">
+                            <span class="setting-value" id="valHist">0.20</span>
+                        </div>
+                        <div class="setting-row">
+                            <label>Edge Weight</label>
+                            <input type="range" min="0" max="100" value="25" id="settingEdge">
+                            <span class="setting-value" id="valEdge">0.25</span>
+                        </div>
+                        <div class="setting-row">
+                            <label>Template Weight</label>
+                            <input type="range" min="0" max="100" value="20" id="settingTemplate">
+                            <span class="setting-value" id="valTemplate">0.20</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Validation Thresholds</h3>
+                        <div class="setting-row">
+                            <label>Similarity Threshold</label>
+                            <input type="range" min="0" max="100" value="55" id="settingSimilarity">
+                            <span class="setting-value" id="valSimilarity">0.55</span>
+                        </div>
+                        <div class="setting-row">
+                            <label>Auto-Approve Threshold</label>
+                            <input type="range" min="0" max="100" value="85" id="settingAutoApprove">
+                            <span class="setting-value" id="valAutoApprove">0.85</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Ollama LLM</h3>
+                        <div class="setting-row">
+                            <label>Ollama URL</label>
+                            <input type="text" value="http://localhost:11434" id="settingOllamaUrl" class="input-text">
+                        </div>
+                        <div class="setting-row">
+                            <label>Model</label>
+                            <input type="text" value="llama3" id="settingOllamaModel" class="input-text">
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="saveSettings">💾 Save Settings</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

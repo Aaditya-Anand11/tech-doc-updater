@@ -1,0 +1,117 @@
+2026-02-13 00:30:48,476 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 00:30:48,477 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 00:30:48,477 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 00:30:48,478 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 00:30:48,478 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 00:30:52,665 [INFO] docsync.plugins.ollama (ollama_plugin.py:61): Ollama not available: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+2026-02-13 00:30:52,666 [WARNING] docsync.plugins (plugin_base.py:93): Plugin 'ai_llm' failed to initialize
+2026-02-13 00:40:42,734 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 00:40:42,734 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 00:40:42,735 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 00:40:42,735 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 00:40:42,735 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 00:40:46,842 [INFO] docsync.plugins.ollama (ollama_plugin.py:61): Ollama not available: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+2026-02-13 00:40:46,842 [WARNING] docsync.plugins (plugin_base.py:93): Plugin 'ai_llm' failed to initialize
+2026-02-13 00:56:22,369 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 00:56:22,370 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 00:56:22,370 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 00:56:22,370 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 00:56:22,370 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 00:56:26,484 [INFO] docsync.plugins.ollama (ollama_plugin.py:61): Ollama not available: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+2026-02-13 00:56:26,484 [WARNING] docsync.plugins (plugin_base.py:93): Plugin 'ai_llm' failed to initialize
+2026-02-13 01:16:51,865 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 01:16:51,866 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 01:16:51,866 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 01:16:51,866 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 01:16:51,867 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 01:16:54,012 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 01:16:54,014 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ai_llm v1.0.0
+2026-02-13 02:29:16,062 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 02:29:16,063 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 02:29:16,063 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 02:29:16,063 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 02:29:16,063 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 02:29:18,167 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 02:29:18,167 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ai_llm v1.0.0
+2026-02-13 02:30:25,669 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 02:31:10,139 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 1 images (0 good matches)
+2026-02-13 02:31:10,352 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 0 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 02:31:10,378 [INFO] docsync.history_manager (history_manager.py:113): Version 16 recorded for pgadmin4-7.8.pdf
+2026-02-13 02:34:26,228 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 02:36:29,380 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 1 images (1 good matches)
+2026-02-13 02:36:29,834 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 02:36:29,860 [INFO] docsync.history_manager (history_manager.py:113): Version 17 recorded for pgadmin4-7.8.pdf
+2026-02-13 02:42:34,580 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 02:44:39,854 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 1 images (1 good matches)
+2026-02-13 02:44:40,299 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 02:44:40,327 [INFO] docsync.history_manager (history_manager.py:113): Version 18 recorded for pgadmin4-7.8.pdf
+2026-02-13 02:52:50,369 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 02:54:56,088 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 1 images (1 good matches)
+2026-02-13 02:54:56,539 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 02:54:56,565 [INFO] docsync.history_manager (history_manager.py:113): Version 19 recorded for pgadmin4-7.8.pdf
+2026-02-13 03:02:42,363 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 03:02:42,363 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 03:02:42,363 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 03:02:42,364 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 03:02:42,364 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 03:02:44,443 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 03:02:44,444 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ai_llm v1.0.0
+2026-02-13 03:03:41,777 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 03:05:45,846 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 1 images (1 good matches)
+2026-02-13 03:05:46,243 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 03:05:46,280 [INFO] docsync.history_manager (history_manager.py:113): Version 20 recorded for pgadmin4-7.8.pdf
+2026-02-13 03:33:46,085 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ssim v1.0.0
+2026-02-13 03:33:46,086 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: histogram v1.0.0
+2026-02-13 03:33:46,087 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: edge v1.0.0
+2026-02-13 03:33:46,087 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: template v1.0.0
+2026-02-13 03:33:46,087 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: phash v1.0.0
+2026-02-13 03:33:48,182 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 03:33:48,183 [INFO] docsync.plugins (plugin_base.py:88): Plugin registered: ai_llm v1.0.0
+2026-02-13 03:34:33,770 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 03:36:33,763 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 1 images (1 good matches)
+2026-02-13 03:36:33,764 [INFO] docsync.api (routes.py:154): Matched: new_0_Screenshot 2026-02-13 023358.png → PDF xref=4948 (page 382, score=0.834)
+2026-02-13 03:36:34,162 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 03:36:34,181 [INFO] docsync.history_manager (history_manager.py:113): Version 21 recorded for pgadmin4-7.8.pdf
+2026-02-13 03:36:48,159 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 21:26:42,870 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-13 21:26:42,870 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-13 21:26:42,870 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-13 21:26:42,870 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-13 21:26:42,870 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-13 21:26:44,974 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 21:26:44,975 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-13 21:56:04,329 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 22:01:28,341 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 9 images (7 good matches)
+2026-02-13 22:01:28,342 [INFO] docsync.api (routes.py:237): Matched: new_0_Screenshot 2026-02-13 214933.png → PDF xref=5269 (page 428, score=0.697)
+2026-02-13 22:01:28,342 [INFO] docsync.api (routes.py:237): Matched: new_3_Screenshot 2026-02-13 215107.png → PDF xref=3014 (page 47, score=0.921)
+2026-02-13 22:01:28,342 [INFO] docsync.api (routes.py:237): Matched: new_4_Screenshot 2026-02-13 215113.png → PDF xref=3020 (page 48, score=0.870)
+2026-02-13 22:01:28,343 [INFO] docsync.api (routes.py:237): Matched: new_5_Screenshot 2026-02-13 215122.png → PDF xref=3028 (page 49, score=0.967)
+2026-02-13 22:01:28,343 [INFO] docsync.api (routes.py:237): Matched: new_6_Screenshot 2026-02-13 215427.png → PDF xref=3638 (page 138, score=0.729)
+2026-02-13 22:01:28,343 [INFO] docsync.api (routes.py:237): Matched: new_7_Screenshot 2026-02-13 215441.png → PDF xref=4948 (page 382, score=0.796)
+2026-02-13 22:01:29,300 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 6 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 22:01:29,330 [INFO] docsync.history_manager (history_manager.py:113): Version 22 recorded for pgadmin4-7.8.pdf
+2026-02-13 22:14:10,110 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-13 22:14:10,111 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-13 22:14:10,112 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-13 22:14:10,112 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-13 22:14:10,112 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-13 22:14:12,199 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 22:14:12,199 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-13 22:16:02,751 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-13 22:22:44,027 [INFO] docsync.image_comparator (image_comparator.py:253): Matched 9 images (7 good matches)
+2026-02-13 22:23:57,910 [INFO] docsync.api (routes.py:324): Approved: new_0_Screenshot 2026-02-13 023358.png → PDF xref=4948 (page 382)
+2026-02-13 22:23:57,910 [INFO] docsync.api (routes.py:324): Approved: new_1_Screenshot 2026-02-13 215006.png → PDF xref=5269 (page 428)
+2026-02-13 22:23:57,910 [INFO] docsync.api (routes.py:324): Approved: new_2_Screenshot 2026-02-13 215035.png → PDF xref=3371 (page 95)
+2026-02-13 22:23:57,910 [INFO] docsync.api (routes.py:324): Approved: new_3_Screenshot 2026-02-13 215107.png → PDF xref=3014 (page 47)
+2026-02-13 22:23:57,912 [INFO] docsync.api (routes.py:324): Approved: new_4_Screenshot 2026-02-13 215113.png → PDF xref=3020 (page 48)
+2026-02-13 22:23:57,912 [INFO] docsync.api (routes.py:324): Approved: new_5_Screenshot 2026-02-13 215122.png → PDF xref=3028 (page 49)
+2026-02-13 22:23:57,912 [INFO] docsync.api (routes.py:324): Approved: new_6_Screenshot 2026-02-13 215427.png → PDF xref=3638 (page 138)
+2026-02-13 22:23:58,962 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 7 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-13 22:23:58,984 [INFO] docsync.history_manager (history_manager.py:113): Version 23 recorded for pgadmin4-7.8.pdf
+2026-02-13 22:29:09,319 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-13 22:29:09,319 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-13 22:29:09,319 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-13 22:29:09,320 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-13 22:29:09,320 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-13 22:29:11,420 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-13 22:29:11,421 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0

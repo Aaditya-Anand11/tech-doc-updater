@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document Update Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0a0a; color: #fff; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px; }
+        .header { background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
+        .status-badge { display: inline-block; padding: 12px 35px; background: #27ae60; border-radius: 30px; font-size: 1.2em; font-weight: bold; margin-top: 20px; }
+        .card { background: #16213e; border-radius: 15px; padding: 25px; margin-bottom: 20px; }
+        .card h2 { color: #4CAF50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #4CAF50; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
+        .stat { background: #0f3460; padding: 25px; border-radius: 12px; text-align: center; }
+        .stat-value { font-size: 2.5em; font-weight: bold; color: #4CAF50; }
+        .stat-label { color: #888; margin-top: 5px; }
+        .progress { background: #0f3460; border-radius: 15px; height: 35px; overflow: hidden; margin: 20px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #4CAF50; padding: 15px; text-align: left; }
+        td { padding: 15px; border-bottom: 1px solid #333; }
+        tr:hover { background: #0f3460; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 Document Update Report</h1>
+            <p>Tech Doc Auto Updater v3.0</p>
+            <p style="color: #888; margin-top: 10px;">2026-02-06 15:58:38</p>
+            <div class="status-badge">PASSED</div>
+        </div>
+        
+        <div class="card">
+            <h2>📊 Processing Summary</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Screenshots</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Images Replaced</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Text Updates</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12.5s</div>
+                    <div class="stat-label">Time</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 25px;">Overall Confidence</h3>
+            <div class="progress">
+                <div class="progress-bar" style="width: 99.8424897605765%">100%</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🔍 Match Details</h2>
+            <table>
+                <tr><th>Screenshot</th><th>Matched To</th><th>Confidence</th><th>Status</th></tr>
+                
+            <tr>
+                <td>✅ new.png</td>
+                <td>Page 4</td>
+                <td style="color: #27ae60">99.8%</td>
+                <td>approved</td>
+            </tr>
+            
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>✅ Output</h2>
+            <p><strong>Updated PDF:</strong> ./data/output\updated_20260206_155825.pdf</p>
+            <p><strong>Document:</strong> (anonymous) (9 pages)</p>
+        </div>
+    </div>
+</body>
+</html>

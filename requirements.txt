@@ -1,9 +1,21 @@
+# DocSync – Documentation Synchronization Engine
+# Python Dependencies
+
+# ─── Core Dependencies (from original) ──────────────
 pillow
-gradio
 opencv-python
 scikit-image
 numpy
 pytesseract
 reportlab
 PyPDF2
+pymupdf
 pdf2image
+
+# ─── New Dependencies (modular architecture) ────────
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ─── Legacy UI (optional) ───────────────────────────
+gradio
