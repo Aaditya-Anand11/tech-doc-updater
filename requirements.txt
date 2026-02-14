@@ -16,6 +16,7 @@ pdf2image
 fastapi
 uvicorn[standard]
 python-multipart
+google-genai
 
 # ─── Legacy UI (optional) ───────────────────────────
 gradio

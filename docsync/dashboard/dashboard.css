@@ -1473,6 +1473,17 @@ body {
     margin-top: 0.3rem;
     font-size: 0.78rem;
     color: var(--text-muted);
+    flex-wrap: wrap;
+}
+
+.match-scores-detail {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
 }
 
 .match-confidence {

@@ -381,6 +381,14 @@ function showMatchReview(data) {
                     <div class="match-name">${m.screenshot_name}</div>
                     <div class="match-meta">
                         <span>📄 Page ${m.page}</span>
+                        ${m.scores ? `
+                        <span class="match-scores-detail">
+                            SSIM ${((m.scores.ssim||0)*100).toFixed(0)}%
+                            · Hist ${((m.scores.histogram||0)*100).toFixed(0)}%
+                            · Edge ${((m.scores.edge||0)*100).toFixed(0)}%
+                            · Tmpl ${((m.scores.template||0)*100).toFixed(0)}%
+                            · OCR ${((m.scores.ocr||0)*100).toFixed(0)}%
+                        </span>` : ''}
                         ${m.issues.length ? `<span>⚠️ Might not look right</span>` : ''}
                     </div>
                 </div>
@@ -694,7 +702,7 @@ function showBatchCompareResults(data) {
         <div class="stat-pill">✅ Matches: <span class="pill-value">${matchCount}</span></div>
     `;
 
-    const metrics = ['ssim', 'histogram', 'edge', 'template', 'combined'];
+    const metrics = ['ssim', 'histogram', 'edge', 'template', 'ocr', 'combined'];
 
     pairs.innerHTML = comparisons.map(c => {
         const s = c.scores || {};
@@ -881,6 +889,20 @@ async function checkApiHealth() {
 
             document.getElementById('healthOcr').textContent = '✅';
             document.getElementById('healthPdf').textContent = '✅';
+
+            // Gemini status
+            try {
+                const gRes = await authFetch(`${API_BASE}/api/settings/gemini`);
+                if (gRes.ok) {
+                    const g = await gRes.json();
+                    document.getElementById('healthGemini').textContent =
+                        g.gemini_active ? '✅' : (g.has_key ? '⚠️' : '🔑');
+                    document.getElementById('geminiStatus').textContent =
+                        g.gemini_active ? 'Gemini AI is active and ready'
+                            : g.has_key ? 'Key saved but Gemini could not connect'
+                                : 'No API key set — enter your key below';
+                }
+            } catch { }
         } else {
             throw new Error('Not OK');
         }
@@ -893,6 +915,7 @@ async function checkApiHealth() {
         document.getElementById('healthOcr').textContent = '—';
         document.getElementById('healthPdf').textContent = '—';
         document.getElementById('healthLlm').textContent = '—';
+        document.getElementById('healthGemini').textContent = '—';
     }
 }
 
@@ -900,6 +923,34 @@ async function checkApiHealth() {
 document.addEventListener('DOMContentLoaded', async () => {
     checkApiHealth();
     setInterval(checkApiHealth, 30000);
+
+    // Gemini API key save
+    document.getElementById('saveGeminiKey').addEventListener('click', async () => {
+        const key = document.getElementById('geminiKeyInput').value.trim();
+        const statusEl = document.getElementById('geminiStatus');
+        if (!key) { statusEl.textContent = 'Please enter a key'; return; }
+        statusEl.textContent = 'Saving...';
+        try {
+            const res = await authFetch(`${API_BASE}/api/settings/gemini`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ api_key: key }),
+            });
+            const data = await res.json();
+            if (data.gemini_available) {
+                statusEl.textContent = '✅ Key saved — Gemini AI is now active!';
+                statusEl.style.color = '#22c55e';
+                document.getElementById('healthGemini').textContent = '✅';
+                document.getElementById('geminiKeyInput').value = '';
+            } else {
+                statusEl.textContent = '⚠️ Key saved but Gemini could not connect — check your key';
+                statusEl.style.color = '#f59e0b';
+            }
+        } catch (e) {
+            statusEl.textContent = '❌ Error saving key';
+            statusEl.style.color = '#ef4444';
+        }
+    });
 
     // Check if we have an existing session
     if (authToken) {

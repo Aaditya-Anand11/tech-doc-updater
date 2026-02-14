@@ -65,7 +65,19 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     # Shared instances
     parser = DocumentParser()
-    comparator = ImageComparator()
+    gemini_cfg = {
+        "enabled": config.gemini_enabled,
+        "api_key": config.gemini_api_key,
+        "model": config.gemini_model,
+        "weight": config.gemini_weight,
+    }
+    ollama_cfg = {
+        "enabled": config.ollama_enabled,
+        "base_url": config.ollama_base_url,
+        "vision_model": config.ollama_vision_model,
+        "weight": 0.25,
+    }
+    comparator = ImageComparator(gemini_config=gemini_cfg, ollama_config=ollama_cfg)
     text_proc = SmartTextProcessor()
     updater = DocumentUpdater()
     validator = ValidationEngine()
@@ -214,7 +226,8 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
             # ── Pipeline: match only (don't apply) ──
             pdf_info = parser.get_pdf_info(pdf_path)
-            pdf_images = parser.extract_all_images(pdf_path)
+            extract_dir = os.path.join(tmp, "extracted")
+            pdf_images = parser.extract_all_images(pdf_path, output_dir=extract_dir)
 
             all_matches = comparator.find_best_matches(new_paths, pdf_images)
 
@@ -249,6 +262,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                         "histogram": round(m.histogram_score, 4),
                         "edge": round(m.edge_score, 4),
                         "template": round(m.template_score, 4),
+                        "ocr": round(m.ocr_score, 4),
                     },
                     "issues": m.issues,
                 })
@@ -390,10 +404,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         elif kind == "matched" and m.matched_pdf_image:
             path = m.matched_pdf_image.get("path", "")
         else:
+            logger.warning(f"Preview: no matched image for index {index}, kind={kind}")
             raise HTTPException(status_code=404, detail="No image available")
 
+        logger.info(f"Preview: kind={kind}, index={index}, path={path}, exists={os.path.isfile(path) if path else False}")
+
         if not path or not os.path.isfile(path):
-            raise HTTPException(status_code=404, detail="Image file not found")
+            raise HTTPException(status_code=404, detail=f"Image file not found: {path}")
 
         return FileResponse(path)
 
@@ -408,6 +425,45 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         if result:
             return {"success": True, "restored": result}
         raise HTTPException(status_code=404, detail="Version not found")
+
+    # ─── Gemini settings ─────────────────────────────────
+    class GeminiSettingsRequest(BaseModel):
+        api_key: str
+
+    @app.post("/api/settings/gemini")
+    async def save_gemini_key(body: GeminiSettingsRequest):
+        nonlocal comparator
+        config.gemini_api_key = body.api_key
+        config.save()
+        # Reinitialize comparator with new key
+        g = {
+            "enabled": config.gemini_enabled,
+            "api_key": config.gemini_api_key,
+            "model": config.gemini_model,
+            "weight": config.gemini_weight,
+        }
+        o = {
+            "enabled": config.ollama_enabled,
+            "base_url": config.ollama_base_url,
+            "vision_model": config.ollama_vision_model,
+            "weight": 0.25,
+        }
+        comparator = ImageComparator(gemini_config=g, ollama_config=o)
+        return {
+            "success": True,
+            "gemini_available": comparator.ai_name == "Gemini",
+            "ai_backend": comparator.ai_name or "none",
+        }
+
+    @app.get("/api/settings/gemini")
+    async def get_gemini_status():
+        return {
+            "enabled": config.gemini_enabled,
+            "has_key": bool(config.gemini_api_key),
+            "model": config.gemini_model,
+            "gemini_active": comparator.ai_name == "Gemini",
+            "ai_backend": comparator.ai_name or "none",
+        }
 
     @app.post("/api/compare")
     async def compare_images(

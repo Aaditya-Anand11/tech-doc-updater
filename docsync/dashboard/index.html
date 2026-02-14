@@ -157,9 +157,29 @@
                             <span class="health-label">Ollama LLM</span>
                             <span class="health-status" id="healthLlm">⏳</span>
                         </div>
+                        <div class="health-item">
+                            <span class="health-label">Gemini AI</span>
+                            <span class="health-status" id="healthGemini">⏳</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="card gemini-key-card">
+                    <div class="card-header">
+                        <h2>🔑 Gemini AI Key</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-subtitle" style="margin-bottom:0.75rem">Enter your Google Gemini API key for
+                            smarter image matching</p>
+                        <div style="display:flex;gap:0.5rem;align-items:center">
+                            <input type="password" id="geminiKeyInput" placeholder="Paste your API key..."
+                                style="flex:1;padding:0.5rem 0.75rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);font-size:0.85rem">
+                            <button class="btn-primary btn-sm" id="saveGeminiKey">Save</button>
+                        </div>
+                        <div id="geminiStatus" style="margin-top:0.5rem;font-size:0.78rem;color:var(--text-muted)">
+                        </div>
+                    </div>
+                </div>
         </section>
 
         <!-- ─── Process Document Tab ───────────── -->

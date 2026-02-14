@@ -44,6 +44,7 @@ class MatchResult:
     histogram_score: float = 0.0
     edge_score: float = 0.0
     template_score: float = 0.0
+    ocr_score: float = 0.0
     combined_score: float = 0.0
     is_good_match: bool = False
     target_page: Optional[int] = None

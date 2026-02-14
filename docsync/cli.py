@@ -112,8 +112,7 @@ def cmd_compare(args, config: DocSyncConfig):
     print(f"  SSIM:       {scores['ssim']:.1%}")
     print(f"  Histogram:  {scores['histogram']:.1%}")
     print(f"  Edge:       {scores['edge']:.1%}")
-    print(f"  Template:   {scores['template']:.1%}")
-    print(f"  Combined:   {scores['combined']:.1%}")
+    print(f"  Template:   {scores['template']:.1%}")    print(f"  OCR:        {scores.get('ocr', 0):.1%}")    print(f"  Combined:   {scores['combined']:.1%}")
     print(f"  Match:      {'✅ Yes' if scores['is_match'] else '❌ No'}")
 
 

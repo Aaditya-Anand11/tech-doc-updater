@@ -329,6 +329,36 @@
         "processing_time": 0,
         "output_path": "./data/output\\updated_output.pdf"
       }
+    },
+    {
+      "version_id": 24,
+      "timestamp": "2026-02-14 20:42:38",
+      "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\tmp4z3jq487\\test_pdf.pdf",
+      "backup_path": "./data/history\\backups\\v24_test_pdf.pdf",
+      "changes": {},
+      "result": {
+        "success": true,
+        "images_replaced": 1,
+        "text_replaced": 0,
+        "confidence": 0.7922493736075538,
+        "processing_time": 0,
+        "output_path": "./data/output\\updated_output.pdf"
+      }
+    },
+    {
+      "version_id": 25,
+      "timestamp": "2026-02-14 20:52:13",
+      "original_pdf": "C:\\Users\\mdiza\\AppData\\Local\\Temp\\tmp5oqc6h_c\\test_pdf.pdf",
+      "backup_path": "./data/history\\backups\\v25_test_pdf.pdf",
+      "changes": {},
+      "result": {
+        "success": true,
+        "images_replaced": 1,
+        "text_replaced": 0,
+        "confidence": 0.8863586563077075,
+        "processing_time": 0,
+        "output_path": "./data/output\\updated_output.pdf"
+      }
     }
   ]
 }

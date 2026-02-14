@@ -1,0 +1,805 @@
+2026-02-14 19:36:07,310 [INFO] docsync.image_comparator (image_comparator.py:92): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-02-14 19:36:07,321 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-14 19:36:07,322 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-14 19:36:07,322 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-14 19:36:07,322 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-14 19:36:07,322 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-14 19:36:09,404 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-14 19:36:09,404 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-14 19:38:42,869 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from pgadmin4-7.8.pdf
+2026-02-14 19:39:11,656 [INFO] docsync.image_comparator (image_comparator.py:309): AI verifying: new_0_WhatsApp Image 2026-02-13 at 10.47.18 PM.jpeg -> page 428
+2026-02-14 19:39:25,179 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface with text and buttons.
+2026-02-14 19:39:25,179 [INFO] docsync.image_comparator (image_comparator.py:337): Matched 1 images (1 good matches)
+2026-02-14 19:39:25,191 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmpnp1jstsf\new_0_WhatsApp Image 2026-02-13 at 10.47.18 PM.jpeg, exists=True
+2026-02-14 19:39:25,193 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmpnp1jstsf\extracted\page428_img2.png, exists=True
+2026-02-14 20:38:53,127 [INFO] docsync.image_comparator (image_comparator.py:95): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-02-14 20:38:53,137 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-14 20:38:53,138 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-14 20:38:53,138 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-14 20:38:53,138 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-14 20:38:53,138 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-14 20:38:55,169 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-14 20:38:55,170 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-14 20:39:36,017 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 20:40:06,274 [INFO] docsync.image_comparator (image_comparator.py:396): AI verifying: new_0_test_img.jpeg -> page 81
+2026-02-14 20:40:20,031 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface with various options and settings.
+2026-02-14 20:40:20,033 [INFO] docsync.image_comparator (image_comparator.py:424): Matched 1 images (1 good matches)
+2026-02-14 20:42:24,297 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp4z3jq487\new_0_test_img.jpeg, exists=True
+2026-02-14 20:42:24,470 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp4z3jq487\extracted\page81_img1.png, exists=True
+2026-02-14 20:42:37,863 [INFO] docsync.api (routes.py:337): Approved: new_0_test_img.jpeg → PDF xref=3296 (page 81)
+2026-02-14 20:42:38,351 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-14 20:42:38,395 [INFO] docsync.history_manager (history_manager.py:113): Version 24 recorded for test_pdf.pdf
+2026-02-14 20:50:00,973 [INFO] docsync.image_comparator (image_comparator.py:96): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-02-14 20:50:00,980 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-14 20:50:00,980 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-14 20:50:00,981 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-14 20:50:00,981 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-14 20:50:00,981 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-14 20:50:03,053 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-14 20:50:03,053 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-14 20:50:40,661 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 20:51:04,831 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 50/465 candidates for new_0_test_img.jpeg (aspect/size pre-filter)
+2026-02-14 20:51:04,833 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 258: combined=0.848 (ssim=0.82 hist=1.00 edge=0.77 tmpl=0.99 phash=0.77)
+2026-02-14 20:51:04,833 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 170: combined=0.846 (ssim=0.79 hist=1.00 edge=0.73 tmpl=0.97 phash=0.83)
+2026-02-14 20:51:04,833 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 171: combined=0.834 (ssim=0.78 hist=1.00 edge=0.69 tmpl=0.96 phash=0.83)
+2026-02-14 20:51:04,834 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 391: combined=0.832 (ssim=0.79 hist=1.00 edge=0.73 tmpl=0.97 phash=0.77)
+2026-02-14 20:51:04,834 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 81: combined=0.831 (ssim=0.72 hist=1.00 edge=0.68 tmpl=0.90 phash=0.92)
+2026-02-14 20:51:04,834 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 258 (candidate #1)
+2026-02-14 20:51:17,697 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface for creating or editing a publication in a software application.
+2026-02-14 20:51:17,698 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 170 (candidate #2)
+2026-02-14 20:51:21,155 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 20:51:21,157 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 171 (candidate #3)
+2026-02-14 20:51:26,649 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface for a database or data management system, specifically showing a table with columns and rows of data, including a dropdown menu labeled 'SOLICITACION' and a button labeled 'REACTION'. The interface is consistent in terms of layout and design elements.
+2026-02-14 20:51:26,650 [INFO] docsync.image_comparator (image_comparator.py:471): Matched 1 images (1 good matches)
+2026-02-14 20:51:26,662 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp5oqc6h_c\new_0_test_img.jpeg, exists=True
+2026-02-14 20:51:26,820 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp5oqc6h_c\extracted\page258_img1.png, exists=True
+2026-02-14 20:52:13,162 [INFO] docsync.api (routes.py:337): Approved: new_0_test_img.jpeg → PDF xref=4296 (page 258)
+2026-02-14 20:52:13,678 [INFO] docsync.doc_updater (doc_updater.py:108): Document updated: 1 images, 0 text replacements → ./data/output\updated_output.pdf
+2026-02-14 20:52:13,701 [INFO] docsync.history_manager (history_manager.py:113): Version 25 recorded for test_pdf.pdf
+2026-02-14 20:53:26,583 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 20:53:51,708 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 50/465 candidates for new_0_test_img.jpeg (aspect/size pre-filter)
+2026-02-14 20:53:51,708 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 258: combined=0.848 (ssim=0.82 hist=1.00 edge=0.77 tmpl=0.99 phash=0.77)
+2026-02-14 20:53:51,709 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 170: combined=0.846 (ssim=0.79 hist=1.00 edge=0.73 tmpl=0.97 phash=0.83)
+2026-02-14 20:53:51,709 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 171: combined=0.834 (ssim=0.78 hist=1.00 edge=0.69 tmpl=0.96 phash=0.83)
+2026-02-14 20:53:51,709 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 391: combined=0.832 (ssim=0.79 hist=1.00 edge=0.73 tmpl=0.97 phash=0.77)
+2026-02-14 20:53:51,709 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 81: combined=0.831 (ssim=0.72 hist=1.00 edge=0.68 tmpl=0.90 phash=0.92)
+2026-02-14 20:53:51,710 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 258 (candidate #1)
+2026-02-14 20:53:56,132 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface with a text editor open and a file system explorer on the right side.
+2026-02-14 20:53:56,132 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 170 (candidate #2)
+2026-02-14 20:53:59,728 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 20:53:59,729 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 171 (candidate #3)
+2026-02-14 20:54:03,362 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 20:54:41,338 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 120/465 candidates for new_1_Screenshot 2026-02-13 215006.png (aspect/size pre-filter)
+2026-02-14 20:54:41,338 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 308: combined=0.609 (ssim=0.50 hist=1.00 edge=0.32 tmpl=0.63 phash=0.70)
+2026-02-14 20:54:41,338 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 242: combined=0.607 (ssim=0.50 hist=1.00 edge=0.30 tmpl=0.74 phash=0.64)
+2026-02-14 20:54:41,338 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 245: combined=0.589 (ssim=0.47 hist=1.00 edge=0.26 tmpl=0.71 phash=0.66)
+2026-02-14 20:54:41,339 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 306: combined=0.587 (ssim=0.48 hist=1.00 edge=0.31 tmpl=0.61 phash=0.66)
+2026-02-14 20:54:41,339 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 243: combined=0.583 (ssim=0.44 hist=1.00 edge=0.29 tmpl=0.73 phash=0.62)
+2026-02-14 20:54:41,339 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 308 (candidate #1)
+2026-02-14 20:54:46,350 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a configuration or settings menu for a network or system, specifically related to a PostgreSQL database configuration.
+2026-02-14 20:54:46,351 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 242 (candidate #2)
+2026-02-14 20:54:50,675 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for configuring a network or server settings, specifically related to an admin panel or dashboard.
+2026-02-14 20:54:50,677 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 245 (candidate #3)
+2026-02-14 20:54:55,546 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for configuring a network or server settings, specifically a page for creating an admin account or package. The layout, design elements, and options are consistent across both screens.
+2026-02-14 20:55:33,638 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 52/465 candidates for new_2_Screenshot 2026-02-13 215035.png (aspect/size pre-filter)
+2026-02-14 20:55:33,639 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 335: combined=0.747 (ssim=0.63 hist=1.00 edge=0.57 tmpl=0.95 phash=0.73)
+2026-02-14 20:55:33,639 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 121: combined=0.736 (ssim=0.62 hist=1.00 edge=0.53 tmpl=0.95 phash=0.73)
+2026-02-14 20:55:33,639 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 34: combined=0.729 (ssim=0.61 hist=1.00 edge=0.58 tmpl=0.95 phash=0.67)
+2026-02-14 20:55:33,640 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 451: combined=0.718 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.95 phash=0.67)
+2026-02-14 20:55:33,640 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 435: combined=0.715 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.92 phash=0.69)
+2026-02-14 20:55:33,640 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 335 (candidate #1)
+2026-02-14 20:55:38,827 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer screen displaying an error message from a web application or software interface, and it appears to be the same as the one in the PDF document.
+2026-02-14 20:55:38,827 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 121 (candidate #2)
+2026-02-14 20:55:43,161 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows a computer screen displaying a user interface for configuring a PostgreSQL database server. The layout and elements are identical in both images.
+2026-02-14 20:55:43,161 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 34 (candidate #3)
+2026-02-14 20:55:47,624 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows the same interface with minor visual differences, such as the positioning of the text and buttons, which is typical for a GUI screenshot compared to an extracted PDF document.
+2026-02-14 20:56:10,847 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 63/465 candidates for new_3_Screenshot 2026-02-13 215107.png (aspect/size pre-filter)
+2026-02-14 20:56:10,849 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 47: combined=0.943 (ssim=0.92 hist=1.00 edge=0.87 tmpl=0.98 phash=0.97)
+2026-02-14 20:56:10,849 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 48: combined=0.636 (ssim=0.46 hist=0.97 edge=0.58 tmpl=0.54 phash=0.72)
+2026-02-14 20:56:10,849 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 55: combined=0.592 (ssim=0.42 hist=0.93 edge=0.59 tmpl=0.57 phash=0.58)
+2026-02-14 20:56:10,850 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 49: combined=0.589 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.51 phash=0.55)
+2026-02-14 20:56:10,850 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 61: combined=0.585 (ssim=0.39 hist=0.93 edge=0.59 tmpl=0.61 phash=0.56)
+2026-02-14 20:56:10,850 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 47 (candidate #1)
+2026-02-14 20:56:15,334 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same login screen for a website or application.
+2026-02-14 20:56:15,335 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 48 (candidate #2)
+2026-02-14 20:56:19,079 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a website or application.
+2026-02-14 20:56:19,080 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 55 (candidate #3)
+2026-02-14 20:56:22,857 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen with minor visual differences.
+2026-02-14 20:56:46,429 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 43/465 candidates for new_4_Screenshot 2026-02-13 215113.png (aspect/size pre-filter)
+2026-02-14 20:56:46,429 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 48: combined=0.902 (ssim=0.90 hist=1.00 edge=0.85 tmpl=0.96 phash=0.84)
+2026-02-14 20:56:46,430 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 55: combined=0.676 (ssim=0.60 hist=0.98 edge=0.63 tmpl=0.71 phash=0.58)
+2026-02-14 20:56:46,430 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 49: combined=0.637 (ssim=0.63 hist=0.99 edge=0.65 tmpl=0.65 phash=0.42)
+2026-02-14 20:56:46,430 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 47: combined=0.619 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.55 phash=0.66)
+2026-02-14 20:56:46,430 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 61: combined=0.617 (ssim=0.55 hist=0.97 edge=0.64 tmpl=0.64 phash=0.44)
+2026-02-14 20:56:46,431 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 48 (candidate #1)
+2026-02-14 20:56:50,980 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for a website or application.
+2026-02-14 20:56:50,981 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 55 (candidate #2)
+2026-02-14 20:56:54,807 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for a website or application.
+2026-02-14 20:56:54,808 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 49 (candidate #3)
+2026-02-14 20:56:58,882 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for an admin account of a website or application.
+2026-02-14 20:57:34,961 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 50/465 candidates for new_5_Screenshot 2026-02-13 215122.png (aspect/size pre-filter)
+2026-02-14 20:57:34,962 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 49: combined=0.944 (ssim=0.97 hist=1.00 edge=0.89 tmpl=0.99 phash=0.89)
+2026-02-14 20:57:34,962 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 55: combined=0.654 (ssim=0.68 hist=0.99 edge=0.68 tmpl=0.48 phash=0.52)
+2026-02-14 20:57:34,962 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 48: combined=0.654 (ssim=0.63 hist=0.99 edge=0.63 tmpl=0.64 phash=0.50)
+2026-02-14 20:57:34,962 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 61: combined=0.628 (ssim=0.66 hist=0.99 edge=0.68 tmpl=0.41 phash=0.47)
+2026-02-14 20:57:34,963 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 335: combined=0.615 (ssim=0.66 hist=0.14 edge=0.71 tmpl=0.82 phash=0.66)
+2026-02-14 20:57:34,963 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 49 (candidate #1)
+2026-02-14 20:57:39,193 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface with minor visual differences.
+2026-02-14 20:57:39,194 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 55 (candidate #2)
+2026-02-14 20:57:42,724 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 20:57:42,724 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 48 (candidate #3)
+2026-02-14 20:57:46,724 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for an admin account of a website or application.
+2026-02-14 20:58:19,579 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 45/465 candidates for new_6_Screenshot 2026-02-13 215427.png (aspect/size pre-filter)
+2026-02-14 20:58:19,579 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 63: combined=0.786 (ssim=0.74 hist=1.00 edge=0.68 tmpl=0.97 phash=0.67)
+2026-02-14 20:58:19,580 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 383: combined=0.786 (ssim=0.71 hist=1.00 edge=0.67 tmpl=0.97 phash=0.72)
+2026-02-14 20:58:19,580 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 145: combined=0.770 (ssim=0.69 hist=1.00 edge=0.64 tmpl=0.93 phash=0.72)
+2026-02-14 20:58:19,580 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 71: combined=0.770 (ssim=0.70 hist=1.00 edge=0.64 tmpl=0.94 phash=0.70)
+2026-02-14 20:58:19,580 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 121: combined=0.767 (ssim=0.72 hist=1.00 edge=0.64 tmpl=0.95 phash=0.67)
+2026-02-14 20:58:19,580 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 63 (candidate #1)
+2026-02-14 20:58:24,159 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a webpage or a software application's user interface.
+2026-02-14 20:58:24,160 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 383 (candidate #2)
+2026-02-14 20:58:28,914 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows a computer screen displaying a user interface that appears to be a web application or software dashboard. The layout and design elements are consistent across both images, indicating they represent the same screen with minor visual differences.
+2026-02-14 20:58:28,916 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 145 (candidate #3)
+2026-02-14 20:58:32,760 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows a computer interface that is identical to the one in the PDF document.
+2026-02-14 20:58:49,147 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 186/465 candidates for new_7_Screenshot 2026-02-13 215441.png (aspect/size pre-filter)
+2026-02-14 20:58:49,148 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 428: combined=0.877 (ssim=0.84 hist=1.00 edge=0.82 tmpl=0.94 phash=0.84)
+2026-02-14 20:58:49,148 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 74: combined=0.847 (ssim=0.80 hist=1.00 edge=0.79 tmpl=0.90 phash=0.81)
+2026-02-14 20:58:49,148 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 430: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.94 phash=0.80)
+2026-02-14 20:58:49,149 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 435: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.92 phash=0.81)
+2026-02-14 20:58:49,149 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 436: combined=0.837 (ssim=0.77 hist=1.00 edge=0.75 tmpl=0.92 phash=0.83)
+2026-02-14 20:58:49,149 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 428 (candidate #1)
+2026-02-14 20:58:53,948 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a file explorer or directory structure with various folders and files.
+2026-02-14 20:58:53,949 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 74 (candidate #2)
+2026-02-14 20:58:58,059 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface, which appears to be a user interface for an application or software program.
+2026-02-14 20:58:58,060 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 430 (candidate #3)
+2026-02-14 20:59:02,907 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer interface and the other image is an extracted page from a PDF document that appears to be a screenshot of the same interface. The layout, design, and elements are identical, indicating they are the same screen.
+2026-02-14 20:59:27,449 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 104/465 candidates for new_8_Screenshot 2026-02-13 215459.png (aspect/size pre-filter)
+2026-02-14 20:59:27,449 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 65: combined=0.626 (ssim=0.39 hist=1.00 edge=0.31 tmpl=0.77 phash=0.81)
+2026-02-14 20:59:27,449 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 307: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67)
+2026-02-14 20:59:27,450 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 358: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67)
+2026-02-14 20:59:27,450 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 306: combined=0.588 (ssim=0.45 hist=1.00 edge=0.37 tmpl=0.64 phash=0.62)
+2026-02-14 20:59:27,451 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 310: combined=0.583 (ssim=0.41 hist=1.00 edge=0.35 tmpl=0.64 phash=0.66)
+2026-02-14 20:59:27,451 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 65 (candidate #1)
+2026-02-14 20:59:32,590 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for managing SQL databases or servers, specifically PostgreSQL, as indicated by the text on the screen.
+2026-02-14 20:59:32,592 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 307 (candidate #2)
+2026-02-14 20:59:36,663 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same user interface for configuring a PostgreSQL database in a web application or software.
+2026-02-14 20:59:36,664 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 358 (candidate #3)
+2026-02-14 20:59:40,252 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for configuring a PostgreSQL database in a web application or software tool.
+2026-02-14 20:59:40,253 [INFO] docsync.image_comparator (image_comparator.py:471): Matched 9 images (9 good matches)
+2026-02-14 20:59:40,271 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_0_test_img.jpeg, exists=True
+2026-02-14 20:59:40,283 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page258_img1.png, exists=True
+2026-02-14 20:59:40,284 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_1_Screenshot 2026-02-13 215006.png, exists=True
+2026-02-14 20:59:40,291 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page308_img1.png, exists=True
+2026-02-14 20:59:40,294 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_2_Screenshot 2026-02-13 215035.png, exists=True
+2026-02-14 20:59:40,295 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page335_img1.png, exists=True
+2026-02-14 20:59:40,305 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_3_Screenshot 2026-02-13 215107.png, exists=True
+2026-02-14 20:59:40,306 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page47_img1.png, exists=True
+2026-02-14 20:59:40,309 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_4_Screenshot 2026-02-13 215113.png, exists=True
+2026-02-14 20:59:40,314 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page48_img1.png, exists=True
+2026-02-14 20:59:40,317 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_5_Screenshot 2026-02-13 215122.png, exists=True
+2026-02-14 20:59:40,318 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page49_img1.png, exists=True
+2026-02-14 20:59:40,328 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_6_Screenshot 2026-02-13 215427.png, exists=True
+2026-02-14 20:59:40,335 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page63_img1.png, exists=True
+2026-02-14 20:59:40,340 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_7_Screenshot 2026-02-13 215441.png, exists=True
+2026-02-14 20:59:40,341 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page428_img2.png, exists=True
+2026-02-14 20:59:40,345 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\new_8_Screenshot 2026-02-13 215459.png, exists=True
+2026-02-14 20:59:40,356 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmppwm3n5mw\extracted\page65_img1.png, exists=True
+2026-02-14 21:07:11,733 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 21:07:34,519 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 50/465 candidates for new_0_test_img.jpeg (aspect/size pre-filter)
+2026-02-14 21:07:34,520 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 258: combined=0.848 (ssim=0.82 hist=1.00 edge=0.77 tmpl=0.99 phash=0.77)
+2026-02-14 21:07:34,520 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 170: combined=0.846 (ssim=0.79 hist=1.00 edge=0.73 tmpl=0.97 phash=0.83)
+2026-02-14 21:07:34,520 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 171: combined=0.834 (ssim=0.78 hist=1.00 edge=0.69 tmpl=0.96 phash=0.83)
+2026-02-14 21:07:34,520 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 391: combined=0.832 (ssim=0.79 hist=1.00 edge=0.73 tmpl=0.97 phash=0.77)
+2026-02-14 21:07:34,520 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 81: combined=0.831 (ssim=0.72 hist=1.00 edge=0.68 tmpl=0.90 phash=0.92)
+2026-02-14 21:07:34,520 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 258 (candidate #1)
+2026-02-14 21:07:47,053 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface for creating or editing a publication in a software application.
+2026-02-14 21:07:47,053 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 170 (candidate #2)
+2026-02-14 21:07:51,778 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface for a database or data management system, possibly from a web application or software tool. The differences are minimal and do not affect the functionality or layout of the interface.
+2026-02-14 21:07:51,778 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_0_test_img.jpeg -> page 171 (candidate #3)
+2026-02-14 21:07:55,485 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface with minor visual differences.
+2026-02-14 21:08:32,269 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 120/465 candidates for new_1_Screenshot 2026-02-13 215006.png (aspect/size pre-filter)
+2026-02-14 21:08:32,270 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 308: combined=0.609 (ssim=0.50 hist=1.00 edge=0.32 tmpl=0.63 phash=0.70)
+2026-02-14 21:08:32,270 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 242: combined=0.607 (ssim=0.50 hist=1.00 edge=0.30 tmpl=0.74 phash=0.64)
+2026-02-14 21:08:32,270 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 245: combined=0.589 (ssim=0.47 hist=1.00 edge=0.26 tmpl=0.71 phash=0.66)
+2026-02-14 21:08:32,270 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 306: combined=0.587 (ssim=0.48 hist=1.00 edge=0.31 tmpl=0.61 phash=0.66)
+2026-02-14 21:08:32,271 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 243: combined=0.583 (ssim=0.44 hist=1.00 edge=0.29 tmpl=0.73 phash=0.62)
+2026-02-14 21:08:32,271 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 308 (candidate #1)
+2026-02-14 21:08:37,119 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for configuring a network connection or settings.
+2026-02-14 21:08:37,119 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 242 (candidate #2)
+2026-02-14 21:08:41,501 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for configuring a network or server settings, specifically related to an admin panel or dashboard.
+2026-02-14 21:08:41,501 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 245 (candidate #3)
+2026-02-14 21:08:45,309 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface with minor visual differences.
+2026-02-14 21:09:22,886 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 52/465 candidates for new_2_Screenshot 2026-02-13 215035.png (aspect/size pre-filter)
+2026-02-14 21:09:22,888 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 335: combined=0.747 (ssim=0.63 hist=1.00 edge=0.57 tmpl=0.95 phash=0.73)
+2026-02-14 21:09:22,888 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 121: combined=0.736 (ssim=0.62 hist=1.00 edge=0.53 tmpl=0.95 phash=0.73)
+2026-02-14 21:09:22,888 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 34: combined=0.729 (ssim=0.61 hist=1.00 edge=0.58 tmpl=0.95 phash=0.67)
+2026-02-14 21:09:22,888 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 451: combined=0.718 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.95 phash=0.67)
+2026-02-14 21:09:22,888 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 435: combined=0.715 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.92 phash=0.69)
+2026-02-14 21:09:22,889 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 335 (candidate #1)
+2026-02-14 21:09:27,678 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a command prompt or terminal window with text and commands.
+2026-02-14 21:09:27,680 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 121 (candidate #2)
+2026-02-14 21:09:32,070 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a direct comparison of two screenshots showing the same interface, which appears to be a user interface for managing or configuring cloud services or servers.
+2026-02-14 21:09:32,071 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 34 (candidate #3)
+2026-02-14 21:09:36,015 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows a computer interface that is identical to the one in the PDF document.
+2026-02-14 21:09:59,578 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 63/465 candidates for new_3_Screenshot 2026-02-13 215107.png (aspect/size pre-filter)
+2026-02-14 21:09:59,578 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 47: combined=0.943 (ssim=0.92 hist=1.00 edge=0.87 tmpl=0.98 phash=0.97)
+2026-02-14 21:09:59,578 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 48: combined=0.636 (ssim=0.46 hist=0.97 edge=0.58 tmpl=0.54 phash=0.72)
+2026-02-14 21:09:59,579 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 55: combined=0.592 (ssim=0.42 hist=0.93 edge=0.59 tmpl=0.57 phash=0.58)
+2026-02-14 21:09:59,579 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 49: combined=0.589 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.51 phash=0.55)
+2026-02-14 21:09:59,579 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 61: combined=0.585 (ssim=0.39 hist=0.93 edge=0.59 tmpl=0.61 phash=0.56)
+2026-02-14 21:09:59,579 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 47 (candidate #1)
+2026-02-14 21:10:04,260 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a website or application, with minor visual differences such as font size and color variations.
+2026-02-14 21:10:04,261 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 48 (candidate #2)
+2026-02-14 21:10:08,226 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface, which is a login page for an admin account.
+2026-02-14 21:10:08,227 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 55 (candidate #3)
+2026-02-14 21:10:11,896 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 21:10:35,343 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 43/465 candidates for new_4_Screenshot 2026-02-13 215113.png (aspect/size pre-filter)
+2026-02-14 21:10:35,343 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 48: combined=0.902 (ssim=0.90 hist=1.00 edge=0.85 tmpl=0.96 phash=0.84)
+2026-02-14 21:10:35,344 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 55: combined=0.676 (ssim=0.60 hist=0.98 edge=0.63 tmpl=0.71 phash=0.58)
+2026-02-14 21:10:35,344 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 49: combined=0.637 (ssim=0.63 hist=0.99 edge=0.65 tmpl=0.65 phash=0.42)
+2026-02-14 21:10:35,344 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 47: combined=0.619 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.55 phash=0.66)
+2026-02-14 21:10:35,345 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 61: combined=0.617 (ssim=0.55 hist=0.97 edge=0.64 tmpl=0.64 phash=0.44)
+2026-02-14 21:10:35,345 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 48 (candidate #1)
+2026-02-14 21:10:39,778 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a forgotten password feature of an admin account.
+2026-02-14 21:10:39,779 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 55 (candidate #2)
+2026-02-14 21:10:43,405 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface with minor visual differences.
+2026-02-14 21:10:43,406 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 49 (candidate #3)
+2026-02-14 21:10:47,377 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for an admin account of a website or application.
+2026-02-14 21:11:23,208 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 50/465 candidates for new_5_Screenshot 2026-02-13 215122.png (aspect/size pre-filter)
+2026-02-14 21:11:23,209 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 49: combined=0.944 (ssim=0.97 hist=1.00 edge=0.89 tmpl=0.99 phash=0.89)
+2026-02-14 21:11:23,209 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 55: combined=0.654 (ssim=0.68 hist=0.99 edge=0.68 tmpl=0.48 phash=0.52)
+2026-02-14 21:11:23,209 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 48: combined=0.654 (ssim=0.63 hist=0.99 edge=0.63 tmpl=0.64 phash=0.50)
+2026-02-14 21:11:23,209 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 61: combined=0.628 (ssim=0.66 hist=0.99 edge=0.68 tmpl=0.41 phash=0.47)
+2026-02-14 21:11:23,210 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 335: combined=0.615 (ssim=0.66 hist=0.14 edge=0.71 tmpl=0.82 phash=0.66)
+2026-02-14 21:11:23,210 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 49 (candidate #1)
+2026-02-14 21:11:27,337 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 21:11:27,338 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 55 (candidate #2)
+2026-02-14 21:11:30,929 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 21:11:30,931 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 48 (candidate #3)
+2026-02-14 21:11:34,935 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for an admin panel of a website or application.
+2026-02-14 21:12:08,124 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 45/465 candidates for new_6_Screenshot 2026-02-13 215427.png (aspect/size pre-filter)
+2026-02-14 21:12:08,124 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 63: combined=0.786 (ssim=0.74 hist=1.00 edge=0.68 tmpl=0.97 phash=0.67)
+2026-02-14 21:12:08,125 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 383: combined=0.786 (ssim=0.71 hist=1.00 edge=0.67 tmpl=0.97 phash=0.72)
+2026-02-14 21:12:08,125 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 145: combined=0.770 (ssim=0.69 hist=1.00 edge=0.64 tmpl=0.93 phash=0.72)
+2026-02-14 21:12:08,125 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 71: combined=0.770 (ssim=0.70 hist=1.00 edge=0.64 tmpl=0.94 phash=0.70)
+2026-02-14 21:12:08,125 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 121: combined=0.767 (ssim=0.72 hist=1.00 edge=0.64 tmpl=0.95 phash=0.67)
+2026-02-14 21:12:08,126 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 63 (candidate #1)
+2026-02-14 21:12:12,651 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a webpage or application dashboard.
+2026-02-14 21:12:12,653 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 383 (candidate #2)
+2026-02-14 21:12:17,516 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows a computer screen displaying a user interface that appears to be a web application or software dashboard with various options and settings. The layout, design elements, and functionality of the two images are identical, indicating they represent the same screen.
+2026-02-14 21:12:17,517 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 145 (candidate #3)
+2026-02-14 21:12:22,113 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows a computer interface that appears to be a screenshot of a user interface for configuring or managing servers. The layout and design elements are consistent across both images, indicating they represent the same screen.
+2026-02-14 21:12:38,627 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 186/465 candidates for new_7_Screenshot 2026-02-13 215441.png (aspect/size pre-filter)
+2026-02-14 21:12:38,628 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 428: combined=0.877 (ssim=0.84 hist=1.00 edge=0.82 tmpl=0.94 phash=0.84)
+2026-02-14 21:12:38,628 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 74: combined=0.847 (ssim=0.80 hist=1.00 edge=0.79 tmpl=0.90 phash=0.81)
+2026-02-14 21:12:38,628 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 430: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.94 phash=0.80)
+2026-02-14 21:12:38,628 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 435: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.92 phash=0.81)
+2026-02-14 21:12:38,629 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 436: combined=0.837 (ssim=0.77 hist=1.00 edge=0.75 tmpl=0.92 phash=0.83)
+2026-02-14 21:12:38,630 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 428 (candidate #1)
+2026-02-14 21:12:43,392 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface with various options and text fields.
+2026-02-14 21:12:43,393 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 74 (candidate #2)
+2026-02-14 21:12:47,573 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a file explorer or directory structure with various folders and files.
+2026-02-14 21:12:47,575 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 430 (candidate #3)
+2026-02-14 21:12:51,518 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a direct comparison of the same screen from two different sources, showing no noticeable differences.
+2026-02-14 21:13:15,643 [INFO] docsync.image_comparator (image_comparator.py:383): Skipped 104/465 candidates for new_8_Screenshot 2026-02-13 215459.png (aspect/size pre-filter)
+2026-02-14 21:13:15,645 [INFO] docsync.image_comparator (image_comparator.py:388):   #1 page 65: combined=0.626 (ssim=0.39 hist=1.00 edge=0.31 tmpl=0.77 phash=0.81)
+2026-02-14 21:13:15,645 [INFO] docsync.image_comparator (image_comparator.py:388):   #2 page 307: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67)
+2026-02-14 21:13:15,645 [INFO] docsync.image_comparator (image_comparator.py:388):   #3 page 358: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67)
+2026-02-14 21:13:15,645 [INFO] docsync.image_comparator (image_comparator.py:388):   #4 page 306: combined=0.588 (ssim=0.45 hist=1.00 edge=0.37 tmpl=0.64 phash=0.62)
+2026-02-14 21:13:15,645 [INFO] docsync.image_comparator (image_comparator.py:388):   #5 page 310: combined=0.583 (ssim=0.41 hist=1.00 edge=0.35 tmpl=0.64 phash=0.66)
+2026-02-14 21:13:15,645 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 65 (candidate #1)
+2026-02-14 21:13:20,994 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same interface, which is a computer screen displaying a user interface for managing SQL databases or servers, specifically PostgreSQL. The differences are minimal and do not affect the functionality of the interface.
+2026-02-14 21:13:20,994 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 307 (candidate #2)
+2026-02-14 21:13:25,055 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same user interface for configuring a PostgreSQL database in a web application or software.
+2026-02-14 21:13:25,056 [INFO] docsync.image_comparator (image_comparator.py:422): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 358 (candidate #3)
+2026-02-14 21:13:28,703 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for configuring a PostgreSQL database in a graphical user interface.
+2026-02-14 21:13:28,704 [INFO] docsync.image_comparator (image_comparator.py:471): Matched 9 images (9 good matches)
+2026-02-14 21:13:28,720 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_0_test_img.jpeg, exists=True
+2026-02-14 21:13:28,734 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page258_img1.png, exists=True
+2026-02-14 21:13:28,735 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_1_Screenshot 2026-02-13 215006.png, exists=True
+2026-02-14 21:13:28,742 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page308_img1.png, exists=True
+2026-02-14 21:13:28,746 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_2_Screenshot 2026-02-13 215035.png, exists=True
+2026-02-14 21:13:28,753 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page335_img1.png, exists=True
+2026-02-14 21:13:28,754 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_3_Screenshot 2026-02-13 215107.png, exists=True
+2026-02-14 21:13:28,758 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page47_img1.png, exists=True
+2026-02-14 21:13:28,765 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_4_Screenshot 2026-02-13 215113.png, exists=True
+2026-02-14 21:13:28,766 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page48_img1.png, exists=True
+2026-02-14 21:13:28,767 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_5_Screenshot 2026-02-13 215122.png, exists=True
+2026-02-14 21:13:28,775 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page49_img1.png, exists=True
+2026-02-14 21:13:28,777 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_6_Screenshot 2026-02-13 215427.png, exists=True
+2026-02-14 21:13:28,778 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page63_img1.png, exists=True
+2026-02-14 21:13:28,786 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_7_Screenshot 2026-02-13 215441.png, exists=True
+2026-02-14 21:13:28,788 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page428_img2.png, exists=True
+2026-02-14 21:13:28,789 [INFO] docsync.api (routes.py:409): Preview: kind=uploaded, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\new_8_Screenshot 2026-02-13 215459.png, exists=True
+2026-02-14 21:13:28,799 [INFO] docsync.api (routes.py:409): Preview: kind=matched, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmpbv4szonh\extracted\page65_img1.png, exists=True
+2026-02-14 21:32:05,135 [INFO] docsync.image_comparator (image_comparator.py:121): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-02-14 21:32:05,146 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-14 21:32:05,146 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-14 21:32:05,147 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-14 21:32:05,147 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-14 21:32:05,147 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-14 21:32:07,215 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-14 21:32:07,215 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-14 21:34:28,040 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 21:42:44,213 [INFO] docsync.image_comparator (image_comparator.py:444): Skipped 59/465 candidates for new_0_Screenshot 2026-02-13 023358.png (aspect/size pre-filter)
+2026-02-14 21:42:44,213 [INFO] docsync.image_comparator (image_comparator.py:449):   #1 page 428: combined=0.671 (ssim=0.80 hist=1.00 edge=0.82 tmpl=0.87 phash=0.81 ocr=0.15)
+2026-02-14 21:42:44,213 [INFO] docsync.image_comparator (image_comparator.py:449):   #2 page 382: combined=0.665 (ssim=0.78 hist=1.00 edge=0.77 tmpl=0.90 phash=0.67 ocr=0.28)
+2026-02-14 21:42:44,213 [INFO] docsync.image_comparator (image_comparator.py:449):   #3 page 63: combined=0.640 (ssim=0.77 hist=1.00 edge=0.72 tmpl=0.95 phash=0.67 ocr=0.20)
+2026-02-14 21:42:44,213 [INFO] docsync.image_comparator (image_comparator.py:449):   #4 page 429: combined=0.636 (ssim=0.80 hist=1.00 edge=0.77 tmpl=0.93 phash=0.81 ocr=0.01)
+2026-02-14 21:42:44,215 [INFO] docsync.image_comparator (image_comparator.py:449):   #5 page 452: combined=0.635 (ssim=0.80 hist=1.00 edge=0.77 tmpl=0.88 phash=0.61 ocr=0.20)
+2026-02-14 21:42:44,215 [INFO] docsync.image_comparator (image_comparator.py:483): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 428 (candidate #1)
+2026-02-14 21:42:57,883 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer interface and the other image is an extracted page from a PDF document, but they are identical in content and layout.
+2026-02-14 21:42:57,883 [INFO] docsync.image_comparator (image_comparator.py:483): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 382 (candidate #2)
+2026-02-14 21:43:01,827 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for selecting privileges or permissions in a software application.
+2026-02-14 21:43:01,828 [INFO] docsync.image_comparator (image_comparator.py:483): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 63 (candidate #3)
+2026-02-14 21:43:06,259 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a webpage or application with a navigation bar at the top and a content area below it.
+2026-02-14 21:50:19,710 [INFO] docsync.image_comparator (image_comparator.py:444): Skipped 120/465 candidates for new_1_Screenshot 2026-02-13 215006.png (aspect/size pre-filter)
+2026-02-14 21:50:19,710 [INFO] docsync.image_comparator (image_comparator.py:449):   #1 page 33: combined=0.548 (ssim=0.38 hist=1.00 edge=0.20 tmpl=0.18 phash=0.67 ocr=0.76)
+2026-02-14 21:50:19,711 [INFO] docsync.image_comparator (image_comparator.py:449):   #2 page 308: combined=0.477 (ssim=0.50 hist=1.00 edge=0.32 tmpl=0.63 phash=0.70 ocr=0.10)
+2026-02-14 21:50:19,711 [INFO] docsync.image_comparator (image_comparator.py:449):   #3 page 242: combined=0.472 (ssim=0.50 hist=1.00 edge=0.30 tmpl=0.74 phash=0.64 ocr=0.10)
+2026-02-14 21:50:19,711 [INFO] docsync.image_comparator (image_comparator.py:449):   #4 page 306: combined=0.458 (ssim=0.48 hist=1.00 edge=0.31 tmpl=0.61 phash=0.66 ocr=0.09)
+2026-02-14 21:50:19,712 [INFO] docsync.image_comparator (image_comparator.py:449):   #5 page 245: combined=0.457 (ssim=0.47 hist=1.00 edge=0.26 tmpl=0.71 phash=0.66 ocr=0.09)
+2026-02-14 21:50:19,712 [INFO] docsync.image_comparator (image_comparator.py:463): No good match for new_1_Screenshot 2026-02-13 215006.png: best score 0.548 < threshold 0.55
+2026-02-14 21:58:50,100 [INFO] docsync.image_comparator (image_comparator.py:121): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-02-14 21:58:50,112 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-02-14 21:58:50,113 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-02-14 21:58:50,118 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-02-14 21:58:50,118 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-02-14 21:58:50,119 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-02-14 21:58:52,171 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-02-14 21:58:52,171 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-02-14 22:00:38,760 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 22:01:58,840 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 59/465 candidates for new_0_Screenshot 2026-02-13 023358.png (aspect/size pre-filter)
+2026-02-14 22:01:58,841 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 429: combined=0.849 (ssim=0.80 hist=1.00 edge=0.77 tmpl=0.93 phash=0.81 ocr=0.00)
+2026-02-14 22:01:58,841 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 428: combined=0.848 (ssim=0.80 hist=1.00 edge=0.82 tmpl=0.87 phash=0.81 ocr=0.00)
+2026-02-14 22:01:58,842 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 435: combined=0.837 (ssim=0.81 hist=1.00 edge=0.78 tmpl=0.94 phash=0.75 ocr=0.00)
+2026-02-14 22:01:58,842 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 74: combined=0.835 (ssim=0.81 hist=1.00 edge=0.81 tmpl=0.93 phash=0.72 ocr=0.00)
+2026-02-14 22:01:58,842 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 436: combined=0.823 (ssim=0.79 hist=1.00 edge=0.75 tmpl=0.94 phash=0.73 ocr=0.00)
+2026-02-14 22:01:59,877 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 429: ocr=0.01 -> combined=0.640
+2026-02-14 22:02:00,210 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 428: ocr=0.15 -> combined=0.674
+2026-02-14 22:02:00,664 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 435: ocr=0.02 -> combined=0.632
+2026-02-14 22:02:00,664 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 74 (candidate #1)
+2026-02-14 22:02:13,357 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer interface and the other image is an extracted page from a PDF document, but they are the same screen with minor visual differences.
+2026-02-14 22:02:13,358 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 436 (candidate #2)
+2026-02-14 22:02:18,066 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface with various elements such as text fields, buttons, and menus, suggesting that it is a screenshot of a software application or a web page.
+2026-02-14 22:02:18,066 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 138 (candidate #3)
+2026-02-14 22:02:22,564 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a calendar application or scheduling tool, with minor visual differences such as the position of some elements and possibly the content within them.
+2026-02-14 22:02:22,565 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 428 -> page 74 (score 0.876)
+2026-02-14 22:02:59,632 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 120/465 candidates for new_1_Screenshot 2026-02-13 215006.png (aspect/size pre-filter)
+2026-02-14 22:02:59,633 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 308: combined=0.609 (ssim=0.50 hist=1.00 edge=0.32 tmpl=0.63 phash=0.70 ocr=0.00)
+2026-02-14 22:02:59,633 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 242: combined=0.607 (ssim=0.50 hist=1.00 edge=0.30 tmpl=0.74 phash=0.64 ocr=0.00)
+2026-02-14 22:02:59,633 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 245: combined=0.589 (ssim=0.47 hist=1.00 edge=0.26 tmpl=0.71 phash=0.66 ocr=0.00)
+2026-02-14 22:02:59,634 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 306: combined=0.587 (ssim=0.48 hist=1.00 edge=0.31 tmpl=0.61 phash=0.66 ocr=0.00)
+2026-02-14 22:02:59,634 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 243: combined=0.583 (ssim=0.44 hist=1.00 edge=0.29 tmpl=0.73 phash=0.62 ocr=0.00)
+2026-02-14 22:03:00,696 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 308: ocr=0.10 -> combined=0.483
+2026-02-14 22:03:01,000 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 242: ocr=0.10 -> combined=0.479
+2026-02-14 22:03:01,315 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 245: ocr=0.09 -> combined=0.464
+2026-02-14 22:03:01,316 [INFO] docsync.image_comparator (image_comparator.py:532): No good match for new_1_Screenshot 2026-02-13 215006.png: best score 0.483 < threshold 0.55
+2026-02-14 22:03:38,401 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 52/465 candidates for new_2_Screenshot 2026-02-13 215035.png (aspect/size pre-filter)
+2026-02-14 22:03:38,402 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 335: combined=0.747 (ssim=0.63 hist=1.00 edge=0.57 tmpl=0.95 phash=0.73 ocr=0.00)
+2026-02-14 22:03:38,402 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 121: combined=0.736 (ssim=0.62 hist=1.00 edge=0.53 tmpl=0.95 phash=0.73 ocr=0.00)
+2026-02-14 22:03:38,402 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 34: combined=0.729 (ssim=0.61 hist=1.00 edge=0.58 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:03:38,402 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 451: combined=0.718 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:03:38,403 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 435: combined=0.715 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.92 phash=0.69 ocr=0.00)
+2026-02-14 22:03:39,646 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 335: ocr=0.08 -> combined=0.581
+2026-02-14 22:03:40,073 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 121: ocr=0.01 -> combined=0.554
+2026-02-14 22:03:40,639 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 34: ocr=0.03 -> combined=0.554
+2026-02-14 22:03:40,639 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 451 (candidate #1)
+2026-02-14 22:03:45,493 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for configuring a PostgreSQL database server.
+2026-02-14 22:03:45,493 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 435 (candidate #2)
+2026-02-14 22:03:49,846 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a command prompt or terminal window with text and commands related to running a Python script.
+2026-02-14 22:03:49,847 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 334 (candidate #3)
+2026-02-14 22:03:53,983 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows the same interface with minor visual differences such as the positioning of elements and the text in the PDF document.
+2026-02-14 22:03:53,983 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 335 -> page 451 (score 0.789)
+2026-02-14 22:04:17,265 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 63/465 candidates for new_3_Screenshot 2026-02-13 215107.png (aspect/size pre-filter)
+2026-02-14 22:04:17,265 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 47: combined=0.943 (ssim=0.92 hist=1.00 edge=0.87 tmpl=0.98 phash=0.97 ocr=0.00)
+2026-02-14 22:04:17,266 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 48: combined=0.636 (ssim=0.46 hist=0.97 edge=0.58 tmpl=0.54 phash=0.72 ocr=0.00)
+2026-02-14 22:04:17,266 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 55: combined=0.592 (ssim=0.42 hist=0.93 edge=0.59 tmpl=0.57 phash=0.58 ocr=0.00)
+2026-02-14 22:04:17,267 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 49: combined=0.589 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.51 phash=0.55 ocr=0.00)
+2026-02-14 22:04:17,267 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 61: combined=0.585 (ssim=0.39 hist=0.93 edge=0.59 tmpl=0.61 phash=0.56 ocr=0.00)
+2026-02-14 22:04:17,829 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 47: ocr=0.93 -> combined=0.941
+2026-02-14 22:04:18,167 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 48: ocr=0.34 -> combined=0.561
+2026-02-14 22:04:18,542 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 55: ocr=0.32 -> combined=0.523
+2026-02-14 22:04:18,542 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 47 (candidate #1)
+2026-02-14 22:04:22,890 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a website or application.
+2026-02-14 22:04:22,891 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 49 (candidate #2)
+2026-02-14 22:04:26,849 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface, which is a login page for an admin panel.
+2026-02-14 22:04:26,850 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 61 (candidate #3)
+2026-02-14 22:04:30,510 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 22:04:54,036 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 43/465 candidates for new_4_Screenshot 2026-02-13 215113.png (aspect/size pre-filter)
+2026-02-14 22:04:54,037 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 48: combined=0.902 (ssim=0.90 hist=1.00 edge=0.85 tmpl=0.96 phash=0.84 ocr=0.00)
+2026-02-14 22:04:54,037 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 55: combined=0.676 (ssim=0.60 hist=0.98 edge=0.63 tmpl=0.71 phash=0.58 ocr=0.00)
+2026-02-14 22:04:54,037 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 49: combined=0.637 (ssim=0.63 hist=0.99 edge=0.65 tmpl=0.65 phash=0.42 ocr=0.00)
+2026-02-14 22:04:54,037 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 47: combined=0.619 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.55 phash=0.66 ocr=0.00)
+2026-02-14 22:04:54,038 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 61: combined=0.617 (ssim=0.55 hist=0.97 edge=0.64 tmpl=0.64 phash=0.44 ocr=0.00)
+2026-02-14 22:04:54,367 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 48: ocr=0.99 -> combined=0.924
+2026-02-14 22:04:54,367 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 55: ocr=0.21 -> combined=0.558
+2026-02-14 22:04:54,705 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 49: ocr=0.23 -> combined=0.536
+2026-02-14 22:04:54,706 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 48 (candidate #1)
+2026-02-14 22:04:59,316 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface for a 'Forgot Password' feature on a website or application.
+2026-02-14 22:04:59,316 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 47 (candidate #2)
+2026-02-14 22:05:03,045 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a website or application.
+2026-02-14 22:05:03,046 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 61 (candidate #3)
+2026-02-14 22:05:06,924 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for a website or application.
+2026-02-14 22:05:42,768 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 50/465 candidates for new_5_Screenshot 2026-02-13 215122.png (aspect/size pre-filter)
+2026-02-14 22:05:42,768 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 49: combined=0.944 (ssim=0.97 hist=1.00 edge=0.89 tmpl=0.99 phash=0.89 ocr=0.00)
+2026-02-14 22:05:42,769 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 55: combined=0.654 (ssim=0.68 hist=0.99 edge=0.68 tmpl=0.48 phash=0.52 ocr=0.00)
+2026-02-14 22:05:42,769 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 48: combined=0.654 (ssim=0.63 hist=0.99 edge=0.63 tmpl=0.64 phash=0.50 ocr=0.00)
+2026-02-14 22:05:42,769 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 61: combined=0.628 (ssim=0.66 hist=0.99 edge=0.68 tmpl=0.41 phash=0.47 ocr=0.00)
+2026-02-14 22:05:42,769 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 335: combined=0.615 (ssim=0.66 hist=0.14 edge=0.71 tmpl=0.82 phash=0.66 ocr=0.00)
+2026-02-14 22:05:43,148 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 49: ocr=0.72 -> combined=0.888
+2026-02-14 22:05:43,149 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 55: ocr=0.17 -> combined=0.534
+2026-02-14 22:05:43,149 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 48: ocr=0.34 -> combined=0.577
+2026-02-14 22:05:43,150 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 49 (candidate #1)
+2026-02-14 22:05:47,345 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 22:05:47,346 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 61 (candidate #2)
+2026-02-14 22:05:51,406 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user registration or login screen for an application or website.
+2026-02-14 22:05:51,407 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 335 (candidate #3)
+2026-02-14 22:05:55,721 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface for creating or editing an admin account in a software application.
+2026-02-14 22:06:28,884 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 45/465 candidates for new_6_Screenshot 2026-02-13 215427.png (aspect/size pre-filter)
+2026-02-14 22:06:28,885 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 63: combined=0.786 (ssim=0.74 hist=1.00 edge=0.68 tmpl=0.97 phash=0.67 ocr=0.00)
+2026-02-14 22:06:28,885 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 383: combined=0.786 (ssim=0.71 hist=1.00 edge=0.67 tmpl=0.97 phash=0.72 ocr=0.00)
+2026-02-14 22:06:28,885 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 145: combined=0.770 (ssim=0.69 hist=1.00 edge=0.64 tmpl=0.93 phash=0.72 ocr=0.00)
+2026-02-14 22:06:28,885 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 71: combined=0.770 (ssim=0.70 hist=1.00 edge=0.64 tmpl=0.94 phash=0.70 ocr=0.00)
+2026-02-14 22:06:28,885 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 121: combined=0.767 (ssim=0.72 hist=1.00 edge=0.64 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:06:29,684 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 63: ocr=0.42 -> combined=0.693
+2026-02-14 22:06:30,170 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 383: ocr=0.02 -> combined=0.595
+2026-02-14 22:06:30,599 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 145: ocr=0.01 -> combined=0.580
+2026-02-14 22:06:30,599 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 71 (candidate #1)
+2026-02-14 22:06:35,247 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for a software application or website.
+2026-02-14 22:06:35,247 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 121 (candidate #2)
+2026-02-14 22:06:39,538 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer interface and the PDF document appears to be a digital representation of the same interface, indicating they are the same.
+2026-02-14 22:06:39,539 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 74 (candidate #3)
+2026-02-14 22:06:45,296 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer screen displaying a user interface that appears to be a webpage or application with a navigation bar at the top and various menu items on the left side. The content of the page includes text, images, and possibly buttons or links. It looks like a standard web-based interface for managing or viewing information, such as a dashboard or control panel.
+2026-02-14 22:06:45,297 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 63 -> page 71 (score 0.827)
+2026-02-14 22:07:01,677 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 186/465 candidates for new_7_Screenshot 2026-02-13 215441.png (aspect/size pre-filter)
+2026-02-14 22:07:01,677 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 428: combined=0.877 (ssim=0.84 hist=1.00 edge=0.82 tmpl=0.94 phash=0.84 ocr=0.00)
+2026-02-14 22:07:01,677 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 74: combined=0.847 (ssim=0.80 hist=1.00 edge=0.79 tmpl=0.90 phash=0.81 ocr=0.00)
+2026-02-14 22:07:01,678 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 430: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.94 phash=0.80 ocr=0.00)
+2026-02-14 22:07:01,678 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 435: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.92 phash=0.81 ocr=0.00)
+2026-02-14 22:07:01,678 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 436: combined=0.837 (ssim=0.77 hist=1.00 edge=0.75 tmpl=0.92 phash=0.83 ocr=0.00)
+2026-02-14 22:07:01,950 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 428: ocr=0.21 -> combined=0.709
+2026-02-14 22:07:02,369 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 74: ocr=0.02 -> combined=0.640
+2026-02-14 22:07:02,790 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 430: ocr=0.02 -> combined=0.639
+2026-02-14 22:07:02,792 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 435 (candidate #1)
+2026-02-14 22:07:07,543 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface with various options and text fields.
+2026-02-14 22:07:07,544 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 436 (candidate #2)
+2026-02-14 22:07:12,712 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for a database or data management system, with options such as 'Admin', 'Files', 'Users', and 'Logs' visible on the left sidebar. The layout, design, and elements are consistent across both screens.
+2026-02-14 22:07:12,713 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 422 (candidate #3)
+2026-02-14 22:07:16,382 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface with minor visual differences.
+2026-02-14 22:07:16,383 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 428 -> page 435 (score 0.884)
+2026-02-14 22:07:40,114 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 104/465 candidates for new_8_Screenshot 2026-02-13 215459.png (aspect/size pre-filter)
+2026-02-14 22:07:40,114 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 65: combined=0.626 (ssim=0.39 hist=1.00 edge=0.31 tmpl=0.77 phash=0.81 ocr=0.00)
+2026-02-14 22:07:40,115 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 307: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67 ocr=0.00)
+2026-02-14 22:07:40,115 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 358: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67 ocr=0.00)
+2026-02-14 22:07:40,115 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 306: combined=0.588 (ssim=0.45 hist=1.00 edge=0.37 tmpl=0.64 phash=0.62 ocr=0.00)
+2026-02-14 22:07:40,115 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 310: combined=0.583 (ssim=0.41 hist=1.00 edge=0.35 tmpl=0.64 phash=0.66 ocr=0.00)
+2026-02-14 22:07:41,095 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 65: ocr=0.10 -> combined=0.496
+2026-02-14 22:07:41,421 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 307: ocr=0.18 -> combined=0.493
+2026-02-14 22:07:41,734 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 358: ocr=0.18 -> combined=0.493
+2026-02-14 22:07:41,735 [INFO] docsync.image_comparator (image_comparator.py:532): No good match for new_8_Screenshot 2026-02-13 215459.png: best score 0.496 < threshold 0.55
+2026-02-14 22:07:41,735 [INFO] docsync.image_comparator (image_comparator.py:602): Matched 9 images (7 good matches)
+2026-02-14 22:07:41,760 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_0_Screenshot 2026-02-13 023358.png, exists=True
+2026-02-14 22:07:41,761 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page74_img1.png, exists=True
+2026-02-14 22:07:41,763 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_1_Screenshot 2026-02-13 215006.png, exists=True
+2026-02-14 22:07:41,773 [WARNING] docsync.api (routes.py:407): Preview: no matched image for index 1, kind=matched
+2026-02-14 22:07:41,775 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_2_Screenshot 2026-02-13 215035.png, exists=True
+2026-02-14 22:07:41,776 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page451_img1.png, exists=True
+2026-02-14 22:07:41,782 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_3_Screenshot 2026-02-13 215107.png, exists=True
+2026-02-14 22:07:41,788 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page47_img1.png, exists=True
+2026-02-14 22:07:41,793 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_4_Screenshot 2026-02-13 215113.png, exists=True
+2026-02-14 22:07:41,795 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page48_img1.png, exists=True
+2026-02-14 22:07:41,797 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_5_Screenshot 2026-02-13 215122.png, exists=True
+2026-02-14 22:07:41,802 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page49_img1.png, exists=True
+2026-02-14 22:07:41,805 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_6_Screenshot 2026-02-13 215427.png, exists=True
+2026-02-14 22:07:41,806 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page71_img3.png, exists=True
+2026-02-14 22:07:41,813 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_7_Screenshot 2026-02-13 215441.png, exists=True
+2026-02-14 22:07:41,817 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\extracted\page435_img2.png, exists=True
+2026-02-14 22:07:41,818 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmp0s_pd7vo\new_8_Screenshot 2026-02-13 215459.png, exists=True
+2026-02-14 22:07:41,820 [WARNING] docsync.api (routes.py:407): Preview: no matched image for index 8, kind=matched
+2026-02-14 22:23:03,487 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 465 images from test_pdf.pdf
+2026-02-14 22:24:22,055 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 59/465 candidates for new_0_Screenshot 2026-02-13 023358.png (aspect/size pre-filter)
+2026-02-14 22:24:22,056 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 429: combined=0.849 (ssim=0.80 hist=1.00 edge=0.77 tmpl=0.93 phash=0.81 ocr=0.00)
+2026-02-14 22:24:22,056 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 428: combined=0.848 (ssim=0.80 hist=1.00 edge=0.82 tmpl=0.87 phash=0.81 ocr=0.00)
+2026-02-14 22:24:22,056 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 435: combined=0.837 (ssim=0.81 hist=1.00 edge=0.78 tmpl=0.94 phash=0.75 ocr=0.00)
+2026-02-14 22:24:22,057 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 74: combined=0.835 (ssim=0.81 hist=1.00 edge=0.81 tmpl=0.93 phash=0.72 ocr=0.00)
+2026-02-14 22:24:22,057 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 436: combined=0.823 (ssim=0.79 hist=1.00 edge=0.75 tmpl=0.94 phash=0.73 ocr=0.00)
+2026-02-14 22:24:23,013 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 429: ocr=0.01 -> combined=0.640
+2026-02-14 22:24:23,325 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 428: ocr=0.15 -> combined=0.674
+2026-02-14 22:24:23,760 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 435: ocr=0.02 -> combined=0.632
+2026-02-14 22:24:23,761 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 74 (candidate #1)
+2026-02-14 22:24:37,055 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface with various elements such as text boxes, buttons, and menus.
+2026-02-14 22:24:37,057 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 436 (candidate #2)
+2026-02-14 22:24:41,230 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a screenshot of a computer program or application with various elements such as text boxes, buttons, and menus.
+2026-02-14 22:24:41,231 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 138 (candidate #3)
+2026-02-14 22:24:45,421 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a calendar application or scheduling tool with a list of events and tasks.
+2026-02-14 22:24:45,423 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 428 -> page 74 (score 0.876)
+2026-02-14 22:25:21,633 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 120/465 candidates for new_1_Screenshot 2026-02-13 215006.png (aspect/size pre-filter)
+2026-02-14 22:25:21,633 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 308: combined=0.609 (ssim=0.50 hist=1.00 edge=0.32 tmpl=0.63 phash=0.70 ocr=0.00)
+2026-02-14 22:25:21,634 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 242: combined=0.607 (ssim=0.50 hist=1.00 edge=0.30 tmpl=0.74 phash=0.64 ocr=0.00)
+2026-02-14 22:25:21,634 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 245: combined=0.589 (ssim=0.47 hist=1.00 edge=0.26 tmpl=0.71 phash=0.66 ocr=0.00)
+2026-02-14 22:25:21,635 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 306: combined=0.587 (ssim=0.48 hist=1.00 edge=0.31 tmpl=0.61 phash=0.66 ocr=0.00)
+2026-02-14 22:25:21,635 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 243: combined=0.583 (ssim=0.44 hist=1.00 edge=0.29 tmpl=0.73 phash=0.62 ocr=0.00)
+2026-02-14 22:25:22,694 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 308: ocr=0.10 -> combined=0.483
+2026-02-14 22:25:23,035 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 242: ocr=0.10 -> combined=0.479
+2026-02-14 22:25:23,356 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 245: ocr=0.09 -> combined=0.464
+2026-02-14 22:25:23,356 [INFO] docsync.image_comparator (image_comparator.py:532): No good match for new_1_Screenshot 2026-02-13 215006.png: best score 0.483 < threshold 0.55
+2026-02-14 22:26:00,428 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 52/465 candidates for new_2_Screenshot 2026-02-13 215035.png (aspect/size pre-filter)
+2026-02-14 22:26:00,428 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 335: combined=0.747 (ssim=0.63 hist=1.00 edge=0.57 tmpl=0.95 phash=0.73 ocr=0.00)
+2026-02-14 22:26:00,428 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 121: combined=0.736 (ssim=0.62 hist=1.00 edge=0.53 tmpl=0.95 phash=0.73 ocr=0.00)
+2026-02-14 22:26:00,429 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 34: combined=0.729 (ssim=0.61 hist=1.00 edge=0.58 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:26:00,429 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 451: combined=0.718 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:26:00,429 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 435: combined=0.715 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.92 phash=0.69 ocr=0.00)
+2026-02-14 22:26:01,673 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 335: ocr=0.08 -> combined=0.581
+2026-02-14 22:26:02,095 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 121: ocr=0.01 -> combined=0.554
+2026-02-14 22:26:02,685 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 34: ocr=0.03 -> combined=0.554
+2026-02-14 22:26:02,685 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 451 (candidate #1)
+2026-02-14 22:26:06,978 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface with minor visual differences.
+2026-02-14 22:26:06,979 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 435 (candidate #2)
+2026-02-14 22:26:11,107 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying an error message from a PostgreSQL database server.
+2026-02-14 22:26:11,107 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 334 (candidate #3)
+2026-02-14 22:26:14,816 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface with minor visual differences.
+2026-02-14 22:26:14,817 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 335 -> page 451 (score 0.789)
+2026-02-14 22:26:37,785 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 63/465 candidates for new_3_Screenshot 2026-02-13 215107.png (aspect/size pre-filter)
+2026-02-14 22:26:37,785 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 47: combined=0.943 (ssim=0.92 hist=1.00 edge=0.87 tmpl=0.98 phash=0.97 ocr=0.00)
+2026-02-14 22:26:37,785 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 48: combined=0.636 (ssim=0.46 hist=0.97 edge=0.58 tmpl=0.54 phash=0.72 ocr=0.00)
+2026-02-14 22:26:37,786 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 55: combined=0.592 (ssim=0.42 hist=0.93 edge=0.59 tmpl=0.57 phash=0.58 ocr=0.00)
+2026-02-14 22:26:37,786 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 49: combined=0.589 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.51 phash=0.55 ocr=0.00)
+2026-02-14 22:26:37,786 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 61: combined=0.585 (ssim=0.39 hist=0.93 edge=0.59 tmpl=0.61 phash=0.56 ocr=0.00)
+2026-02-14 22:26:38,371 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 47: ocr=0.93 -> combined=0.941
+2026-02-14 22:26:38,688 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 48: ocr=0.34 -> combined=0.561
+2026-02-14 22:26:39,029 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 55: ocr=0.32 -> combined=0.523
+2026-02-14 22:26:39,030 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 47 (candidate #1)
+2026-02-14 22:26:43,441 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same login screen for a website or application.
+2026-02-14 22:26:43,442 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 49 (candidate #2)
+2026-02-14 22:26:47,105 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 22:26:47,106 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 61 (candidate #3)
+2026-02-14 22:26:51,097 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface, which appears to be a login or registration page for an admin panel.
+2026-02-14 22:27:14,483 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 43/465 candidates for new_4_Screenshot 2026-02-13 215113.png (aspect/size pre-filter)
+2026-02-14 22:27:14,483 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 48: combined=0.902 (ssim=0.90 hist=1.00 edge=0.85 tmpl=0.96 phash=0.84 ocr=0.00)
+2026-02-14 22:27:14,484 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 55: combined=0.676 (ssim=0.60 hist=0.98 edge=0.63 tmpl=0.71 phash=0.58 ocr=0.00)
+2026-02-14 22:27:14,484 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 49: combined=0.637 (ssim=0.63 hist=0.99 edge=0.65 tmpl=0.65 phash=0.42 ocr=0.00)
+2026-02-14 22:27:14,484 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 47: combined=0.619 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.55 phash=0.66 ocr=0.00)
+2026-02-14 22:27:14,485 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 61: combined=0.617 (ssim=0.55 hist=0.97 edge=0.64 tmpl=0.64 phash=0.44 ocr=0.00)
+2026-02-14 22:27:14,833 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 48: ocr=0.99 -> combined=0.924
+2026-02-14 22:27:14,834 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 55: ocr=0.21 -> combined=0.558
+2026-02-14 22:27:15,181 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 49: ocr=0.23 -> combined=0.536
+2026-02-14 22:27:15,181 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 48 (candidate #1)
+2026-02-14 22:27:19,760 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for a website or application.
+2026-02-14 22:27:19,762 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 47 (candidate #2)
+2026-02-14 22:27:23,546 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a website or application.
+2026-02-14 22:27:23,547 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 61 (candidate #3)
+2026-02-14 22:27:27,463 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for a website or application.
+2026-02-14 22:28:03,383 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 50/465 candidates for new_5_Screenshot 2026-02-13 215122.png (aspect/size pre-filter)
+2026-02-14 22:28:03,383 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 49: combined=0.944 (ssim=0.97 hist=1.00 edge=0.89 tmpl=0.99 phash=0.89 ocr=0.00)
+2026-02-14 22:28:03,385 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 55: combined=0.654 (ssim=0.68 hist=0.99 edge=0.68 tmpl=0.48 phash=0.52 ocr=0.00)
+2026-02-14 22:28:03,385 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 48: combined=0.654 (ssim=0.63 hist=0.99 edge=0.63 tmpl=0.64 phash=0.50 ocr=0.00)
+2026-02-14 22:28:03,385 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 61: combined=0.628 (ssim=0.66 hist=0.99 edge=0.68 tmpl=0.41 phash=0.47 ocr=0.00)
+2026-02-14 22:28:03,385 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 335: combined=0.615 (ssim=0.66 hist=0.14 edge=0.71 tmpl=0.82 phash=0.66 ocr=0.00)
+2026-02-14 22:28:03,767 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 49: ocr=0.72 -> combined=0.888
+2026-02-14 22:28:03,768 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 55: ocr=0.17 -> combined=0.534
+2026-02-14 22:28:03,769 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 48: ocr=0.34 -> combined=0.577
+2026-02-14 22:28:03,769 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 49 (candidate #1)
+2026-02-14 22:28:08,207 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface with minor visual differences.
+2026-02-14 22:28:08,209 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 61 (candidate #2)
+2026-02-14 22:28:12,779 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user registration or login page with various elements such as a world map, people's avatars, and input fields for registration.
+2026-02-14 22:28:12,780 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 335 (candidate #3)
+2026-02-14 22:28:16,448 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 22:28:49,546 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 45/465 candidates for new_6_Screenshot 2026-02-13 215427.png (aspect/size pre-filter)
+2026-02-14 22:28:49,547 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 63: combined=0.786 (ssim=0.74 hist=1.00 edge=0.68 tmpl=0.97 phash=0.67 ocr=0.00)
+2026-02-14 22:28:49,547 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 383: combined=0.786 (ssim=0.71 hist=1.00 edge=0.67 tmpl=0.97 phash=0.72 ocr=0.00)
+2026-02-14 22:28:49,547 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 145: combined=0.770 (ssim=0.69 hist=1.00 edge=0.64 tmpl=0.93 phash=0.72 ocr=0.00)
+2026-02-14 22:28:49,548 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 71: combined=0.770 (ssim=0.70 hist=1.00 edge=0.64 tmpl=0.94 phash=0.70 ocr=0.00)
+2026-02-14 22:28:49,548 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 121: combined=0.767 (ssim=0.72 hist=1.00 edge=0.64 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:28:50,367 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 63: ocr=0.42 -> combined=0.693
+2026-02-14 22:28:50,880 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 383: ocr=0.02 -> combined=0.595
+2026-02-14 22:28:51,281 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 145: ocr=0.01 -> combined=0.580
+2026-02-14 22:28:51,281 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 71 (candidate #1)
+2026-02-14 22:28:55,821 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for a software application or website.
+2026-02-14 22:28:55,823 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 121 (candidate #2)
+2026-02-14 22:29:00,176 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer screen displaying a user interface, and it appears to be a comparison of two images showing the same screen or interface component.
+2026-02-14 22:29:00,177 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 74 (candidate #3)
+2026-02-14 22:29:05,107 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer interface and the other image appears to be a screenshot of a PDF document that has been edited to look like a webpage. The layout, design, and elements are identical, indicating they are the same screen.
+2026-02-14 22:29:05,108 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 63 -> page 71 (score 0.827)
+2026-02-14 22:29:21,282 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 186/465 candidates for new_7_Screenshot 2026-02-13 215441.png (aspect/size pre-filter)
+2026-02-14 22:29:21,282 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 428: combined=0.877 (ssim=0.84 hist=1.00 edge=0.82 tmpl=0.94 phash=0.84 ocr=0.00)
+2026-02-14 22:29:21,282 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 74: combined=0.847 (ssim=0.80 hist=1.00 edge=0.79 tmpl=0.90 phash=0.81 ocr=0.00)
+2026-02-14 22:29:21,282 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 430: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.94 phash=0.80 ocr=0.00)
+2026-02-14 22:29:21,283 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 435: combined=0.846 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.92 phash=0.81 ocr=0.00)
+2026-02-14 22:29:21,283 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 436: combined=0.837 (ssim=0.77 hist=1.00 edge=0.75 tmpl=0.92 phash=0.83 ocr=0.00)
+2026-02-14 22:29:21,583 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 428: ocr=0.21 -> combined=0.709
+2026-02-14 22:29:21,995 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 74: ocr=0.02 -> combined=0.640
+2026-02-14 22:29:22,417 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 430: ocr=0.02 -> combined=0.639
+2026-02-14 22:29:22,418 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 435 (candidate #1)
+2026-02-14 22:29:27,147 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a computer screen displaying a user interface for an application or software program.
+2026-02-14 22:29:27,148 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 436 (candidate #2)
+2026-02-14 22:29:31,525 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for a database or data management system, with a focus on SQL operations and data manipulation.
+2026-02-14 22:29:31,527 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 422 (candidate #3)
+2026-02-14 22:29:35,227 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 22:29:35,228 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 428 -> page 435 (score 0.884)
+2026-02-14 22:29:58,838 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 104/465 candidates for new_8_Screenshot 2026-02-13 215459.png (aspect/size pre-filter)
+2026-02-14 22:29:58,838 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 65: combined=0.626 (ssim=0.39 hist=1.00 edge=0.31 tmpl=0.77 phash=0.81 ocr=0.00)
+2026-02-14 22:29:58,838 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 307: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67 ocr=0.00)
+2026-02-14 22:29:58,839 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 358: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67 ocr=0.00)
+2026-02-14 22:29:58,839 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 306: combined=0.588 (ssim=0.45 hist=1.00 edge=0.37 tmpl=0.64 phash=0.62 ocr=0.00)
+2026-02-14 22:29:58,839 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 310: combined=0.583 (ssim=0.41 hist=1.00 edge=0.35 tmpl=0.64 phash=0.66 ocr=0.00)
+2026-02-14 22:29:59,805 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 65: ocr=0.10 -> combined=0.496
+2026-02-14 22:30:00,136 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 307: ocr=0.18 -> combined=0.493
+2026-02-14 22:30:00,456 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 358: ocr=0.18 -> combined=0.493
+2026-02-14 22:30:00,457 [INFO] docsync.image_comparator (image_comparator.py:532): No good match for new_8_Screenshot 2026-02-13 215459.png: best score 0.496 < threshold 0.55
+2026-02-14 22:30:00,457 [INFO] docsync.image_comparator (image_comparator.py:602): Matched 9 images (7 good matches)
+2026-02-14 22:30:21,576 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_0_Screenshot 2026-02-13 023358.png, exists=True
+2026-02-14 22:30:21,580 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page74_img1.png, exists=True
+2026-02-14 22:30:28,060 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_1_Screenshot 2026-02-13 215006.png, exists=True
+2026-02-14 22:30:28,061 [WARNING] docsync.api (routes.py:407): Preview: no matched image for index 1, kind=matched
+2026-02-14 22:30:31,280 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_2_Screenshot 2026-02-13 215035.png, exists=True
+2026-02-14 22:30:31,292 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page451_img1.png, exists=True
+2026-02-14 22:30:36,008 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_3_Screenshot 2026-02-13 215107.png, exists=True
+2026-02-14 22:30:36,009 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page47_img1.png, exists=True
+2026-02-14 22:30:41,430 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_4_Screenshot 2026-02-13 215113.png, exists=True
+2026-02-14 22:30:41,433 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page48_img1.png, exists=True
+2026-02-14 22:30:42,676 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_5_Screenshot 2026-02-13 215122.png, exists=True
+2026-02-14 22:30:42,677 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page49_img1.png, exists=True
+2026-02-14 22:30:44,526 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_6_Screenshot 2026-02-13 215427.png, exists=True
+2026-02-14 22:30:44,529 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page71_img3.png, exists=True
+2026-02-14 22:30:50,617 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_7_Screenshot 2026-02-13 215441.png, exists=True
+2026-02-14 22:30:50,620 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\extracted\page435_img2.png, exists=True
+2026-02-14 22:30:59,789 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmpx82fv3cb\new_8_Screenshot 2026-02-13 215459.png, exists=True
+2026-02-14 22:30:59,791 [WARNING] docsync.api (routes.py:407): Preview: no matched image for index 8, kind=matched
+2026-02-14 22:36:52,283 [INFO] docsync.doc_parser (doc_parser.py:122): Extracted 523 images from pgadmin4-9.10.pdf
+2026-02-14 22:38:20,023 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 71/523 candidates for new_0_Screenshot 2026-02-13 023358.png (aspect/size pre-filter)
+2026-02-14 22:38:20,023 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 88: combined=0.835 (ssim=0.81 hist=1.00 edge=0.81 tmpl=0.93 phash=0.72 ocr=0.00)
+2026-02-14 22:38:20,023 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 152: combined=0.820 (ssim=0.76 hist=1.00 edge=0.75 tmpl=0.85 phash=0.81 ocr=0.00)
+2026-02-14 22:38:20,025 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 85: combined=0.806 (ssim=0.75 hist=1.00 edge=0.76 tmpl=0.94 phash=0.70 ocr=0.00)
+2026-02-14 22:38:20,025 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 56: combined=0.806 (ssim=0.78 hist=1.00 edge=0.76 tmpl=0.90 phash=0.70 ocr=0.00)
+2026-02-14 22:38:20,025 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 490: combined=0.806 (ssim=0.80 hist=1.00 edge=0.80 tmpl=0.91 phash=0.64 ocr=0.00)
+2026-02-14 22:38:21,082 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 88: ocr=0.01 -> combined=0.628
+2026-02-14 22:38:21,484 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 152: ocr=0.08 -> combined=0.636
+2026-02-14 22:38:21,772 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 85: ocr=0.06 -> combined=0.619
+2026-02-14 22:38:21,772 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 56 (candidate #1)
+2026-02-14 22:38:34,573 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface with minor visual differences.
+2026-02-14 22:38:34,573 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 490 (candidate #2)
+2026-02-14 22:38:38,151 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface with minor visual differences.
+2026-02-14 22:38:38,152 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_0_Screenshot 2026-02-13 023358.png -> page 96 (candidate #3)
+2026-02-14 22:38:42,426 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer interface and the other image is an extracted page from a PDF document, but they are the same screen.
+2026-02-14 22:38:42,427 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 152 -> page 56 (score 0.855)
+2026-02-14 22:39:23,396 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 144/523 candidates for new_1_Screenshot 2026-02-13 215006.png (aspect/size pre-filter)
+2026-02-14 22:39:23,397 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 34: combined=0.731 (ssim=0.62 hist=1.00 edge=0.36 tmpl=0.80 phash=0.94 ocr=0.00)
+2026-02-14 22:39:23,397 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 342: combined=0.609 (ssim=0.50 hist=1.00 edge=0.32 tmpl=0.63 phash=0.70 ocr=0.00)
+2026-02-14 22:39:23,397 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 276: combined=0.607 (ssim=0.50 hist=1.00 edge=0.30 tmpl=0.74 phash=0.64 ocr=0.00)
+2026-02-14 22:39:23,397 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 279: combined=0.589 (ssim=0.47 hist=1.00 edge=0.26 tmpl=0.71 phash=0.66 ocr=0.00)
+2026-02-14 22:39:23,397 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 340: combined=0.587 (ssim=0.48 hist=1.00 edge=0.31 tmpl=0.61 phash=0.66 ocr=0.00)
+2026-02-14 22:39:24,747 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 34: ocr=1.00 -> combined=0.798
+2026-02-14 22:39:25,048 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 342: ocr=0.10 -> combined=0.483
+2026-02-14 22:39:25,364 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 276: ocr=0.10 -> combined=0.479
+2026-02-14 22:39:25,365 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 34 (candidate #1)
+2026-02-14 22:39:30,508 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a configuration or settings menu for a network router or server, specifically for configuring an admin account and port forwarding.
+2026-02-14 22:39:30,509 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 279 (candidate #2)
+2026-02-14 22:39:34,666 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for configuring a network or server settings.
+2026-02-14 22:39:34,667 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_1_Screenshot 2026-02-13 215006.png -> page 340 (candidate #3)
+2026-02-14 22:39:38,661 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same user interface for configuring a SQL database connection in a software application.
+2026-02-14 22:40:19,660 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 65/523 candidates for new_2_Screenshot 2026-02-13 215035.png (aspect/size pre-filter)
+2026-02-14 22:40:19,661 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 35: combined=0.868 (ssim=0.79 hist=1.00 edge=0.69 tmpl=0.97 phash=0.95 ocr=0.00)
+2026-02-14 22:40:19,661 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 35: combined=0.754 (ssim=0.55 hist=1.00 edge=0.53 tmpl=0.92 phash=0.89 ocr=0.00)
+2026-02-14 22:40:19,661 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 369: combined=0.747 (ssim=0.63 hist=1.00 edge=0.57 tmpl=0.95 phash=0.73 ocr=0.00)
+2026-02-14 22:40:19,662 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 135: combined=0.736 (ssim=0.62 hist=1.00 edge=0.53 tmpl=0.95 phash=0.73 ocr=0.00)
+2026-02-14 22:40:19,662 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 490: combined=0.724 (ssim=0.59 hist=1.00 edge=0.55 tmpl=0.95 phash=0.70 ocr=0.00)
+2026-02-14 22:40:21,311 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 35: ocr=0.90 -> combined=0.877
+2026-02-14 22:40:22,186 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 35: ocr=0.74 -> combined=0.751
+2026-02-14 22:40:22,536 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 369: ocr=0.08 -> combined=0.581
+2026-02-14 22:40:22,537 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 35 (candidate #1)
+2026-02-14 22:40:27,190 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying an error message from a Python script.
+2026-02-14 22:40:27,191 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 35 (candidate #2)
+2026-02-14 22:40:31,270 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows the same interface, which is a computer screen displaying a command prompt with a Python script and its output.
+2026-02-14 22:40:31,270 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_2_Screenshot 2026-02-13 215035.png -> page 135 (candidate #3)
+2026-02-14 22:40:35,754 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows the same interface, which appears to be a computer screen displaying a user interface for configuring or managing cloud services, specifically focusing on database settings and authentication details.
+2026-02-14 22:41:01,720 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 74/523 candidates for new_3_Screenshot 2026-02-13 215107.png (aspect/size pre-filter)
+2026-02-14 22:41:01,721 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 52: combined=0.943 (ssim=0.92 hist=1.00 edge=0.87 tmpl=0.98 phash=0.97 ocr=0.00)
+2026-02-14 22:41:01,721 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 53: combined=0.636 (ssim=0.46 hist=0.97 edge=0.58 tmpl=0.54 phash=0.72 ocr=0.00)
+2026-02-14 22:41:01,721 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 63: combined=0.592 (ssim=0.42 hist=0.93 edge=0.59 tmpl=0.57 phash=0.58 ocr=0.00)
+2026-02-14 22:41:01,722 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 54: combined=0.589 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.51 phash=0.55 ocr=0.00)
+2026-02-14 22:41:01,722 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 69: combined=0.585 (ssim=0.39 hist=0.93 edge=0.59 tmpl=0.61 phash=0.56 ocr=0.00)
+2026-02-14 22:41:02,306 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 52: ocr=0.93 -> combined=0.941
+2026-02-14 22:41:02,630 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 53: ocr=0.34 -> combined=0.561
+2026-02-14 22:41:02,995 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 63: ocr=0.32 -> combined=0.523
+2026-02-14 22:41:02,997 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 52 (candidate #1)
+2026-02-14 22:41:07,358 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same login screen for a website or application.
+2026-02-14 22:41:07,359 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 54 (candidate #2)
+2026-02-14 22:41:11,104 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface with minor visual differences.
+2026-02-14 22:41:11,105 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_3_Screenshot 2026-02-13 215107.png -> page 69 (candidate #3)
+2026-02-14 22:41:14,771 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 22:41:40,709 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 53/523 candidates for new_4_Screenshot 2026-02-13 215113.png (aspect/size pre-filter)
+2026-02-14 22:41:40,710 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 53: combined=0.902 (ssim=0.90 hist=1.00 edge=0.85 tmpl=0.96 phash=0.84 ocr=0.00)
+2026-02-14 22:41:40,710 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 63: combined=0.676 (ssim=0.60 hist=0.98 edge=0.63 tmpl=0.71 phash=0.58 ocr=0.00)
+2026-02-14 22:41:40,710 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 54: combined=0.637 (ssim=0.63 hist=0.99 edge=0.65 tmpl=0.65 phash=0.42 ocr=0.00)
+2026-02-14 22:41:40,710 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 52: combined=0.619 (ssim=0.46 hist=0.97 edge=0.57 tmpl=0.55 phash=0.66 ocr=0.00)
+2026-02-14 22:41:40,711 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 69: combined=0.617 (ssim=0.55 hist=0.97 edge=0.64 tmpl=0.64 phash=0.44 ocr=0.00)
+2026-02-14 22:41:41,063 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 53: ocr=0.99 -> combined=0.924
+2026-02-14 22:41:41,064 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 63: ocr=0.21 -> combined=0.558
+2026-02-14 22:41:41,416 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 54: ocr=0.23 -> combined=0.536
+2026-02-14 22:41:41,416 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 53 (candidate #1)
+2026-02-14 22:41:45,992 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a login screen for an admin account on a website or application.
+2026-02-14 22:41:45,993 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 52 (candidate #2)
+2026-02-14 22:41:49,731 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same login screen for a website or application.
+2026-02-14 22:41:49,732 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_4_Screenshot 2026-02-13 215113.png -> page 69 (candidate #3)
+2026-02-14 22:41:54,118 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image is a screenshot of a computer screen displaying a login page for a website or application, and it appears to be the same as the one in the PDF document.
+2026-02-14 22:42:34,430 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 62/523 candidates for new_5_Screenshot 2026-02-13 215122.png (aspect/size pre-filter)
+2026-02-14 22:42:34,430 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 54: combined=0.944 (ssim=0.97 hist=1.00 edge=0.89 tmpl=0.99 phash=0.89 ocr=0.00)
+2026-02-14 22:42:34,430 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 63: combined=0.654 (ssim=0.68 hist=0.99 edge=0.68 tmpl=0.48 phash=0.52 ocr=0.00)
+2026-02-14 22:42:34,431 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 53: combined=0.654 (ssim=0.63 hist=0.99 edge=0.63 tmpl=0.64 phash=0.50 ocr=0.00)
+2026-02-14 22:42:34,431 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 69: combined=0.628 (ssim=0.66 hist=0.99 edge=0.68 tmpl=0.41 phash=0.47 ocr=0.00)
+2026-02-14 22:42:34,431 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 369: combined=0.615 (ssim=0.66 hist=0.14 edge=0.71 tmpl=0.82 phash=0.66 ocr=0.00)
+2026-02-14 22:42:34,815 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 54: ocr=0.72 -> combined=0.888
+2026-02-14 22:42:34,816 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 63: ocr=0.17 -> combined=0.534
+2026-02-14 22:42:34,817 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 53: ocr=0.34 -> combined=0.577
+2026-02-14 22:42:34,817 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 54 (candidate #1)
+2026-02-14 22:42:39,296 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface with minor visual differences.
+2026-02-14 22:42:39,298 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 69 (candidate #2)
+2026-02-14 22:42:42,930 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface.
+2026-02-14 22:42:42,931 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_5_Screenshot 2026-02-13 215122.png -> page 369 (candidate #3)
+2026-02-14 22:42:46,899 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The image shows two identical screenshots of a computer interface, which appear to be the same.
+2026-02-14 22:43:23,686 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 56/523 candidates for new_6_Screenshot 2026-02-13 215427.png (aspect/size pre-filter)
+2026-02-14 22:43:23,687 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 72: combined=0.950 (ssim=0.95 hist=1.00 edge=0.83 tmpl=0.99 phash=0.98 ocr=0.00)
+2026-02-14 22:43:23,687 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 417: combined=0.786 (ssim=0.71 hist=1.00 edge=0.67 tmpl=0.97 phash=0.72 ocr=0.00)
+2026-02-14 22:43:23,688 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 159: combined=0.770 (ssim=0.69 hist=1.00 edge=0.64 tmpl=0.93 phash=0.72 ocr=0.00)
+2026-02-14 22:43:23,688 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 85: combined=0.770 (ssim=0.70 hist=1.00 edge=0.64 tmpl=0.94 phash=0.70 ocr=0.00)
+2026-02-14 22:43:23,688 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 135: combined=0.767 (ssim=0.72 hist=1.00 edge=0.64 tmpl=0.95 phash=0.67 ocr=0.00)
+2026-02-14 22:43:24,552 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 72: ocr=0.40 -> combined=0.812
+2026-02-14 22:43:25,093 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 417: ocr=0.02 -> combined=0.595
+2026-02-14 22:43:25,499 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 159: ocr=0.01 -> combined=0.580
+2026-02-14 22:43:25,500 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 72 (candidate #1)
+2026-02-14 22:43:30,176 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a webpage or a software application's user interface.
+2026-02-14 22:43:30,177 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 85 (candidate #2)
+2026-02-14 22:43:34,468 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same user interface, which appears to be a screenshot of a computer screen displaying a software application or webpage with various options and settings.
+2026-02-14 22:43:34,468 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_6_Screenshot 2026-02-13 215427.png -> page 135 (candidate #3)
+2026-02-14 22:43:38,588 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user authentication or login screen for a cloud service or application.
+2026-02-14 22:43:56,527 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 220/523 candidates for new_7_Screenshot 2026-02-13 215441.png (aspect/size pre-filter)
+2026-02-14 22:43:56,527 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 56: combined=0.854 (ssim=0.82 hist=1.00 edge=0.78 tmpl=0.95 phash=0.80 ocr=0.00)
+2026-02-14 22:43:56,527 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 88: combined=0.847 (ssim=0.80 hist=1.00 edge=0.79 tmpl=0.90 phash=0.81 ocr=0.00)
+2026-02-14 22:43:56,527 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 494: combined=0.824 (ssim=0.80 hist=1.00 edge=0.78 tmpl=0.95 phash=0.70 ocr=0.00)
+2026-02-14 22:43:56,528 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 467: combined=0.822 (ssim=0.78 hist=1.00 edge=0.79 tmpl=0.87 phash=0.75 ocr=0.00)
+2026-02-14 22:43:56,528 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 507: combined=0.818 (ssim=0.74 hist=1.00 edge=0.71 tmpl=0.92 phash=0.81 ocr=0.00)
+2026-02-14 22:43:57,152 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 56: ocr=0.18 -> combined=0.685
+2026-02-14 22:43:57,153 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 88: ocr=0.02 -> combined=0.640
+2026-02-14 22:43:57,719 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 494: ocr=0.01 -> combined=0.620
+2026-02-14 22:43:57,720 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 467 (candidate #1)
+2026-02-14 22:44:02,321 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for an application or software program.
+2026-02-14 22:44:02,322 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 507 (candidate #2)
+2026-02-14 22:44:05,920 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 22:44:05,921 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_7_Screenshot 2026-02-13 215441.png -> page 475 (candidate #3)
+2026-02-14 22:44:09,521 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The two images show the same screen interface
+2026-02-14 22:44:09,523 [INFO] docsync.image_comparator (image_comparator.py:563): AI overturned fast-score winner: page 56 -> page 467 (score 0.866)
+2026-02-14 22:44:36,447 [INFO] docsync.image_comparator (image_comparator.py:487): Skipped 120/523 candidates for new_8_Screenshot 2026-02-13 215459.png (aspect/size pre-filter)
+2026-02-14 22:44:36,448 [INFO] docsync.image_comparator (image_comparator.py:492):   #1 page 73: combined=0.799 (ssim=0.68 hist=1.00 edge=0.56 tmpl=0.89 phash=0.94 ocr=0.00)
+2026-02-14 22:44:36,448 [INFO] docsync.image_comparator (image_comparator.py:492):   #2 page 341: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67 ocr=0.00)
+2026-02-14 22:44:36,448 [INFO] docsync.image_comparator (image_comparator.py:492):   #3 page 392: combined=0.600 (ssim=0.46 hist=1.00 edge=0.36 tmpl=0.63 phash=0.67 ocr=0.00)
+2026-02-14 22:44:36,448 [INFO] docsync.image_comparator (image_comparator.py:492):   #4 page 340: combined=0.588 (ssim=0.45 hist=1.00 edge=0.37 tmpl=0.64 phash=0.62 ocr=0.00)
+2026-02-14 22:44:36,449 [INFO] docsync.image_comparator (image_comparator.py:492):   #5 page 210: combined=0.586 (ssim=0.44 hist=1.00 edge=0.36 tmpl=0.71 phash=0.59 ocr=0.00)
+2026-02-14 22:44:37,425 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #1 page 73: ocr=0.38 -> combined=0.694
+2026-02-14 22:44:37,712 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #2 page 341: ocr=0.18 -> combined=0.493
+2026-02-14 22:44:38,048 [INFO] docsync.image_comparator (image_comparator.py:517):   OCR #3 page 392: ocr=0.18 -> combined=0.493
+2026-02-14 22:44:38,049 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 73 (candidate #1)
+2026-02-14 22:44:42,957 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for configuring a PostgreSQL database in an admin panel.
+2026-02-14 22:44:42,958 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 340 (candidate #2)
+2026-02-14 22:44:47,085 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which appears to be a user interface for configuring or managing a SQL database in a software application.
+2026-02-14 22:44:47,086 [INFO] docsync.image_comparator (image_comparator.py:552): AI verifying: new_8_Screenshot 2026-02-13 215459.png -> page 210 (candidate #3)
+2026-02-14 22:44:51,282 [INFO] docsync.ollama_comparator (ollama_comparator.py:118): Ollama score: 1.00 — The images show the same interface, which is a computer screen displaying a user interface for creating and managing schedules in a software application.
+2026-02-14 22:44:51,284 [INFO] docsync.image_comparator (image_comparator.py:602): Matched 9 images (9 good matches)
+2026-02-14 22:44:51,297 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_0_Screenshot 2026-02-13 023358.png, exists=True
+2026-02-14 22:44:51,312 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=0, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page56_img1.png, exists=True
+2026-02-14 22:44:51,313 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_1_Screenshot 2026-02-13 215006.png, exists=True
+2026-02-14 22:44:51,318 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=1, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page34_img1.png, exists=True
+2026-02-14 22:44:51,323 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_2_Screenshot 2026-02-13 215035.png, exists=True
+2026-02-14 22:44:51,329 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=2, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page35_img2.png, exists=True
+2026-02-14 22:44:51,330 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_3_Screenshot 2026-02-13 215107.png, exists=True
+2026-02-14 22:44:51,341 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=3, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page52_img1.png, exists=True
+2026-02-14 22:44:51,343 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_4_Screenshot 2026-02-13 215113.png, exists=True
+2026-02-14 22:44:51,345 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=4, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page53_img1.png, exists=True
+2026-02-14 22:44:51,353 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_5_Screenshot 2026-02-13 215122.png, exists=True
+2026-02-14 22:44:51,353 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=5, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page54_img1.png, exists=True
+2026-02-14 22:44:51,355 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_6_Screenshot 2026-02-13 215427.png, exists=True
+2026-02-14 22:44:51,363 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=6, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page72_img1.png, exists=True
+2026-02-14 22:44:51,365 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_7_Screenshot 2026-02-13 215441.png, exists=True
+2026-02-14 22:44:51,366 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=7, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page467_img1.jpeg, exists=True
+2026-02-14 22:44:51,375 [INFO] docsync.api (routes.py:410): Preview: kind=uploaded, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\new_8_Screenshot 2026-02-13 215459.png, exists=True
+2026-02-14 22:44:51,375 [INFO] docsync.api (routes.py:410): Preview: kind=matched, index=8, path=C:\Users\mdiza\AppData\Local\Temp\tmp4_2jrai7\extracted\page73_img2.png, exists=True

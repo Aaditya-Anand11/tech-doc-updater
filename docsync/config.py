@@ -46,7 +46,14 @@ class DocSyncConfig:
     # Ollama LLM settings
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "llama3"
+    ollama_vision_model: str = "llava"
     ollama_enabled: bool = True
+
+    # Gemini AI settings
+    gemini_api_key: str = "AIzaSyD2dzmQCLdjTOhrP0j6mMbH3E04zSZK9AU"
+    gemini_model: str = "gemini-2.0-flash"
+    gemini_enabled: bool = False  # Set to True when Gemini quota resets
+    gemini_weight: float = 0.25
 
     # API settings
     api_host: str = "127.0.0.1"
@@ -82,6 +89,7 @@ class DocSyncConfig:
             "DOCSYNC_OUTPUT_DIR": "output_dir",
             "DOCSYNC_OLLAMA_URL": "ollama_base_url",
             "DOCSYNC_OLLAMA_MODEL": "ollama_model",
+            "DOCSYNC_GEMINI_KEY": "gemini_api_key",
             "DOCSYNC_API_HOST": "api_host",
             "DOCSYNC_API_PORT": "api_port",
             "DOCSYNC_DB_PATH": "db_path",
@@ -115,6 +123,10 @@ class DocSyncConfig:
             "ollama_base_url": self.ollama_base_url,
             "ollama_model": self.ollama_model,
             "ollama_enabled": self.ollama_enabled,
+            "gemini_api_key": self.gemini_api_key,
+            "gemini_model": self.gemini_model,
+            "gemini_enabled": self.gemini_enabled,
+            "gemini_weight": self.gemini_weight,
             "api_host": self.api_host,
             "api_port": self.api_port,
             "auth_enabled": self.auth_enabled,
