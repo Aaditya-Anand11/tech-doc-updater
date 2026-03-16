@@ -2,5 +2,7 @@
   "enabled_plugins": {
     "ai_llm": true
   },
-  "plugin_settings": {}
+  "plugin_settings": {},
+  "histogram": true,
+  "ssim": true
 }

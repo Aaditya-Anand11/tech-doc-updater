@@ -39,12 +39,33 @@ import logging
 from collections import Counter
 from difflib import SequenceMatcher
 
+# Auth & structured logging
+try:
+    from docsync.auth.rbac import RBACManager, Role, ROLE_PERMISSIONS
+    AUTH_AVAILABLE = True
+except ImportError:
+    AUTH_AVAILABLE = False
+    logger_placeholder = None  # defined after logging init
+
+try:
+    from docsync.logging_config import setup_logging
+except ImportError:
+    setup_logging = None
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Add file handler so logs appear in Logs tab
+_log_dir = os.path.join(".", "data", "logs")
+os.makedirs(_log_dir, exist_ok=True)
+_fh = logging.FileHandler(os.path.join(_log_dir, "app.log"), encoding="utf-8")
+_fh.setLevel(logging.INFO)
+_fh.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(_fh)
 
 # ==================== DEPENDENCY IMPORTS ====================
 
@@ -307,7 +328,7 @@ class AdvancedImageMatcher:
             "histogram_weight": 0.20,
             "edge_weight": 0.25,
             "template_weight": 0.20,
-            "similarity_threshold": 0.55,
+            "similarity_threshold": 0.30,
             "high_confidence_threshold": 0.80
         }
         # Merge passed config with defaults
@@ -388,7 +409,7 @@ class AdvancedImageMatcher:
             return 0.0
     
     def compute_template_match(self, img1_path: str, img2_path: str) -> float:
-        """Template matching score"""
+        """Template matching score using center crop of img1 as template"""
         if not CV2_AVAILABLE:
             return 0.0
         
@@ -399,11 +420,18 @@ class AdvancedImageMatcher:
             if img1 is None or img2 is None:
                 return 0.0
             
-            # Resize img2 to match img1
-            img2 = cv2.resize(img2, (img1.shape[1], img1.shape[0]))
+            # Resize both to a common size for comparison
+            common_h, common_w = 256, 256
+            img1 = cv2.resize(img1, (common_w, common_h))
+            img2 = cv2.resize(img2, (common_w, common_h))
             
-            # Template matching
-            result = cv2.matchTemplate(img1, img2, cv2.TM_CCOEFF_NORMED)
+            # Use a center crop (75%) of img1 as the template
+            margin_h = common_h // 8
+            margin_w = common_w // 8
+            template = img1[margin_h:common_h - margin_h, margin_w:common_w - margin_w]
+            
+            # Match template against img2
+            result = cv2.matchTemplate(img2, template, cv2.TM_CCOEFF_NORMED)
             _, max_val, _, _ = cv2.minMaxLoc(result)
             
             return max(0, float(max_val))
@@ -468,13 +496,13 @@ class AdvancedImageMatcher:
                           page_hints: Dict[str, int] = None) -> List[MatchResult]:
         """Find best matches for all new images"""
         
-        print(f"[DEBUG] find_best_matches called with {len(new_images)} new images and {len(pdf_images)} PDF images")
+        logger.debug(f"find_best_matches called with {len(new_images)} new images and {len(pdf_images)} PDF images")
         
         results = []
         
         for new_img_path in new_images:
             new_img_name = os.path.basename(new_img_path)
-            print(f"[DEBUG] Processing new image: {new_img_name}")
+            logger.debug(f"Processing new image: {new_img_name}")
             
             best_match = None
             best_scores = {"combined": 0}
@@ -492,17 +520,17 @@ class AdvancedImageMatcher:
                 if target_page is not None and pdf_img.get("page") != target_page:
                     continue
                 
-                print(f"[DEBUG] Comparing with PDF image: {pdf_img.get('filename', 'unknown')}")
+                logger.debug(f"Comparing with PDF image: {pdf_img.get('filename', 'unknown')}")
                 scores = self.compute_combined_score(new_img_path, pdf_img.get("path", ""))
-                print(f"[DEBUG] Scores: SSIM={scores.get('ssim', 0):.3f}, Hist={scores.get('histogram', 0):.3f}, Edge={scores.get('edge', 0):.3f}, Template={scores.get('template', 0):.3f}, Combined={scores.get('combined', 0):.3f}")
-                print(f"[DEBUG] is_match={scores.get('is_match')}, threshold={self.config['similarity_threshold']}")
+                logger.debug(f"Scores: SSIM={scores.get('ssim', 0):.3f}, Hist={scores.get('histogram', 0):.3f}, Edge={scores.get('edge', 0):.3f}, Template={scores.get('template', 0):.3f}, Combined={scores.get('combined', 0):.3f}")
+                logger.debug(f"is_match={scores.get('is_match')}, threshold={self.config['similarity_threshold']}")
                 
                 if scores["combined"] > best_scores["combined"]:
                     best_scores = scores
                     best_match = pdf_img
-                    print(f"[DEBUG] New best match found!")
+                    logger.debug(f"New best match found!")
             
-            print(f"[DEBUG] Best match for {new_img_name}: combined_score={best_scores.get('combined', 0):.3f}, is_match={best_scores.get('is_match', False)}")
+            logger.debug(f"Best match for {new_img_name}: combined_score={best_scores.get('combined', 0):.3f}, is_match={best_scores.get('is_match', False)}")
             
             # Create result
             result = MatchResult(
@@ -529,7 +557,7 @@ class AdvancedImageMatcher:
             
             results.append(result)
         
-        print(f"[DEBUG] Returning {len(results)} match results")
+        logger.debug(f"Returning {len(results)} match results")
         return results
 
 
@@ -541,59 +569,17 @@ class SmartTextProcessor:
     """
     
     def __init__(self):
-        # DISABLED: Single-word matching causes Scunthorpe problem
-        # e.g., "view" → "details" corrupts "Overview" to "OverDetails"
         self.ui_terms = {}
         
+        # OCR corrections: only safe multi-char patterns (not single digits/chars)
         self.ocr_corrections = {
-            "|": "I",
-            "0": "O",
             "rn": "m",
             "vv": "w",
-            "1": "l",
-            "!": "i",
         }
         
-        # Common PHRASE replacements - Include BOTH lowercase AND capitalized versions
-        # for exact PDF text matching
-        self.common_phrase_pairs = {
-            # Product names (capitalized as they appear in PDF)
-            "EcoStruxure Device Manager": "EcoStruxure Device Hub",
-            "ecostruxure device manager": "ecostruxure device hub",
-            "Device Manager": "Device Hub",
-            "device manager": "device hub",
-            
-            # UI labels - capitalized as they appear
-            "Add New Device": "Register Device",
-            "+ Add New Device": "+ Register Device",
-            "add new device": "register device",
-            "+ add new device": "+ register device",
-            "Online Devices": "Active Devices",
-            "online devices": "active devices",
-            "Connected Devices": "Device Inventory",
-            "connected devices": "device inventory",
-            
-            # Grammatical variations (prevent "Last Sync d" bug)
-            "Last Updated": "Last Synced",  # Capitalized FIRST
-            "Last Update": "Last Sync",
-            "last updated": "last synced",
-            "last update": "last sync",
-            
-            # Visual descriptions - as they appear in manual
-            "Green gradient": "Blue header",
-            "green gradient": "blue header",
-            "Green header": "Blue header",
-            "green header": "blue header",
-            "Green button": "Blue button",
-            "green button": "blue button",
-            "(green)": "(blue)",
-            "(Green)": "(Blue)",
-            "green left border": "blue left border",
-            
-            # Button labels
-            "Settings button": "Preferences button",
-            "settings button": "preferences button",
-        }
+        # No hardcoded phrase pairs — all text changes are detected dynamically
+        # via OCR comparison of old vs new screenshots
+        self.common_phrase_pairs = {}
     
     def extract_full_text(self, image_path: str) -> str:
         """Extract full text from image"""
@@ -623,18 +609,18 @@ class SmartTextProcessor:
         common_phrase_pairs and OCR-detected phrase changes.
         """
         # Return empty list to disable unsafe single-word matching
-        return []
+        return []  # Disabled: relies on dynamic OCR detection instead
     
     def find_text_differences(self, old_img_path: str, new_img_path: str) -> Dict:
         """Find text differences between two images using enhanced OCR comparison"""
         
-        print(f"[DEBUG] Extracting text from old image: {old_img_path}")
+        logger.debug(f"Extracting text from old image: {old_img_path}")
         old_text = self.extract_full_text(old_img_path)
-        print(f"[DEBUG] Old text extracted: {len(old_text)} chars")
+        logger.debug(f"Old text extracted: {len(old_text)} chars")
         
-        print(f"[DEBUG] Extracting text from new image: {new_img_path}")
+        logger.debug(f"Extracting text from new image: {new_img_path}")
         new_text = self.extract_full_text(new_img_path)
-        print(f"[DEBUG] New text extracted: {len(new_text)} chars")
+        logger.debug(f"New text extracted: {len(new_text)} chars")
         
         # Correct OCR errors
         old_text = self.correct_ocr_errors(old_text)
@@ -644,7 +630,7 @@ class SmartTextProcessor:
         old_lines = [line.strip() for line in old_text.split('\n') if line.strip() and len(line.strip()) > 2]
         new_lines = [line.strip() for line in new_text.split('\n') if line.strip() and len(line.strip()) > 2]
         
-        print(f"[DEBUG] Old lines: {len(old_lines)}, New lines: {len(new_lines)}")
+        logger.debug(f"Old lines: {len(old_lines)}, New lines: {len(new_lines)}")
         
         # Find word differences (existing logic)
         old_words = set(old_text.lower().split())
@@ -692,10 +678,10 @@ class SmartTextProcessor:
         # 1. Check for common phrase pairs we know about
         for old_term, new_term in self.common_phrase_pairs.items():
             if old_term in old_lower and new_term in new_lower:
-                print(f"[DEBUG] Found known phrase pair: '{old_term}' -> '{new_term}'")
+                logger.debug(f"Found known phrase pair: '{old_term}' -> '{new_term}'")
                 changes.append({
-                    "old": old_term.title(),  # Capitalize for proper replacement
-                    "new": new_term.title(),
+                    "old": old_term,  # Use original case (not .title())
+                    "new": new_term,
                     "category": "phrase_pair",
                     "confidence": 0.95
                 })
@@ -704,7 +690,7 @@ class SmartTextProcessor:
         old_phrases = self._extract_key_phrases(old_lines)
         new_phrases = self._extract_key_phrases(new_lines)
         
-        print(f"[DEBUG] Extracted {len(old_phrases)} old phrases, {len(new_phrases)} new phrases")
+        logger.debug(f"Extracted {len(old_phrases)} old phrases, {len(new_phrases)} new phrases")
         
         # Find phrases that are in old but not in new, and vice versa
         for old_phrase in old_phrases:
@@ -721,7 +707,7 @@ class SmartTextProcessor:
                             # Same word count, might be a direct replacement
                             similarity = SequenceMatcher(None, old_phrase.lower(), new_phrase.lower()).ratio()
                             if 0.2 < similarity < 0.85:
-                                print(f"[DEBUG] Found OCR replacement: '{old_phrase}' -> '{new_phrase}' (sim: {similarity:.2f})")
+                                logger.debug(f"Found OCR replacement: '{old_phrase}' -> '{new_phrase}' (sim: {similarity:.2f})")
                                 changes.append({
                                     "old": old_phrase,
                                     "new": new_phrase,
@@ -776,7 +762,7 @@ class SmartTextProcessor:
                     best_match = new_line
             
             if best_match and old_line.lower() != best_match.lower():
-                print(f"[DEBUG] Found phrase change: '{old_line}' -> '{best_match}' (similarity: {best_similarity:.2f})")
+                logger.debug(f"Found phrase change: '{old_line}' -> '{best_match}' (similarity: {best_similarity:.2f})")
                 changes.append({
                     "old": old_line,
                     "new": best_match,
@@ -790,10 +776,10 @@ class SmartTextProcessor:
         """Generate text replacements from diff"""
         replacements = []
         
-        print(f"[DEBUG] Generating text replacements...")
-        print(f"[DEBUG] UI changes: {len(text_diff.get('ui_changes', []))}")
-        print(f"[DEBUG] Phrase changes: {len(text_diff.get('phrase_changes', []))}")
-        print(f"[DEBUG] OCR replacements: {len(text_diff.get('ocr_replacements', []))}")
+        logger.debug(f"Generating text replacements...")
+        logger.debug(f"UI changes: {len(text_diff.get('ui_changes', []))}")
+        logger.debug(f"Phrase changes: {len(text_diff.get('phrase_changes', []))}")
+        logger.debug(f"OCR replacements: {len(text_diff.get('ocr_replacements', []))}")
         
         # HIGH PRIORITY: Add OCR replacements (these are the most reliable)
         for change in text_diff.get("ocr_replacements", []):
@@ -833,9 +819,9 @@ class SmartTextProcessor:
         # DELETED: Word pairing loop removed - it caused single-word replacements
     # that corrupted text (e.g., "Devices" → "Active devices" mid-sentence)
         
-        print(f"[DEBUG] Total replacements generated: {len(replacements)}")
+        logger.debug(f"Total replacements generated: {len(replacements)}")
         for r in replacements:
-            print(f"[DEBUG]   '{r.old_text}' -> '{r.new_text}' (approved={r.approved}, confidence={r.confidence:.2f})")
+            logger.debug(f"  '{r.old_text}' -> '{r.new_text}' (approved={r.approved}, confidence={r.confidence:.2f})")
         
         return replacements
 
@@ -1119,7 +1105,7 @@ class EnhancedPDFProcessor:
                                  image_replacements: List[Dict],
                                  text_replacements: List[TextChange],
                                  output_path: str) -> Dict:
-        """Replace images and text in PDF with fuzzy text matching"""
+        """Replace images and text in PDF – two-pass redaction approach"""
         if not PDF_SUPPORT:
             return {"success": False, "error": "PDF support not available"}
         
@@ -1127,27 +1113,36 @@ class EnhancedPDFProcessor:
             doc = fitz.open(pdf_path)
             images_replaced = 0
             text_replaced = 0
+            page_details = {}  # page_num -> {"images": N, "texts": [(old,new),...]}
             
-            # Replace images
+            # ── Pass 1: Replace images ──
             for repl in image_replacements:
                 xref = repl.get("xref")
                 new_path = repl.get("new_image_path")
                 
-                if not xref or not new_path:
+                if not xref or not new_path or not os.path.exists(new_path):
                     continue
                 
-                for page in doc:
+                for page_num, page in enumerate(doc):
                     for img in page.get_images():
                         if img[0] == xref:
                             rects = page.get_image_rects(xref)
                             if rects:
                                 rect = rects[0]
-                                page.delete_image(xref)
-                                page.insert_image(rect, filename=new_path)
-                                images_replaced += 1
+                                try:
+                                    page.delete_image(xref)
+                                    page.insert_image(rect, filename=new_path)
+                                    images_replaced += 1
+                                    pg = page_details.setdefault(page_num + 1, {"images": 0, "texts": []})
+                                    pg["images"] += 1
+                                    logger.info(f"Replaced image xref={xref} on page {page_num+1}")
+                                except Exception as e:
+                                    logger.error(f"Image replacement error on page {page_num+1}: {e}")
                             break
             
-            # Replace text with fuzzy matching
+            # ── Pass 2a: Collect ALL text redactions per page ──
+            page_redactions = {}  # page_num -> [(rect, new_text), ...]
+            
             for change in text_replacements:
                 if not change.approved:
                     continue
@@ -1155,36 +1150,43 @@ class EnhancedPDFProcessor:
                 old_text = change.old_text
                 new_text = change.new_text
                 
-                print(f"[DEBUG] Trying to replace: '{old_text}' -> '{new_text}'")
+                logger.info(f"Text replacement: '{old_text}' -> '{new_text}'")
                 
-                for page in doc:
-                    # Try multiple search variants for fuzzy matching
+                for page_num, page in enumerate(doc):
                     search_variants = self._generate_search_variants(old_text)
                     
-                    instances_found = []
                     for variant in search_variants:
                         instances = page.search_for(variant)
                         if instances:
-                            instances_found.extend(instances)
-                            print(f"[DEBUG] Found {len(instances)} matches for variant: '{variant}'")
+                            logger.info(f"  Found {len(instances)} matches for '{variant}' on page {page_num+1}")
+                            for inst in instances:
+                                if page_num not in page_redactions:
+                                    page_redactions[page_num] = []
+                                page_redactions[page_num].append((inst, new_text))
+                                text_replaced += 1
+                                pg = page_details.setdefault(page_num + 1, {"images": 0, "texts": []})
+                                pg["texts"].append((old_text, new_text))
                             break  # Use first variant that matches
-                    
-                    # DELETED: Longest-word fallback removed - it caused text stutter
-                    # (e.g., "Device Hub Device Hub Device Hub" when searching for single words)
-                    for inst in instances_found:
-                        try:
-                            page.add_redact_annot(inst, new_text)
-                            text_replaced += 1
-                        except Exception as e:
-                            print(f"[DEBUG] Redaction error: {e}")
-                    
-                    if instances_found:
-                        try:
-                            page.apply_redactions()
-                        except Exception as e:
-                            print(f"[DEBUG] Apply redactions error: {e}")
             
-            print(f"[DEBUG] Total text replacements: {text_replaced}")
+            # ── Pass 2b: Apply all redactions per page at once ──
+            for page_num, redactions in page_redactions.items():
+                page = doc[page_num]
+                for rect, new_text in redactions:
+                    try:
+                        page.add_redact_annot(
+                            rect,
+                            text=new_text,
+                            fontname="helv",
+                            fontsize=0,  # auto-size to fit rect
+                        )
+                    except Exception as e:
+                        logger.error(f"Redaction annotation error on page {page_num+1}: {e}")
+                try:
+                    page.apply_redactions()
+                except Exception as e:
+                    logger.error(f"Apply redactions error on page {page_num+1}: {e}")
+            
+            logger.info(f"Total: {images_replaced} images replaced, {text_replaced} text replacements")
             
             doc.save(output_path)
             doc.close()
@@ -1193,31 +1195,67 @@ class EnhancedPDFProcessor:
                 "success": True,
                 "images_replaced": images_replaced,
                 "text_replaced": text_replaced,
-                "output_path": output_path
+                "output_path": output_path,
+                "page_details": page_details
             }
         except Exception as e:
-            print(f"[DEBUG] PDF replacement error: {e}")
+            logger.error(f"PDF replacement error: {e}")
             return {"success": False, "error": str(e)}
     
     def _generate_search_variants(self, text: str) -> List[str]:
-        """Generate search variants for matching - SIMPLIFIED to prevent stutter"""
+        """Generate search variants for case-insensitive fuzzy matching"""
         variants = []
+        seen = set()
         
-        # 1. Original text (exact match)
-        variants.append(text)
+        def _add(v):
+            if v and v not in seen:
+                seen.add(v)
+                variants.append(v)
         
-        # 2. Normalized whitespace only
-        normalized = ' '.join(text.split())
-        if normalized != text:
-            variants.append(normalized)
+        # Original text
+        _add(text)
+        # Normalized whitespace
+        _add(' '.join(text.split()))
+        # Title Case
+        _add(text.title())
+        # UPPER CASE (headings in PDFs are often uppercase)
+        _add(text.upper())
+        # lower case
+        _add(text.lower())
+        # Capitalize first letter only
+        _add(text[0].upper() + text[1:] if len(text) > 1 else text.upper())
         
-        # 3. Title case (for proper nouns)
-        title = text.title()
-        if title not in variants:
-            variants.append(title)
-        
-        # That's it - no more case variations that could cause duplicate matches
         return variants
+    
+    def render_pdf_pages(self, pdf_path: str, output_dir: str = None) -> List[Dict]:
+        """Render each PDF page as an image for fallback comparison"""
+        if not PDF_SUPPORT:
+            return []
+        
+        if output_dir is None:
+            output_dir = os.path.join(self.temp_dir, "rendered")
+        os.makedirs(output_dir, exist_ok=True)
+        
+        rendered = []
+        try:
+            doc = fitz.open(pdf_path)
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                # Render at 150 DPI
+                mat = fitz.Matrix(150 / 72, 150 / 72)
+                pix = page.get_pixmap(matrix=mat)
+                img_path = os.path.join(output_dir, f"page_{page_num + 1}.png")
+                pix.save(img_path)
+                rendered.append({
+                    "page": page_num + 1,
+                    "path": img_path,
+                    "filename": f"page_{page_num + 1}.png",
+                })
+            doc.close()
+            logger.info(f"Rendered {len(rendered)} PDF pages as images")
+        except Exception as e:
+            logger.error(f"Error rendering PDF pages: {e}")
+        return rendered
     
     def cleanup(self):
         try:
@@ -1304,85 +1342,87 @@ class VisualAnalyzer:
 class ComprehensiveReportGenerator:
     """Generate all report formats"""
     
-    def generate_summary(self, result: ProcessingResult, pdf_info: Dict) -> str:
-        """Generate human-readable summary"""
+    def generate_summary(self, result: ProcessingResult, pdf_info: Dict,
+                         page_details: Dict = None) -> str:
+        """Generate detailed English-only summary with per-page breakdown"""
         
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         # Determine overall status
         if result.overall_confidence >= 0.8:
-            status = "✅ EXCELLENT"
+            status = "EXCELLENT"
             status_desc = "High confidence - all changes verified"
         elif result.overall_confidence >= 0.6:
-            status = "⚠️ GOOD"
+            status = "GOOD"
             status_desc = "Moderate confidence - review recommended"
         else:
-            status = "❌ NEEDS REVIEW"
+            status = "NEEDS REVIEW"
             status_desc = "Low confidence - manual review required"
         
-        summary = f"""
-╔══════════════════════════════════════════════════════════════════════════╗
-║               DOCUMENT UPDATE SUMMARY - TECH DOC AUTO UPDATER            ║
-╚══════════════════════════════════════════════════════════════════════════╝
+        summary = f"""DOCUMENT UPDATE REPORT
+{'=' * 72}
+Generated : {timestamp}
+Document  : {pdf_info.get('title', 'Unknown')}
+Pages     : {pdf_info.get('pages', 'N/A')}
+Status    : {status} - {status_desc}
+{'=' * 72}
 
-📅 Generated: {timestamp}
-📄 Document: {pdf_info.get('title', 'Unknown')}
-📊 Status: {status}
-   {status_desc}
-
-═══════════════════════════════════════════════════════════════════════════
-                              PROCESSING RESULTS
-═══════════════════════════════════════════════════════════════════════════
-
-📸 IMAGE UPDATES
-────────────────
-• Screenshots Processed: {len(result.matches)}
-• Images Replaced: {result.images_replaced}
-• Match Confidence: {result.overall_confidence:.1%}
-
-📝 TEXT UPDATES
-───────────────
-• Text Changes Applied: {result.text_replaced}
-• Text Changes Detected: {len(result.text_changes)}
-
-⏱️ PERFORMANCE
-──────────────
-• Processing Time: {result.processing_time:.2f}s
-• Pages Processed: {pdf_info.get('pages', 'N/A')}
-
-═══════════════════════════════════════════════════════════════════════════
-                              MATCH DETAILS
-═══════════════════════════════════════════════════════════════════════════
+SUMMARY
+{'-' * 40}
+  Screenshots Processed : {len(result.matches)}
+  Images Replaced       : {result.images_replaced}
+  Text Changes Applied  : {result.text_replaced}
+  Text Changes Detected : {len(result.text_changes)}
+  Overall Confidence    : {result.overall_confidence:.1%}
+  Processing Time       : {result.processing_time:.2f} seconds
 """
         
+        # ── Per-page breakdown ──
+        if page_details:
+            summary += f"\nPER-PAGE CHANGE DETAILS\n{'-' * 40}\n"
+            for page_num in sorted(page_details.keys()):
+                info = page_details[page_num]
+                img_count = info.get("images", 0)
+                txt_list = info.get("texts", [])
+                summary += f"\n  Page {page_num}:\n"
+                if img_count:
+                    summary += f"    - {img_count} image(s) replaced\n"
+                if txt_list:
+                    summary += f"    - {len(txt_list)} text change(s):\n"
+                    seen = set()
+                    for old_t, new_t in txt_list:
+                        key = (old_t, new_t)
+                        if key not in seen:
+                            seen.add(key)
+                            summary += f'        "{old_t}" -> "{new_t}"\n'
+        
+        # ── Match details ──
+        summary += f"\nMATCH DETAILS\n{'-' * 40}\n"
         for match in result.matches:
-            status_icon = "✅" if match.validation_status == ValidationStatus.APPROVED else \
-                         "⚠️" if match.validation_status == ValidationStatus.REVIEW else "❌"
-            
+            status_icon = "[OK]" if match.validation_status == ValidationStatus.APPROVED else \
+                         "[REVIEW]" if match.validation_status == ValidationStatus.REVIEW else "[REJECTED]"
             matched_page = match.matched_pdf_image.get('page', 'N/A') if match.matched_pdf_image else 'N/A'
-            
-            summary += f"""
-{status_icon} {match.new_image_name}
-   → Page: {matched_page}
-   → Confidence: {match.confidence:.1%}
-   → Status: {match.validation_status.value}
-"""
+            summary += f"  {status_icon} {match.new_image_name}\n"
+            summary += f"      Page: {matched_page} | Confidence: {match.confidence:.1%} | Status: {match.validation_status.value}\n"
+        
+        # ── Text changes listing ──
+        if result.text_changes:
+            summary += f"\nALL TEXT CHANGES\n{'-' * 40}\n"
+            for i, change in enumerate(result.text_changes, 1):
+                approved_str = "[APPLIED]" if change.approved else "[SKIPPED]"
+                summary += f'  {i}. {approved_str} "{change.old_text}" -> "{change.new_text}" (confidence: {change.confidence:.0%})\n'
         
         if result.errors:
-            summary += "\n❌ ERRORS\n─────────\n"
+            summary += f"\nERRORS\n{'-' * 40}\n"
             for error in result.errors:
-                summary += f"• {error}\n"
+                summary += f"  - {error}\n"
         
         if result.warnings:
-            summary += "\n⚠️ WARNINGS\n───────────\n"
+            summary += f"\nWARNINGS\n{'-' * 40}\n"
             for warning in result.warnings:
-                summary += f"• {warning}\n"
+                summary += f"  - {warning}\n"
         
-        summary += f"""
-═══════════════════════════════════════════════════════════════════════════
-✅ OUTPUT: {result.output_path}
-═══════════════════════════════════════════════════════════════════════════
-"""
+        summary += f"\n{'=' * 72}\nOUTPUT: {result.output_path}\n{'=' * 72}\n"
         
         return summary
     
@@ -1569,7 +1609,7 @@ def process_document_v3(
     enable_text_replacement = True
     enable_ai_validation = True
     enable_auto_page_detection = True
-    confidence_threshold = 0.6
+    confidence_threshold = 0.30  # Must match AdvancedImageMatcher default
     
     start_time = time.time()
     output_dir = "./data/output"
@@ -1578,6 +1618,7 @@ def process_document_v3(
     
     # Initialize result
     result = ProcessingResult(success=False)
+    _page_details = {}  # Initialize early to prevent NameError on error paths
     
     # Validate required inputs
     if old_gui is None:
@@ -1625,13 +1666,13 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
     
 
     try:
-        print("[DEBUG] Starting process_document_v3...")
-        print(f"[DEBUG] old_gui_path: {old_gui_path}")
-        print(f"[DEBUG] new_paths: {new_paths}")
-        print(f"[DEBUG] pdf_path: {pdf_path}")
+        logger.debug("Starting process_document_v3...")
+        logger.debug(f"old_gui_path: {old_gui_path}")
+        logger.debug(f"new_paths: {new_paths}")
+        logger.debug(f"pdf_path: {pdf_path}")
         
         # Initialize all components
-        print("[DEBUG] Initializing components...")
+        logger.debug("Initializing components...")
         pdf_processor = EnhancedPDFProcessor()
         matcher = AdvancedImageMatcher({"similarity_threshold": confidence_threshold})
         text_processor = SmartTextProcessor()
@@ -1639,31 +1680,85 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
         analyzer = VisualAnalyzer()
         report_gen = ComprehensiveReportGenerator()
         history_mgr = HistoryManager()
-        print("[DEBUG] Components initialized.")
+        logger.debug("Components initialized.")
         
         # Get PDF info
-        print("[DEBUG] Getting PDF info...")
+        logger.debug("Getting PDF info...")
         pdf_info = pdf_processor.get_pdf_info(pdf_path)
-        print(f"[DEBUG] PDF info: {pdf_info}")
+        logger.debug(f"PDF info: {pdf_info}")
         if "error" in pdf_info:
             return None, f"❌ PDF Error: {pdf_info['error']}", "", None, "{}", None, ""
         
         # Extract images from PDF
-        print("[DEBUG] Extracting images from PDF...")
+        logger.info("Extracting images from PDF...")
         extract_dir = os.path.join(output_dir, f"extracted_{timestamp}")
         pdf_images = pdf_processor.extract_all_images(pdf_path, extract_dir)
-        print(f"[DEBUG] Extracted {len(pdf_images)} images from PDF")
+        logger.info(f"Extracted {len(pdf_images)} images from PDF")
         
-        if not pdf_images:
-            return None, "❌ No images found in the PDF document", "", None, "{}", None, ""
+        # Filter out tiny images (icons, logos < 50x50)
+        large_pdf_images = []
+        for pimg in pdf_images:
+            try:
+                if PIL_AVAILABLE:
+                    _img = Image.open(pimg["path"])
+                    if _img.width >= 50 and _img.height >= 50:
+                        large_pdf_images.append(pimg)
+                    else:
+                        logger.debug(f"Filtered small image: {pimg['filename']} ({_img.width}x{_img.height})")
+                else:
+                    large_pdf_images.append(pimg)
+            except Exception:
+                large_pdf_images.append(pimg)
         
-        # Find best matches using advanced matching
-        print("[DEBUG] Finding best matches...")
-        matches = matcher.find_best_matches(new_paths, pdf_images, page_hints)
-        print(f"[DEBUG] Found {len(matches)} matches")
+        if not large_pdf_images and not pdf_images:
+            return None, "No images found in the PDF document.", "", None, "{}", None, ""
+        
+        use_images = large_pdf_images if large_pdf_images else pdf_images
+        logger.info(f"Using {len(use_images)} images for matching (filtered from {len(pdf_images)})")
+        
+        # CRITICAL FIX: Match OLD GUI against PDF images to find WHERE the old image is
+        # (was incorrectly matching new GUI, which is what we want to INSERT, not find)
+        logger.info("Matching old GUI screenshot against PDF images...")
+        matches = matcher.find_best_matches([old_gui_path], use_images, page_hints)
+        logger.info(f"Found {len(matches)} match candidates")
+        
+        # Fallback: if no good match with extracted images, try rendered pages
+        if not any(m.is_good_match for m in matches):
+            logger.info("No match with extracted images, trying rendered PDF pages...")
+            render_dir = os.path.join(output_dir, f"rendered_{timestamp}")
+            rendered_pages = pdf_processor.render_pdf_pages(pdf_path, render_dir)
+            if rendered_pages:
+                page_matches = matcher.find_best_matches([old_gui_path], rendered_pages, page_hints)
+                for pm in page_matches:
+                    if pm.is_good_match:
+                        target_page = pm.matched_pdf_image.get("page")
+                        logger.info(f"Matched old GUI to rendered page {target_page}")
+                        # Find the largest image on that page
+                        page_imgs = [i for i in use_images if i.get("page") == target_page]
+                        if page_imgs:
+                            best_img = page_imgs[0]
+                            match = MatchResult(
+                                new_image_path=new_paths[0] if new_paths else old_gui_path,
+                                new_image_name=os.path.basename(new_paths[0]) if new_paths else "old_gui",
+                                matched_pdf_image=best_img,
+                                is_good_match=True,
+                                target_page=target_page,
+                                confidence=pm.confidence,
+                                combined_score=pm.combined_score,
+                            )
+                            matches = [match]
+                            break
+        
+        # Set the NEW GUI as the replacement image for all matches
+        for match in matches:
+            if match.is_good_match and new_paths:
+                match.new_image_path = new_paths[0]
+                match.new_image_name = os.path.basename(new_paths[0])
+        
+        logger.info(f"Good matches: {sum(1 for m in matches if m.is_good_match)}/{len(matches)}")
         
         # AI Validation if enabled
-        print("[DEBUG] Running AI validation...")
+        logger.debug("Running AI validation...")
         if validator:
             for match in matches:
                 if match.matched_pdf_image:
@@ -1676,7 +1771,7 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
                     match.issues = validation.get("issues", [])
         
         # Process text differences if enabled
-        print("[DEBUG] Processing text differences...")
+        logger.debug("Processing text differences...")
         text_changes = []
         text_report = "Text replacement disabled."
         
@@ -1685,11 +1780,11 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
             reference_image = old_gui_path
             
             if reference_image and new_paths:
-                print(f"[DEBUG] Comparing text: {reference_image} vs {new_paths}")
+                logger.debug(f"Comparing text: {reference_image} vs {new_paths}")
                 for new_path in new_paths:
-                    print(f"[DEBUG] Processing text for: {new_path}")
+                    logger.debug(f"Processing text for: {new_path}")
                     text_diff = text_processor.find_text_differences(reference_image, new_path)
-                    print(f"[DEBUG] Text diff result: {text_diff.get('total_changes', 0)} changes")
+                    logger.debug(f"Text diff result: {text_diff.get('total_changes', 0)} changes")
                     changes = text_processor.generate_text_replacements(text_diff)
                     
                     # Validate text changes if AI validation enabled
@@ -1703,7 +1798,7 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
                 
                 # Add custom replacements from user input
                 if custom_replacements and custom_replacements.strip():
-                    print(f"[DEBUG] Parsing custom replacements...")
+                    logger.debug(f"Parsing custom replacements...")
                     for line in custom_replacements.strip().split("\n"):
                         if "->" in line:
                             parts = line.split("->", 1)
@@ -1711,7 +1806,7 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
                                 old_text = parts[0].strip()
                                 new_text = parts[1].strip()
                                 if old_text and new_text:
-                                    print(f"[DEBUG] Custom replacement: '{old_text}' -> '{new_text}'")
+                                    logger.debug(f"Custom replacement: '{old_text}' -> '{new_text}'")
                                     text_changes.append(TextChange(
                                         old_text=old_text,
                                         new_text=new_text,
@@ -1771,14 +1866,17 @@ DETECTED REPLACEMENTS:
                 result.text_replaced = replace_result.get("text_replaced", 0)
                 result.output_path = output_pdf_path
                 result.success = True
+                _page_details = replace_result.get("page_details", {})
             else:
                 result.errors.append(replace_result.get("error", "Unknown error"))
+                _page_details = {}
         else:
             # No changes to make, just copy the original
             shutil.copy(pdf_path, output_pdf_path)
             result.output_path = output_pdf_path
             result.success = True
             result.warnings.append("No matching images found - PDF copied without changes")
+            _page_details = {}
         
         # Create visual highlight
         highlight_path = None
@@ -1799,37 +1897,30 @@ DETECTED REPLACEMENTS:
         result.matches = matches
         result.text_changes = text_changes
         result.processing_time = time.time() - start_time
-        print(f"[DEBUG] Processing time: {result.processing_time:.2f}s")
+        logger.info(f"Processing time: {result.processing_time:.2f}s")
         
         # Add to history
-        print("[DEBUG] Adding to history...")
         history_mgr.add_version(pdf_path, {}, result)
         
-        # Generate reports
-        print("[DEBUG] Generating summary report...")
-        summary_report = report_gen.generate_summary(result, pdf_info)
-        print("[DEBUG] Generating JSON report...")
+        # Generate reports (pass page_details for per-page breakdown)
+        summary_report = report_gen.generate_summary(result, pdf_info, _page_details)
         json_report = report_gen.generate_json(result, pdf_info)
-        print("[DEBUG] Generating HTML report...")
         html_report = report_gen.generate_html(result, pdf_info)
         
         # Save HTML report
-        print("[DEBUG] Saving HTML report...")
         html_path = os.path.join(output_dir, f"report_{timestamp}.html")
         with open(html_path, "w", encoding="utf-8") as f:
             f.write(html_report)
         
         # Generate AI validation report
-        print("[DEBUG] Generating AI validation report...")
         ai_report = ""
         if validator:
             ai_report = validator.generate_validation_summary()
         
         # Cleanup
-        print("[DEBUG] Cleaning up...")
         pdf_processor.cleanup()
         
-        print("[DEBUG] DONE! Returning results...")
+        logger.info("Processing complete.")
         return (
             output_pdf_path,
             summary_report,
@@ -1842,7 +1933,7 @@ DETECTED REPLACEMENTS:
         
     except Exception as e:
         logger.error(f"Processing error: {e}")
-        print(f"[DEBUG] ERROR: {e}")
+        logger.debug(f"ERROR: {e}")
         import traceback
         traceback.print_exc()
         return None, f"❌ Error: {str(e)}", "", None, "{}", None, ""
@@ -2029,10 +2120,113 @@ def save_settings(*args):
     return "✅ Settings saved successfully!"
 
 
+# ==================== AUTH HELPERS ====================
+
+def _read_log_files():
+    """Read recent log entries from data/logs/"""
+    log_dir = "./data/logs"
+    if not os.path.isdir(log_dir):
+        return "No log files found."
+    
+    log_files = sorted(
+        [f for f in os.listdir(log_dir) if f.endswith(".log")],
+        reverse=True,
+    )
+    if not log_files:
+        return "No log files found."
+    
+    lines = []
+    for lf in log_files[:3]:  # last 3 days
+        try:
+            with open(os.path.join(log_dir, lf), "r", encoding="utf-8", errors="replace") as fh:
+                lines.extend(fh.readlines()[-200:])  # last 200 lines per file
+        except Exception:
+            pass
+    
+    if not lines:
+        return "Log files are empty."
+    return "".join(lines[-500:])  # cap at 500 lines
+
+
+def _get_audit_log():
+    """Get audit log entries"""
+    if not AUTH_AVAILABLE:
+        return "Auth module not available."
+    try:
+        rbac = RBACManager()
+        entries = rbac.get_audit_log(limit=100)
+        if not entries:
+            return "No audit log entries."
+        text = "AUDIT LOG\n" + "=" * 60 + "\n"
+        for e in entries:
+            text += f"[{e['timestamp']}] {e['username']} - {e['action']}: {e['details']}\n"
+        return text
+    except Exception as ex:
+        return f"Error reading audit log: {ex}"
+
+
+def _list_users_display():
+    """List users for admin display"""
+    if not AUTH_AVAILABLE:
+        return "Auth module not available."
+    try:
+        rbac = RBACManager()
+        users = rbac.list_users()
+        if not users:
+            return "No users found."
+        text = f"{'Username':<15} {'Role':<10} {'Active':<8} {'Last Login':<25}\n"
+        text += "-" * 60 + "\n"
+        for u in users:
+            text += f"{u['username']:<15} {u['role']:<10} {'Yes' if u['active'] else 'No':<8} {u.get('last_login','Never') or 'Never':<25}\n"
+        return text
+    except Exception as ex:
+        return f"Error: {ex}"
+
+
+def _create_user(username, password, role, admin_user):
+    """Create a new user (admin only)"""
+    if not AUTH_AVAILABLE:
+        return "Auth module not available."
+    if admin_user is None or admin_user.get("role") != "admin":
+        return "Access denied. Admin role required."
+    if not username or not password:
+        return "Username and password are required."
+    if role not in ("viewer", "editor", "admin"):
+        return "Role must be viewer, editor, or admin."
+    try:
+        rbac = RBACManager()
+        ok = rbac.create_user(username.strip(), password.strip(), role)
+        if ok:
+            rbac._log_audit(admin_user["username"], "create_user", f"Created user {username} with role {role}")
+            return f"User '{username}' created with role '{role}'."
+        return f"Failed to create user '{username}' (may already exist)."
+    except Exception as ex:
+        return f"Error: {ex}"
+
+
+def _process_with_auth(old_gui, old_pdf, new_gui, custom_replacements, user_state):
+    """Auth-gated document processing"""
+    if user_state is None:
+        return None, "Please login first.", "", None, "{}", None, ""
+    if AUTH_AVAILABLE:
+        rbac = RBACManager()
+        if not rbac.authorize(user_state, "process_document"):
+            return None, "Access denied. Editor or Admin role required.", "", None, "{}", None, ""
+        rbac._log_audit(user_state["username"], "process_document", "Started document processing")
+    return process_document_v3(old_gui, old_pdf, new_gui, custom_replacements)
+
+
+def _compare_with_auth(img1, img2, user_state):
+    """Auth-gated comparison"""
+    if user_state is None:
+        return 0, None, "Please login first."
+    return quick_compare(img1, img2)
+
+
 # ==================== GRADIO INTERFACE ====================
 
 def build_interface():
-    """Build the complete Gradio interface with clean, professional design"""
+    """Build the complete Gradio interface with login and RBAC"""
     
     if not GRADIO_AVAILABLE:
         print("Gradio not installed. Run: pip install gradio")
@@ -2047,296 +2241,461 @@ def build_interface():
         """
     ) as interface:
         
-        # ==================== HEADER ====================
-        gr.Markdown("""
-        # Document Updater
-        ### Schneider Electric Technical Documentation Tool
+        # Auth state
+        current_user = gr.State(value=None)
         
-        Automatically update PDF documentation with new screenshots.
-        
-        ---
-        """)
-        
-        # ==================== MAIN TAB: UPDATE DOCUMENT ====================
-        with gr.Tab("Update Document"):
+        # ==================== LOGIN SECTION ====================
+        with gr.Column(visible=True) as login_section:
             gr.Markdown("""
-            ### Update Your Documentation
-            Upload the current screenshot and PDF, then optionally add a new screenshot to replace it.
-            """)
+            # Document Updater
+            ### Schneider Electric Technical Documentation Tool
             
+            **Please login to continue.**
+            
+            ---
+            """)
             with gr.Row():
-                # Left Column - Inputs
                 with gr.Column(scale=1):
-                    gr.Markdown("#### Step 1: Upload Files")
+                    pass
+                with gr.Column(scale=2):
+                    login_username = gr.Textbox(label="Username", placeholder="Enter username")
+                    login_password = gr.Textbox(label="Password", type="password", placeholder="Enter password")
+                    login_btn = gr.Button("Login", variant="primary", size="lg")
+                    login_status = gr.Markdown("")
+                    gr.Markdown("""
+                    **Default accounts:**
                     
-                    old_gui = gr.File(
-                        label="Current Screenshot (Required)",
-                        file_types=["image"],
-                        type="filepath"
-                    )
-                    
-                    old_pdf = gr.File(
-                        label="PDF Document (Required)",
-                        file_types=[".pdf"],
-                        type="filepath"
-                    )
-                    
-                    new_gui = gr.File(
-                        label="New Screenshot (Required)",
-                        file_types=["image"],
-                        type="filepath"
-                    )
-                    
-                    gr.Markdown("#### Custom Text Replacements (Optional)")
-                    gr.Markdown("*Add your own replacements, one per line: `old text -> new text`*")
-                    
-                    custom_replacements = gr.Textbox(
-                        label="Custom Replacements",
-                        placeholder="green gradient -> blue gradient\nAdd New Device -> Register Device",
-                        lines=5,
-                        info="These will be applied in addition to auto-detected changes"
-                    )
-                    
-                    gr.Markdown("#### Step 2: Process")
-                    
-                    process_btn = gr.Button(
-                        "Update Document",
-                        variant="primary",
-                        size="lg"
-                    )
-                
-                # Right Column - Primary Outputs
+                    | Username | Password | Role |
+                    |----------|----------|------|
+                    | admin | admin123 | Admin (full access) |
+                    | editor | editor123 | Editor (process documents) |
+                    | viewer | viewer123 | Viewer (read-only) |
+                    """)
                 with gr.Column(scale=1):
-                    gr.Markdown("#### Results")
-                    
-                    pdf_output = gr.File(label="Updated PDF")
-                    highlight_output = gr.Image(label="Visual Comparison")
-                    
-                    with gr.Row():
-                        export_btn = gr.Button("Download All Files", size="sm")
-                        export_status = gr.Textbox(label="Status", lines=1)
-                    
-                    zip_output = gr.File(label="Download Package")
-            
-            # Reports Section
-            gr.Markdown("#### Processing Details")
-            
-            with gr.Row():
-                with gr.Column():
-                    summary_output = gr.Textbox(
-                        label="Summary",
-                        lines=15,
-                        interactive=False
-                    )
-                
-                with gr.Column():
-                    ai_output = gr.Textbox(
-                        label="Validation Report",
-                        lines=15,
-                        interactive=False
-                    )
-            
-            with gr.Row():
-                with gr.Column():
-                    text_output = gr.Textbox(
-                        label="Text Changes",
-                        lines=10,
-                        interactive=False
-                    )
-                
-                with gr.Column():
-                    json_output = gr.Textbox(
-                        label="Technical Details",
-                        lines=10,
-                        interactive=False
-                    )
-            
-            html_output = gr.File(label="Full Report (HTML)")
-            
-            # Connect process button
-            process_btn.click(
-                fn=process_document_v3,
-                inputs=[
-                    old_gui,
-                    old_pdf,
-                    new_gui,
-                    custom_replacements
-                ],
-                outputs=[
-                    pdf_output,
-                    summary_output,
-                    ai_output,
-                    highlight_output,
-                    json_output,
-                    html_output,
-                    text_output
-                ]
-            )
-            
-            # Connect export button
-            export_btn.click(
-                fn=export_all_outputs,
-                inputs=[pdf_output, html_output, highlight_output],
-                outputs=[zip_output, export_status]
-            )
+                    pass
         
-        # ==================== TAB: COMPARE IMAGES ====================
-        with gr.Tab("Compare Images"):
-            gr.Markdown("""
-            ### Compare Two Screenshots
-            Check the differences between two images before updating your document.
-            """)
+        # ==================== MAIN APP (hidden until login) ====================
+        with gr.Column(visible=False) as main_section:
             
+            # Header with user info
             with gr.Row():
-                compare_img1 = gr.Image(label="Image 1 (Before)", type="filepath")
-                compare_img2 = gr.Image(label="Image 2 (After)", type="filepath")
-            
-            compare_btn = gr.Button("Compare", variant="primary")
-            
+                gr.Markdown("""
+                # Document Updater
+                ### Schneider Electric Technical Documentation Tool
+                """)
             with gr.Row():
-                compare_score = gr.Number(label="Similarity (%)", precision=1)
-                compare_highlight = gr.Image(label="Differences Highlighted")
+                user_info_display = gr.Markdown("Not logged in")
+                logout_btn = gr.Button("Logout", size="sm", variant="secondary")
             
-            compare_report = gr.Textbox(
-                label="Comparison Results",
-                lines=12,
-                interactive=False
-            )
+            gr.Markdown("---")
             
-            compare_btn.click(
-                fn=quick_compare,
-                inputs=[compare_img1, compare_img2],
-                outputs=[compare_score, compare_highlight, compare_report]
-            )
-        
-        # ==================== TAB: HISTORY ====================
-        with gr.Tab("History"):
-            gr.Markdown("""
-            ### Document History
-            View previous updates and restore earlier versions if needed.
-            """)
-            
-            refresh_history_btn = gr.Button("Refresh", size="sm")
-            
-            history_display = gr.Textbox(
-                label="Recent Updates",
-                lines=15,
-                interactive=False
-            )
-            
-            with gr.Row():
-                version_id_input = gr.Textbox(
-                    label="Version ID",
-                    placeholder="Enter version ID to restore"
+            # ==================== TAB: UPDATE DOCUMENT ====================
+            with gr.Tab("Update Document"):
+                gr.Markdown("""
+                ### Update Your Documentation
+                Upload the current screenshot and PDF, then add the new screenshot to replace it.
+                """)
+                
+                with gr.Row():
+                    # Left Column - Inputs
+                    with gr.Column(scale=1):
+                        gr.Markdown("#### Step 1: Upload Files")
+                        
+                        old_gui = gr.File(
+                            label="Current Screenshot (Required)",
+                            file_types=["image"],
+                            type="filepath"
+                        )
+                        
+                        old_pdf = gr.File(
+                            label="PDF Document (Required)",
+                            file_types=[".pdf"],
+                            type="filepath"
+                        )
+                        
+                        new_gui = gr.File(
+                            label="New Screenshot (Required)",
+                            file_types=["image"],
+                            type="filepath"
+                        )
+                        
+                        gr.Markdown("#### Custom Text Replacements (Optional)")
+                        gr.Markdown("*Add your own replacements, one per line: `old text -> new text`*")
+                        
+                        custom_replacements = gr.Textbox(
+                            label="Custom Replacements",
+                            placeholder="green gradient -> blue gradient\nAdd New Device -> Register Device",
+                            lines=5,
+                            info="These will be applied in addition to auto-detected changes"
+                        )
+                        
+                        gr.Markdown("#### Step 2: Process")
+                        
+                        process_btn = gr.Button(
+                            "Update Document",
+                            variant="primary",
+                            size="lg"
+                        )
+                    
+                    # Right Column - Primary Outputs
+                    with gr.Column(scale=1):
+                        gr.Markdown("#### Results")
+                        
+                        pdf_output = gr.File(label="Updated PDF")
+                        highlight_output = gr.Image(label="Visual Comparison")
+                        
+                        with gr.Row():
+                            export_btn = gr.Button("Download All Files", size="sm")
+                            export_status = gr.Textbox(label="Status", lines=1)
+                        
+                        zip_output = gr.File(label="Download Package")
+                
+                # Reports Section
+                gr.Markdown("#### Processing Details")
+                
+                with gr.Row():
+                    with gr.Column():
+                        summary_output = gr.Textbox(
+                            label="Summary",
+                            lines=15,
+                            interactive=False
+                        )
+                    
+                    with gr.Column():
+                        ai_output = gr.Textbox(
+                            label="Validation Report",
+                            lines=15,
+                            interactive=False
+                        )
+                
+                with gr.Row():
+                    with gr.Column():
+                        text_output = gr.Textbox(
+                            label="Text Changes",
+                            lines=10,
+                            interactive=False
+                        )
+                    
+                    with gr.Column():
+                        json_output = gr.Textbox(
+                            label="Technical Details",
+                            lines=10,
+                            interactive=False
+                        )
+                
+                html_output = gr.File(label="Full Report (HTML)")
+                
+                # Connect process button (auth-gated)
+                process_btn.click(
+                    fn=_process_with_auth,
+                    inputs=[
+                        old_gui,
+                        old_pdf,
+                        new_gui,
+                        custom_replacements,
+                        current_user
+                    ],
+                    outputs=[
+                        pdf_output,
+                        summary_output,
+                        ai_output,
+                        highlight_output,
+                        json_output,
+                        html_output,
+                        text_output
+                    ]
                 )
-                rollback_btn = gr.Button("Restore Version", variant="secondary")
+                
+                # Connect export button
+                export_btn.click(
+                    fn=export_all_outputs,
+                    inputs=[pdf_output, html_output, highlight_output],
+                    outputs=[zip_output, export_status]
+                )
             
-            rollback_output = gr.File(label="Restored PDF")
-            rollback_status = gr.Textbox(label="Status", lines=1)
+            # ==================== TAB: COMPARE IMAGES ====================
+            with gr.Tab("Compare Images"):
+                gr.Markdown("""
+                ### Compare Two Screenshots
+                Check the differences between two images before updating your document.
+                """)
+                
+                with gr.Row():
+                    compare_img1 = gr.Image(label="Image 1 (Before)", type="filepath")
+                    compare_img2 = gr.Image(label="Image 2 (After)", type="filepath")
+                
+                compare_btn = gr.Button("Compare", variant="primary")
+                
+                with gr.Row():
+                    compare_score = gr.Number(label="Similarity (%)", precision=1)
+                    compare_highlight = gr.Image(label="Differences Highlighted")
+                
+                compare_report = gr.Textbox(
+                    label="Comparison Results",
+                    lines=12,
+                    interactive=False
+                )
+                
+                compare_btn.click(
+                    fn=_compare_with_auth,
+                    inputs=[compare_img1, compare_img2, current_user],
+                    outputs=[compare_score, compare_highlight, compare_report]
+                )
             
-            refresh_history_btn.click(
-                fn=get_version_history,
-                outputs=[history_display]
-            )
+            # ==================== TAB: HISTORY ====================
+            with gr.Tab("History"):
+                gr.Markdown("""
+                ### Document History
+                View previous updates and restore earlier versions if needed.
+                """)
+                
+                refresh_history_btn = gr.Button("Refresh", size="sm")
+                
+                history_display = gr.Textbox(
+                    label="Recent Updates",
+                    lines=15,
+                    interactive=False
+                )
+                
+                with gr.Row():
+                    version_id_input = gr.Textbox(
+                        label="Version ID",
+                        placeholder="Enter version ID to restore"
+                    )
+                    rollback_btn = gr.Button("Restore Version", variant="secondary")
+                
+                rollback_output = gr.File(label="Restored PDF")
+                rollback_status = gr.Textbox(label="Status", lines=1)
+                
+                refresh_history_btn.click(
+                    fn=get_version_history,
+                    outputs=[history_display]
+                )
+                
+                rollback_btn.click(
+                    fn=rollback_version,
+                    inputs=[version_id_input],
+                    outputs=[rollback_output, rollback_status]
+                )
             
-            rollback_btn.click(
-                fn=rollback_version,
-                inputs=[version_id_input],
-                outputs=[rollback_output, rollback_status]
-            )
-        
-        # ==================== TAB: BATCH ====================
-        with gr.Tab("Batch Processing"):
+            # ==================== TAB: BATCH ====================
+            with gr.Tab("Batch Processing"):
+                gr.Markdown("""
+                ### Process Multiple Documents
+                Update several PDF documents at once.
+                """)
+                
+                batch_screenshots = gr.File(
+                    label="Screenshots (Upload Multiple)",
+                    file_types=["image"],
+                    file_count="multiple",
+                    type="filepath"
+                )
+                
+                batch_pdfs = gr.File(
+                    label="PDF Documents (Upload Multiple)",
+                    file_types=[".pdf"],
+                    file_count="multiple",
+                    type="filepath"
+                )
+                
+                batch_btn = gr.Button("Process All", variant="primary")
+                
+                batch_progress = gr.Textbox(
+                    label="Progress",
+                    lines=12,
+                    interactive=False
+                )
+                
+                batch_output = gr.File(label="Download Results")
+                
+                batch_btn.click(
+                    fn=process_batch,
+                    inputs=[batch_screenshots, batch_pdfs],
+                    outputs=[batch_progress, batch_output]
+                )
+            
+            # ==================== TAB: LOGS (Admin) ====================
+            with gr.Tab("Logs"):
+                gr.Markdown("""
+                ### Application Logs & Audit Trail
+                View recent application logs and user audit trail.
+                """)
+                
+                with gr.Row():
+                    refresh_logs_btn = gr.Button("Refresh Logs", size="sm")
+                    refresh_audit_btn = gr.Button("Refresh Audit Log", size="sm")
+                
+                app_logs_display = gr.Textbox(
+                    label="Application Logs (recent entries)",
+                    lines=20,
+                    interactive=False,
+                    max_lines=30,
+                )
+                
+                audit_log_display = gr.Textbox(
+                    label="Audit Log (user actions)",
+                    lines=15,
+                    interactive=False,
+                    max_lines=25,
+                )
+                
+                refresh_logs_btn.click(
+                    fn=_read_log_files,
+                    outputs=[app_logs_display]
+                )
+                
+                refresh_audit_btn.click(
+                    fn=_get_audit_log,
+                    outputs=[audit_log_display]
+                )
+            
+            # ==================== TAB: ADMIN (Admin only) ====================
+            with gr.Tab("Admin"):
+                gr.Markdown("""
+                ### User Management
+                Create and manage user accounts. **Admin access required.**
+                """)
+                
+                refresh_users_btn = gr.Button("Refresh User List", size="sm")
+                users_display = gr.Textbox(
+                    label="Current Users",
+                    lines=10,
+                    interactive=False
+                )
+                
+                gr.Markdown("#### Create New User")
+                with gr.Row():
+                    new_username = gr.Textbox(label="Username", placeholder="new_user")
+                    new_password = gr.Textbox(label="Password", type="password", placeholder="password")
+                    new_role = gr.Dropdown(
+                        choices=["viewer", "editor", "admin"],
+                        value="viewer",
+                        label="Role"
+                    )
+                
+                create_user_btn = gr.Button("Create User", variant="primary")
+                create_user_status = gr.Textbox(label="Status", lines=1, interactive=False)
+                
+                refresh_users_btn.click(
+                    fn=_list_users_display,
+                    outputs=[users_display]
+                )
+                
+                create_user_btn.click(
+                    fn=_create_user,
+                    inputs=[new_username, new_password, new_role, current_user],
+                    outputs=[create_user_status]
+                )
+            
+            # ==================== TAB: HELP ====================
+            with gr.Tab("Help"):
+                gr.Markdown("""
+                ## How to Use This Tool
+                
+                ### Updating a Document
+                
+                1. **Upload Current Screenshot** - Select the existing screenshot from your document
+                2. **Upload PDF** - Select the PDF document you want to update
+                3. **Upload New Screenshot** - The new version of the screenshot
+                4. **Click "Update Document"** - The tool will process your files
+                5. **Download** - Save the updated PDF to your computer
+                
+                ---
+                
+                ### User Roles
+                
+                | Role | Permissions |
+                |------|-------------|
+                | **Viewer** | View reports, history, and comparisons |
+                | **Editor** | All viewer permissions + process documents, rollback |
+                | **Admin** | All editor permissions + manage users, view logs |
+                
+                ---
+                
+                ### Understanding Results
+                
+                - **High Score** - Good match, changes applied successfully
+                - **Medium Score** - Review recommended before using
+                - **Low Score** - Poor match, may need manual review
+                
+                ---
+                
+                ### Common Questions
+                
+                | Question | Answer |
+                |----------|--------|
+                | No images found in PDF | The PDF may not contain embedded images |
+                | Low match score | Try using a higher quality screenshot |
+                | Slow processing | Reduce the number of files being processed |
+                | Cannot open PDF | Check that the file is not password protected |
+                
+                ---
+                
+                ### Need Help?
+                
+                Contact your IT department for assistance with this tool.
+                """)
+            
+            # ==================== FOOTER ====================
             gr.Markdown("""
-            ### Process Multiple Documents
-            Update several PDF documents at once.
-            """)
-            
-            batch_screenshots = gr.File(
-                label="Screenshots (Upload Multiple)",
-                file_types=["image"],
-                file_count="multiple",
-                type="filepath"
-            )
-            
-            batch_pdfs = gr.File(
-                label="PDF Documents (Upload Multiple)",
-                file_types=[".pdf"],
-                file_count="multiple",
-                type="filepath"
-            )
-            
-            batch_btn = gr.Button("Process All", variant="primary")
-            
-            batch_progress = gr.Textbox(
-                label="Progress",
-                lines=12,
-                interactive=False
-            )
-            
-            batch_output = gr.File(label="Download Results")
-            
-            batch_btn.click(
-                fn=process_batch,
-                inputs=[batch_screenshots, batch_pdfs],
-                outputs=[batch_progress, batch_output]
-            )
-        
-        # ==================== TAB: HELP ====================
-        with gr.Tab("Help"):
-            gr.Markdown("""
-            ## How to Use This Tool
-            
-            ### Updating a Document
-            
-            1. **Upload Current Screenshot** - Select the existing screenshot from your document
-            2. **Upload PDF** - Select the PDF document you want to update
-            3. **Upload New Screenshot** (Optional) - If you have a new version of the screenshot
-            4. **Click "Update Document"** - The tool will process your files
-            5. **Download** - Save the updated PDF to your computer
-            
             ---
             
-            ### Understanding Results
-            
-            - **Green/High Score** - Good match, changes applied successfully
-            - **Yellow/Medium Score** - Review recommended before using
-            - **Red/Low Score** - Poor match, may need manual review
-            
-            ---
-            
-            ### Visual Comparison
-            
-            The highlighted image shows:
-            - **Red areas** - Significant differences between images
-            - **Yellow areas** - Minor differences
-            
-            ---
-            
-            ### Common Questions
-            
-            | Question | Answer |
-            |----------|--------|
-            | No images found in PDF | The PDF may not contain embedded images |
-            | Low match score | Try using a higher quality screenshot |
-            | Slow processing | Reduce the number of files being processed |
-            | Cannot open PDF | Check that the file is not password protected |
-            
-            ---
-            
-            ### Need Help?
-            
-            Contact your IT department for assistance with this tool.
+            <div style="text-align: center; color: #666; font-size: 0.9em;">
+                <p>Document Updater | Schneider Electric</p>
+            </div>
             """)
         
-        # ==================== FOOTER ====================
-        gr.Markdown("""
-        ---
+        # ==================== AUTH HANDLERS ====================
+        def handle_login(username, password):
+            if not AUTH_AVAILABLE:
+                # If auth module not available, allow access as admin
+                user = {"id": 0, "username": username or "admin", "role": "admin"}
+                return [
+                    user,
+                    gr.update(visible=False),
+                    gr.update(visible=True),
+                    f"**{username or 'admin'}** | Role: **ADMIN** (auth module not loaded)",
+                    "",
+                ]
+            
+            rbac = RBACManager()
+            user = rbac.authenticate(username, password)
+            if user:
+                role = user["role"]
+                return [
+                    user,
+                    gr.update(visible=False),
+                    gr.update(visible=True),
+                    f"**{username}** | Role: **{role.upper()}**",
+                    "",
+                ]
+            return [
+                None,
+                gr.update(visible=True),
+                gr.update(visible=False),
+                "",
+                "**Invalid username or password.** Please try again.",
+            ]
         
-        <div style="text-align: center; color: #666; font-size: 0.9em;">
-            <p>Document Updater | Schneider Electric</p>
-        </div>
-        """)
+        def handle_logout():
+            return [
+                None,
+                gr.update(visible=True),
+                gr.update(visible=False),
+                "",
+            ]
+        
+        login_btn.click(
+            fn=handle_login,
+            inputs=[login_username, login_password],
+            outputs=[current_user, login_section, main_section, user_info_display, login_status]
+        )
+        
+        logout_btn.click(
+            fn=handle_logout,
+            outputs=[current_user, login_section, main_section, user_info_display]
+        )
     
     return interface
 
@@ -2345,6 +2704,10 @@ def build_interface():
 
 def main():
     """Main entry point"""
+    
+    # Setup structured logging
+    if setup_logging is not None:
+        setup_logging()
     
     print("""
     ========================================================================
@@ -2363,6 +2726,8 @@ def main():
     |   [+] Batch Processing for Multiple Documents                        |
     |   [+] One-Click Export (ZIP)                                         |
     |   [+] Comprehensive Reporting (Summary, JSON, HTML)                  |
+    |   [+] Role-Based Access Control (Viewer/Editor/Admin)                |
+    |   [+] Application & Audit Logging                                    |
     |                                                                      |
     ========================================================================
     """)
@@ -2373,7 +2738,8 @@ def main():
         "./data/documents",
         "./data/gui_screenshots",
         "./data/history",
-        "./data/output/reports"
+        "./data/output/reports",
+        "./data/logs",
     ]
     
     for directory in directories:
@@ -2387,6 +2753,7 @@ def main():
     print(f"   - Gradio:       {'[OK]' if GRADIO_AVAILABLE else '[X] Install gradio'}")
     print(f"   - PDF Support:  {'[OK]' if PDF_SUPPORT else '[X] Install pymupdf'}")
     print(f"   - OCR Support:  {'[OK]' if OCR_SUPPORT else '[!] Install pytesseract for text features'}")
+    print(f"   - Auth (RBAC):  {'[OK]' if AUTH_AVAILABLE else '[!] Auth module not found'}")
     
     if not GRADIO_AVAILABLE:
         print("\n[ERROR] Cannot start: Gradio is required. Run: pip install gradio")
@@ -2414,3 +2781,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
