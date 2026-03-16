@@ -7,30 +7,26 @@ Schneider Electric Hackathon 2025-2026
 # INSTALLATION
 # ============================================================
 
-pip install -r requirements.txt          # Install all dependencies
-python app_main.py                       # Run application
-# Open: http://127.0.0.1:7861
+# pip install -r requirements.txt          # Install all dependencies
+# python app_main.py                       # Run application
+# Open: http://127.0.0.1:7870
 
 # ============================================================
 # PYTHON API USAGE
 # ============================================================
 
-from app_main import AdvancedDocumentAnalyzer
+# Use the modular components: EnhancedPDFProcessor, ImageComparator, SmartTextProcessor
+from docsync.core.pdf_processor import EnhancedPDFProcessor
+from docsync.core.image_comparator import ImageComparator
+from docsync.core.text_processor import SmartTextProcessor
 
 # Initialize
-analyzer = AdvancedDocumentAnalyzer()
+pdf_processor = EnhancedPDFProcessor()
+comparator = ImageComparator()
+text_processor = SmartTextProcessor()
 
-# Load images
-gui_image = analyzer.load_image("gui.png")
-doc_image = analyzer.load_image("doc.png")
-
-# Compare images
-result = analyzer.compare_images(
-    gui_image, 
-    doc_image, 
-    enable_ocr=True,              # Extract text
-    enable_color_analysis=True    # Analyze colors
-)
+# Example workflow logic (Conceptual)
+gui_score = comparator.compute_fast_score("gui.png", "doc.png")
 
 # Generate summary
 summary = analyzer.generate_summary_report(
@@ -131,10 +127,9 @@ result = {
     },
     "color_analysis": {
         "gui_colors": [
-            {"rgb": (255, 87, 51), "hex": "#FF5733", "percentage": 25.3},
-            ...
+            {"rgb": (255, 87, 51), "hex": "#FF5733", "percentage": 25.3}
         ],
-        "doc_colors": [...]
+        "doc_colors": []
     }
 }
 

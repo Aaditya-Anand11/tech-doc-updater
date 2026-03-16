@@ -92,7 +92,7 @@ brew install tesseract
 python app_main.py
 ```
 
-Open browser: **http://127.0.0.1:7861**
+Open browser: **http://127.0.0.1:7870**
 
 ## 📖 How to Use
 
@@ -153,8 +153,8 @@ Open browser: **http://127.0.0.1:7861**
 | Type | Similarity | Action |
 |------|------------|--------|
 | 🟢 NO_CHANGE | > 99% | No update needed |
-| 🟡 MINOR_UPDATES | 95-98% | Update specific sections |
-| 🟠 SIGNIFICANT_CHANGES | 70-95% | Major revision recommended |
+| 🟡 MINOR_UPDATES | 95-99% | Update specific sections |
+| 🟠 SIGNIFICANT_CHANGES | 70-94% | Major revision recommended |
 | 🔴 MAJOR_REDESIGN | < 70% | Complete rewrite may be needed |
 | ⚪ TEXT_CONTENT_CHANGED | Text ≠ Visual = | Update text content even if visuals match |
 
@@ -257,27 +257,19 @@ pip install reportlab PyPDF2 pdf2image
 ## 📊 API Usage
 
 ```python
-from app_main import AdvancedDocumentAnalyzer
-import cv2
+from docsync.core.pdf_processor import EnhancedPDFProcessor
+from docsync.core.image_comparator import ImageComparator
+from docsync.core.text_processor import SmartTextProcessor
 
-analyzer = AdvancedDocumentAnalyzer()
+# The v3.0 API uses three modular components designed for high performance and targeted processing.
+# 1. EnhancedPDFProcessor: Handles loading, saving, and extracting images from PDFs
+# 2. ImageComparator: Analyzes differences via perceptual hash, SSIM, and histogram metrics
+# 3. SmartTextProcessor: Handles Tesseract OCR, Levenshtein distances and prompt validation
 
-# Load images
-gui_img = analyzer.load_image("gui.png")
-doc_img = analyzer.load_image("doc.png")
+comparator = ImageComparator()
+scores = comparator.compute_fast_score("current_gui.png", "legacy_gui.png")
 
-# Compare
-result = analyzer.compare_images(gui_img, doc_img, enable_ocr=True)
-
-# Generate reports
-summary = analyzer.generate_summary_report("GUI", "Doc", result)
-analyzer.generate_html_report(result, summary, gui_img, doc_img)
-analyzer.generate_json_report(result, summary)
-analyzer.generate_pdf_report(result, summary)
-
-print(f"Similarity: {summary['similarity_score']}%")
-print(f"Changed Regions: {summary['changed_regions_count']}")
-print(f"Recommendation: {summary['recommendation']}")
+print(f"Similarity Breakdown: {scores}")
 ```
 
 ## 👥 Target Audience

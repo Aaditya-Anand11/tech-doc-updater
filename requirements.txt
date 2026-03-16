@@ -12,11 +12,8 @@ PyPDF2
 pymupdf
 pdf2image
 
-# ─── New Dependencies (modular architecture) ────────
-fastapi
-uvicorn[standard]
-python-multipart
+# ─── New Dependencies (GenAI validation enabled but optional) ──
 google-genai
 
-# ─── Legacy UI (optional) ───────────────────────────
+# ─── Web UI ──────────────────────────────
 gradio
