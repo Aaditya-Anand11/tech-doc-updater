@@ -144,6 +144,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             raise HTTPException(status_code=403, detail="Admin access required")
         return user
 
+    def require_editor(request: Request) -> Dict:
+        """Require editor or admin role"""
+        user = require_user(request)
+        if user.get("role") not in ("editor", "admin"):
+            raise HTTPException(status_code=403, detail="Editor access required")
+        return user
+
     # ── Endpoints ────────────────────────────────────────
 
     @app.get("/health")
@@ -204,6 +211,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     @app.post("/api/process")
     async def process_document(
+        request: Request,
         pdf_document: UploadFile = File(...),
         new_screenshots: List[UploadFile] = File(...),
         old_screenshot: UploadFile = File(None),
@@ -211,7 +219,9 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         """
         Phase 1: Upload, extract, match — return match preview (don't apply yet).
         The user reviews matches and then calls /api/process/apply.
+        Requires editor or admin role.
         """
+        require_editor(request)
         start = time.time()
         tmp = tempfile.mkdtemp()
 
@@ -398,11 +408,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         text_decisions: List[Dict] = []  # [{"index": 0, "approved": true}, ...]
 
     @app.post("/api/process/apply")
-    async def apply_decisions(body: ApplyRequest):
+    async def apply_decisions(body: ApplyRequest, request: Request):
         """
         Phase 2: Apply user-approved replacements to the PDF.
         Accepts decisions for images and text changes.
+        Requires editor or admin role.
         """
+        require_editor(request)
         session = pending_sessions.pop(body.session_id, None)
         if not session:
             raise HTTPException(status_code=404, detail="Session expired or not found")
@@ -543,11 +555,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
 
     @app.get("/api/history")
-    async def get_history():
+    async def get_history(request: Request):
+        require_editor(request)
         return {"versions": history.get_history()}
 
     @app.post("/api/rollback/{version_id}")
-    async def rollback(version_id: int):
+    async def rollback(version_id: int, request: Request):
+        require_editor(request)
         result = history.rollback(version_id)
         if result:
             return {"success": True, "restored": result}
@@ -558,7 +572,8 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         api_key: str
 
     @app.post("/api/settings/gemini")
-    async def save_gemini_key(body: GeminiSettingsRequest):
+    async def save_gemini_key(body: GeminiSettingsRequest, request: Request):
+        require_admin(request)
         nonlocal comparator
         config.gemini_api_key = body.api_key
         # Auto-enable Gemini when a key is provided
@@ -596,12 +611,15 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     @app.post("/api/compare")
     async def compare_images(
+        request: Request,
         images: List[UploadFile] = File(...),
     ):
         """
         Batch comparison: upload multiple images and automatically
         compare every pair. Returns pairwise similarity scores.
+        Requires editor or admin role.
         """
+        require_editor(request)
         if len(images) < 2:
             raise HTTPException(status_code=400, detail="Upload at least 2 images")
 
@@ -677,5 +695,44 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             filename="change_summary_report.txt",
             media_type="text/plain",
         )
+
+    # ─── Logs (all authenticated users) ──────────────────
+
+    @app.get("/api/logs")
+    async def get_logs(
+        request: Request,
+        lines: int = Query(200, ge=1, le=2000),
+    ):
+        """Return the last N lines of the application log"""
+        require_user(request)
+        log_path = os.path.join(config.data_dir, "logs", "app.log")
+        if not os.path.isfile(log_path):
+            return {"lines": [], "total": 0}
+        try:
+            with open(log_path, "r", encoding="utf-8", errors="replace") as f:
+                all_lines = f.readlines()
+            tail = all_lines[-lines:]
+            return {"lines": [l.rstrip() for l in tail], "total": len(all_lines)}
+        except Exception as e:
+            logger.error(f"Failed to read logs: {e}")
+            raise HTTPException(status_code=500, detail="Could not read log file")
+
+    # ─── Database Management (admin only) ────────────────
+
+    @app.get("/api/db/info")
+    async def db_info(request: Request):
+        """Return database table information"""
+        require_admin(request)
+        return rbac.get_db_info()
+
+    @app.post("/api/db/reset")
+    async def db_reset(request: Request):
+        """Reset the database – drops all tables and recreates defaults"""
+        admin = require_admin(request)
+        rbac.reset_database()
+        # Invalidate all sessions since users table was recreated
+        sessions.clear()
+        rbac._log_audit(admin["username"], "db_reset", "Database reset by admin")
+        return {"success": True, "message": "Database reset. All sessions invalidated. Please log in again."}
 
     return app

@@ -23,17 +23,20 @@ class Role:
 
 
 # Permissions mapping
+# viewer  – can only view logs and the dashboard
+# editor  – can run the core processing software
+# admin   – full access including database add/remove
 ROLE_PERMISSIONS = {
-    Role.VIEWER: {"view_reports", "view_history", "list_plugins", "compare_images"},
+    Role.VIEWER: {"view_logs", "view_dashboard"},
     Role.EDITOR: {
-        "view_reports", "view_history", "list_plugins",
-        "process_document", "compare_images", "rollback",
+        "view_logs", "view_dashboard",
+        "process_document", "compare_images", "view_history", "rollback",
     },
     Role.ADMIN: {
-        "view_reports", "view_history", "list_plugins",
-        "process_document", "compare_images", "rollback",
+        "view_logs", "view_dashboard",
+        "process_document", "compare_images", "view_history", "rollback",
         "manage_users", "manage_plugins", "manage_config",
-        "view_logs",
+        "manage_db",
     },
 }
 
@@ -258,3 +261,33 @@ class RBACManager:
         ]
         conn.close()
         return entries
+
+    # ── Database Management (admin) ──────────────────────
+
+    def reset_database(self):
+        """Drop all tables and re-initialise the database (admin only)"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("DROP TABLE IF EXISTS audit_log")
+        cursor.execute("DROP TABLE IF EXISTS users")
+        conn.commit()
+        conn.close()
+        self._init_db()
+        logger.info("Database reset completed – default users recreated")
+        return True
+
+    def get_db_info(self) -> Dict:
+        """Return summary information about all database tables"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
+        tables = [r[0] for r in cursor.fetchall()]
+        info = {"db_path": self.db_path, "tables": {}}
+        for table in tables:
+            cursor.execute(f"SELECT COUNT(*) FROM [{table}]")
+            count = cursor.fetchone()[0]
+            cursor.execute(f"PRAGMA table_info([{table}])")
+            columns = [r[1] for r in cursor.fetchall()]
+            info["tables"][table] = {"row_count": count, "columns": columns}
+        conn.close()
+        return info

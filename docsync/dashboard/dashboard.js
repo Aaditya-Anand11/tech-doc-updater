@@ -36,10 +36,27 @@ function updateUserUI(user) {
     document.getElementById('currentRole').textContent = user.role;
     document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
 
-    // Show/hide admin-only sections
-    document.querySelectorAll('.admin-only').forEach(el => {
-        el.classList.toggle('visible', user.role === 'admin');
+    // Role-based sidebar visibility
+    const role = user.role;
+    document.querySelectorAll('.nav-item[data-role]').forEach(el => {
+        const requiredRole = el.dataset.role;
+        let visible = false;
+        if (requiredRole === 'all') {
+            visible = true;
+        } else if (requiredRole === 'editor') {
+            visible = role === 'editor' || role === 'admin';
+        } else if (requiredRole === 'admin') {
+            visible = role === 'admin';
+        }
+        el.style.display = visible ? '' : 'none';
     });
+
+    // If the currently active tab is hidden, switch to dashboard
+    const activeNav = document.querySelector('.nav-item.active');
+    if (activeNav && activeNav.style.display === 'none') {
+        const dashboardNav = document.querySelector('.nav-item[data-tab="dashboard"]');
+        if (dashboardNav) dashboardNav.click();
+    }
 }
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -71,7 +88,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         // Load data after login
         checkApiHealth();
-        loadHistory();
+        loadLogs();
+        if (data.user.role === 'editor' || data.user.role === 'admin') {
+            loadHistory();
+        }
         loadPlugins();
         if (data.user.role === 'admin') loadUsers();
     } catch {
@@ -1058,7 +1078,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const data = await res.json();
                 updateUserUI(data.user);
                 hideLogin();
-                loadHistory();
+                loadLogs();
+                if (data.user.role === 'editor' || data.user.role === 'admin') {
+                    loadHistory();
+                }
                 loadPlugins();
                 if (data.user.role === 'admin') loadUsers();
                 return;
@@ -1167,3 +1190,89 @@ document.getElementById('addUserBtn')?.addEventListener('click', async () => {
         }
     } catch { alert('API error'); }
 });
+
+// ─── Logs ─────────────────────────────────────────────
+async function loadLogs() {
+    const lineCount = document.getElementById('logLineCount')?.value || 200;
+    const contentEl = document.getElementById('logContent');
+    const infoEl = document.getElementById('logTotalInfo');
+    if (!contentEl) return;
+
+    try {
+        const res = await authFetch(`${API_BASE}/api/logs?lines=${lineCount}`);
+        if (!res.ok) {
+            contentEl.textContent = `Error: HTTP ${res.status}`;
+            return;
+        }
+        const data = await res.json();
+        const lines = data.lines || [];
+        if (lines.length === 0) {
+            contentEl.textContent = 'No log entries yet.';
+        } else {
+            contentEl.textContent = lines.join('\n');
+            // Auto-scroll to bottom
+            contentEl.scrollTop = contentEl.scrollHeight;
+        }
+        if (infoEl) {
+            infoEl.textContent = `Showing ${lines.length} of ${data.total || 0} total lines`;
+        }
+    } catch (e) {
+        contentEl.textContent = `Error loading logs: ${e.message}`;
+    }
+}
+
+document.getElementById('refreshLogs')?.addEventListener('click', loadLogs);
+document.getElementById('logLineCount')?.addEventListener('change', loadLogs);
+
+// ─── Database Management (Admin) ──────────────────────
+async function loadDbInfo() {
+    const el = document.getElementById('dbInfoContent');
+    if (!el) return;
+    el.innerHTML = '<div class="empty-state">Loading...</div>';
+
+    try {
+        const res = await authFetch(`${API_BASE}/api/db/info`);
+        if (!res.ok) {
+            el.innerHTML = `<div class="empty-state">Error: HTTP ${res.status}</div>`;
+            return;
+        }
+        const data = await res.json();
+        let html = `<p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.75rem">Database: <code>${data.db_path}</code></p>`;
+
+        const tables = data.tables || {};
+        for (const [name, info] of Object.entries(tables)) {
+            html += `<div style="margin-bottom:0.75rem;padding:0.75rem;background:var(--bg-secondary);border-radius:8px;border:1px solid var(--border-color)">`;
+            html += `<div style="font-weight:600;margin-bottom:0.35rem">${name} <span style="color:var(--text-muted);font-weight:400">(${info.row_count} rows)</span></div>`;
+            html += `<div style="font-size:0.78rem;color:var(--text-muted)">Columns: ${info.columns.join(', ')}</div>`;
+            html += `</div>`;
+        }
+        el.innerHTML = html;
+    } catch (e) {
+        el.innerHTML = `<div class="empty-state">Error: ${e.message}</div>`;
+    }
+}
+
+async function resetDatabase() {
+    if (!confirm('⚠️ This will DELETE all users, audit logs, and sessions.\n\nDefault accounts will be recreated.\n\nAre you sure?')) return;
+    if (!confirm('This action cannot be undone. Type confirm again to proceed.')) return;
+
+    try {
+        const res = await authFetch(`${API_BASE}/api/db/reset`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            alert(data.message || 'Database reset successfully.');
+            // Session invalidated, force re-login
+            authToken = null;
+            currentUser = null;
+            sessionStorage.removeItem('docsync_token');
+            showLogin();
+        } else {
+            alert('Reset failed.');
+        }
+    } catch (e) {
+        alert('Error: ' + e.message);
+    }
+}
+
+document.getElementById('loadDbInfoBtn')?.addEventListener('click', loadDbInfo);
+document.getElementById('resetDbBtn')?.addEventListener('click', resetDatabase);
