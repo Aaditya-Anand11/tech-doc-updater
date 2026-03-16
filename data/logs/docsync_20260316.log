@@ -1,0 +1,33 @@
+2026-03-16 20:27:15,760 [INFO] docsync.image_comparator (image_comparator.py:121): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-03-16 20:27:15,792 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-03-16 20:27:15,792 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-03-16 20:27:15,793 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-03-16 20:27:15,793 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-03-16 20:27:15,793 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-03-16 20:27:17,860 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-03-16 20:27:17,860 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-03-16 21:08:05,648 [INFO] docsync.image_comparator (image_comparator.py:121): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-03-16 21:08:05,663 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-03-16 21:08:05,664 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-03-16 21:08:05,665 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-03-16 21:08:05,665 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-03-16 21:08:05,665 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-03-16 21:08:07,720 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-03-16 21:08:07,720 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-03-16 21:08:07,746 [INFO] docsync.auth (rbac.py:109): Default accounts created: admin, editor, viewer
+2026-03-16 21:12:49,477 [INFO] docsync.image_comparator (image_comparator.py:121): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-03-16 21:12:49,483 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-03-16 21:12:49,483 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-03-16 21:12:49,483 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-03-16 21:12:49,484 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-03-16 21:12:49,484 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-03-16 21:12:51,555 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-03-16 21:12:51,555 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0
+2026-03-16 21:15:52,854 [INFO] docsync.image_comparator (image_comparator.py:121): Ollama vision matching enabled (model=llava, weight=0.25)
+2026-03-16 21:15:52,861 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ssim v1.0.0
+2026-03-16 21:15:52,861 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: histogram v1.0.0
+2026-03-16 21:15:52,861 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: edge v1.0.0
+2026-03-16 21:15:52,861 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: template v1.0.0
+2026-03-16 21:15:52,862 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: phash v1.0.0
+2026-03-16 21:15:54,925 [INFO] docsync.plugins.ollama (ollama_plugin.py:50): Ollama connected: model 'llama3' available
+2026-03-16 21:15:54,925 [INFO] docsync.plugins (plugin_base.py:98): Plugin registered: ai_llm v1.0.0

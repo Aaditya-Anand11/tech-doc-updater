@@ -49,29 +49,37 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item active" data-tab="dashboard">
+            <a href="#" class="nav-item active" data-tab="dashboard" data-role="all">
                 <span class="nav-icon">📊</span>
                 <span class="nav-text">Dashboard</span>
             </a>
-            <a href="#" class="nav-item" data-tab="process">
+            <a href="#" class="nav-item" data-tab="process" data-role="editor">
                 <span class="nav-icon">📄</span>
                 <span class="nav-text">Process Document</span>
             </a>
-            <a href="#" class="nav-item" data-tab="compare">
+            <a href="#" class="nav-item" data-tab="compare" data-role="editor">
                 <span class="nav-icon">🔍</span>
                 <span class="nav-text">Compare Images</span>
             </a>
-            <a href="#" class="nav-item" data-tab="history">
+            <a href="#" class="nav-item" data-tab="history" data-role="editor">
                 <span class="nav-icon">📜</span>
                 <span class="nav-text">Version History</span>
             </a>
-            <a href="#" class="nav-item" data-tab="plugins">
+            <a href="#" class="nav-item" data-tab="logs" data-role="all">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">Logs</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="plugins" data-role="admin">
                 <span class="nav-icon">🔌</span>
                 <span class="nav-text">Plugins</span>
             </a>
-            <a href="#" class="nav-item" data-tab="settings">
+            <a href="#" class="nav-item" data-tab="settings" data-role="admin">
                 <span class="nav-icon">⚙️</span>
                 <span class="nav-text">Settings</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="database" data-role="admin">
+                <span class="nav-icon">🗄️</span>
+                <span class="nav-text">Database</span>
             </a>
         </nav>
 
@@ -330,28 +338,7 @@
                 </div>
             </div>
 
-            <!-- Admin: Add User (shown only to admins) -->
-            <div class="card admin-only" id="userManagementCard">
-                <div class="card-header">
-                    <h2>👥 User Management</h2>
-                </div>
-                <div class="card-body">
-                    <div class="user-list" id="userList"></div>
-                    <div class="add-user-form">
-                        <h3>Add User</h3>
-                        <div class="form-row">
-                            <input type="text" id="newUsername" placeholder="Username" class="input-text">
-                            <input type="password" id="newPassword" placeholder="Password" class="input-text">
-                            <select id="newRole" class="input-text">
-                                <option value="viewer">Viewer</option>
-                                <option value="editor">Editor</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                            <button class="btn-primary btn-sm" id="addUserBtn">+ Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </section>
 
         <!-- ─── Settings Tab ───────────────────── -->
@@ -412,6 +399,86 @@
                     </div>
 
                     <button class="btn-primary" id="saveSettings">💾 Save Settings</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Logs Tab ────────────────────────── -->
+        <section class="tab-content" id="tab-logs">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📋 Application Logs</h2>
+                    <div style="display:flex;gap:0.5rem;align-items:center">
+                        <select id="logLineCount" class="input-text" style="width:auto;padding:0.3rem 0.5rem;font-size:0.82rem">
+                            <option value="50">Last 50 lines</option>
+                            <option value="100">Last 100 lines</option>
+                            <option value="200" selected>Last 200 lines</option>
+                            <option value="500">Last 500 lines</option>
+                            <option value="1000">Last 1000 lines</option>
+                        </select>
+                        <button class="btn-secondary btn-sm" id="refreshLogs">↻ Refresh</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="logTotalInfo" style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.5rem"></div>
+                    <pre id="logContent" style="max-height:600px;overflow:auto;padding:12px;background:var(--bg-primary);border-radius:8px;font-size:0.78rem;line-height:1.5;white-space:pre-wrap;word-break:break-all;border:1px solid var(--border-color)">Loading logs...</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Database Tab (admin only) ────────── -->
+        <section class="tab-content" id="tab-database">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🗄️ Database Management</h2>
+                </div>
+                <div class="card-body">
+                    <div class="dashboard-grid" style="margin-bottom:1.5rem">
+                        <div class="card" style="background:var(--bg-primary);border:1px solid var(--border-color)">
+                            <div class="card-header"><h3>Database Info</h3></div>
+                            <div class="card-body" id="dbInfoContent">
+                                <div class="empty-state">Click "Load Info" to view database details</div>
+                            </div>
+                            <div style="padding:0 1rem 1rem">
+                                <button class="btn-secondary btn-sm" id="loadDbInfoBtn">📊 Load Info</button>
+                            </div>
+                        </div>
+                        <div class="card" style="background:var(--bg-primary);border:1px solid var(--border-color)">
+                            <div class="card-header"><h3>⚠️ Danger Zone</h3></div>
+                            <div class="card-body">
+                                <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem">
+                                    Resetting the database will <strong>delete all users, audit logs, and sessions</strong>.
+                                    Default accounts (admin, editor, viewer) will be recreated.
+                                </p>
+                                <button class="btn-primary btn-sm" id="resetDbBtn" style="background:#e74c3c;border-color:#c0392b">
+                                    🗑️ Reset Database
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management (admin only) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>👥 User Management</h2>
+                </div>
+                <div class="card-body">
+                    <div class="user-list" id="userList"></div>
+                    <div class="add-user-form">
+                        <h3>Add User</h3>
+                        <div class="form-row">
+                            <input type="text" id="newUsername" placeholder="Username" class="input-text">
+                            <input type="password" id="newPassword" placeholder="Password" class="input-text">
+                            <select id="newRole" class="input-text">
+                                <option value="viewer">Viewer</option>
+                                <option value="editor">Editor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <button class="btn-primary btn-sm" id="addUserBtn">+ Add</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
