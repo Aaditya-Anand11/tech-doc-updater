@@ -6,6 +6,7 @@ formatting, alignment, and numbering.
 Extracted from EnhancedPDFProcessor.replace_images_and_text().
 """
 
+import os
 import logging
 from typing import List, Dict
 

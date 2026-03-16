@@ -2,16 +2,41 @@
 DocSync Configuration Module
 
 Central configuration for all DocSync components.
-Loads from config.json or environment variables with sensible defaults.
+Loads from config.ini (INI format) or environment variables with sensible defaults.
 """
 
 import os
+import configparser
 import json
 import logging
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
+
+
+# Mapping from INI section.key → dataclass attribute
+_INI_MAP = {
+    ("Storage", "data_dir"): "data_dir",
+    ("Storage", "output_dir"): "output_dir",
+    ("Storage", "history_dir"): "history_dir",
+    ("Server", "host"): "api_host",
+    ("Server", "port"): "api_port",
+    ("Analysis", "similarity_threshold"): "similarity_threshold",
+    ("Database", "path"): "db_path",
+    ("AI_Validation", "model"): "gemini_model",
+    ("Logging", "level"): "_log_level",
+}
+
+# Attributes that should be parsed as specific types
+_FLOAT_ATTRS = {
+    "ssim_weight", "histogram_weight", "edge_weight", "template_weight",
+    "similarity_threshold", "high_confidence_threshold",
+    "auto_approve_threshold", "review_threshold", "reject_threshold",
+    "gemini_weight",
+}
+_INT_ATTRS = {"api_port", "max_versions"}
+_BOOL_ATTRS = {"ollama_enabled", "gemini_enabled", "auth_enabled"}
 
 
 @dataclass
@@ -29,7 +54,7 @@ class DocSyncConfig:
     histogram_weight: float = 0.20
     edge_weight: float = 0.25
     template_weight: float = 0.20
-    similarity_threshold: float = 0.55
+    similarity_threshold: float = 0.30
     high_confidence_threshold: float = 0.80
 
     # OCR settings
@@ -52,12 +77,12 @@ class DocSyncConfig:
     # Gemini AI settings
     gemini_api_key: str = os.environ.get("GEMINI_API_KEY", "")
     gemini_model: str = "gemini-2.0-flash"
-    gemini_enabled: bool = False  # Set to True when Gemini quota resets
+    gemini_enabled: bool = False
     gemini_weight: float = 0.25
 
     # API settings
     api_host: str = "127.0.0.1"
-    api_port: int = 8000
+    api_port: int = 7870
 
     # Auth / RBAC
     auth_enabled: bool = True
@@ -67,18 +92,19 @@ class DocSyncConfig:
     max_versions: int = 50
 
     @classmethod
-    def load(cls, config_path: str = "config.json") -> "DocSyncConfig":
-        """Load configuration from file, with env var overrides"""
+    def load(cls, config_path: str = "config.ini") -> "DocSyncConfig":
+        """Load configuration from INI file, with env var overrides.
+
+        Also supports legacy config.json for backwards compatibility.
+        """
         config = cls()
 
-        # Load from JSON file
         if os.path.exists(config_path):
             try:
-                with open(config_path, "r") as f:
-                    data = json.load(f)
-                for key, value in data.items():
-                    if hasattr(config, key):
-                        setattr(config, key, value)
+                if config_path.endswith(".json"):
+                    config._load_json(config_path)
+                else:
+                    config._load_ini(config_path)
                 logger.info(f"Configuration loaded from {config_path}")
             except Exception as e:
                 logger.warning(f"Could not load config from {config_path}: {e}")
@@ -98,40 +124,68 @@ class DocSyncConfig:
         for env_key, attr in env_overrides.items():
             val = os.environ.get(env_key)
             if val is not None:
-                if attr == "api_port":
-                    setattr(config, attr, int(val))
-                else:
-                    setattr(config, attr, val)
+                config._set_typed(attr, val)
 
         return config
 
-    def save(self, config_path: str = "config.json"):
-        """Save current configuration to JSON file"""
-        data = {
+    def _load_ini(self, config_path: str):
+        """Parse an INI config file and apply known keys."""
+        parser = configparser.ConfigParser()
+        parser.read(config_path, encoding="utf-8")
+
+        for (section, key), attr in _INI_MAP.items():
+            if parser.has_option(section, key):
+                self._set_typed(attr, parser.get(section, key))
+
+    def _load_json(self, config_path: str):
+        """Parse a JSON config file (legacy support)."""
+        with open(config_path, "r") as f:
+            data = json.load(f)
+        for key, value in data.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+    def _set_typed(self, attr: str, raw: str):
+        """Set an attribute with the correct type conversion."""
+        if attr.startswith("_"):
+            return
+        if attr in _FLOAT_ATTRS:
+            setattr(self, attr, float(raw))
+        elif attr in _INT_ATTRS:
+            setattr(self, attr, int(raw))
+        elif attr in _BOOL_ATTRS:
+            setattr(self, attr, raw.lower() in ("true", "1", "yes"))
+        else:
+            setattr(self, attr, raw)
+
+    def save(self, config_path: str = "config.ini"):
+        """Save current configuration to INI file."""
+        parser = configparser.ConfigParser()
+
+        parser["Storage"] = {
             "data_dir": self.data_dir,
             "output_dir": self.output_dir,
             "history_dir": self.history_dir,
-            "ssim_weight": self.ssim_weight,
-            "histogram_weight": self.histogram_weight,
-            "edge_weight": self.edge_weight,
-            "template_weight": self.template_weight,
-            "similarity_threshold": self.similarity_threshold,
-            "high_confidence_threshold": self.high_confidence_threshold,
-            "auto_approve_threshold": self.auto_approve_threshold,
-            "review_threshold": self.review_threshold,
-            "reject_threshold": self.reject_threshold,
-            "ollama_base_url": self.ollama_base_url,
-            "ollama_model": self.ollama_model,
-            "ollama_enabled": self.ollama_enabled,
-            "gemini_api_key": self.gemini_api_key,
-            "gemini_model": self.gemini_model,
-            "gemini_enabled": self.gemini_enabled,
-            "gemini_weight": self.gemini_weight,
-            "api_host": self.api_host,
-            "api_port": self.api_port,
-            "auth_enabled": self.auth_enabled,
-            "db_path": self.db_path,
-            "max_versions": self.max_versions,
         }
+        parser["Server"] = {
+            "host": self.api_host,
+            "port": str(self.api_port),
+        }
+        parser["Analysis"] = {
+            "similarity_threshold": str(self.similarity_threshold),
+            "ssim_weight": str(self.ssim_weight),
+            "histogram_weight": str(self.histogram_weight),
+            "edge_weight": str(self.edge_weight),
+            "template_weight": str(self.template_weight),
+            "high_confidence_threshold": str(self.high_confidence_threshold),
+        }
+        parser["Database"] = {
+            "path": self.db_path,
+        }
+        parser["AI_Validation"] = {
+            "model": self.gemini_model,
+            "gemini_enabled": str(self.gemini_enabled).lower(),
+        }
+
         with open(config_path, "w") as f:
-            json.dump(data, f, indent=2)
+            parser.write(f)

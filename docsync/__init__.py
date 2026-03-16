@@ -7,7 +7,7 @@ with software GUI changes through intelligent image comparison,
 OCR text analysis, and automated document updating.
 """
 
-__version__ = "4.0.0"
+__version__ = "3.0.0"
 __author__ = "Schneider Electric Hackathon Team"
 
 from docsync.core.gui_extractor import GUIExtractor

@@ -38,6 +38,7 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 import logging
+import traceback
 from collections import Counter
 from difflib import SequenceMatcher
 
@@ -588,11 +589,11 @@ class SmartTextProcessor:
     def __init__(self):
         self.ui_terms = {}
         
-        # OCR corrections: only safe multi-char patterns (not single digits/chars)
-        self.ocr_corrections = {
-            "rn": "m",
-            "vv": "w",
-        }
+        # OCR corrections: disabled — naive substring replacement corrupts
+        # normal words (e.g. "return" → "retum", "warning" → "waming").
+        # Only add patterns here if they use word-boundary regex via
+        # correct_ocr_errors() below.
+        self.ocr_corrections = {}
         
         # No hardcoded phrase pairs — all text changes are detected dynamically
         # via OCR comparison of old vs new screenshots
@@ -610,10 +611,12 @@ class SmartTextProcessor:
             return ""
     
     def correct_ocr_errors(self, text: str) -> str:
-        """Correct common OCR errors"""
+        """Correct common OCR errors using word-boundary-safe regex"""
         corrected = text
         for error, correction in self.ocr_corrections.items():
-            corrected = corrected.replace(error, correction)
+            # Use word-boundary anchors so "rn" only matches as a
+            # standalone token, never inside "return" or "warning".
+            corrected = re.sub(rf'\b{re.escape(error)}\b', correction, corrected)
         return corrected
     
     def find_ui_term_changes(self, old_text: str, new_text: str) -> List[Dict]:
@@ -1735,15 +1738,16 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
     page_hints = {}
     
 
+    pdf_processor = EnhancedPDFProcessor()
+
     try:
         logger.debug("Starting process_document_v3...")
         logger.debug(f"old_gui_path: {old_gui_path}")
         logger.debug(f"new_paths: {new_paths}")
         logger.debug(f"pdf_path: {pdf_path}")
-        
+
         # Initialize all components
         logger.debug("Initializing components...")
-        pdf_processor = EnhancedPDFProcessor()
         matcher = AdvancedImageMatcher({"similarity_threshold": confidence_threshold})
         text_processor = SmartTextProcessor()
         validator = AIValidationEngine() if enable_ai_validation else None
@@ -2013,7 +2017,6 @@ DETECTED REPLACEMENTS:
     except Exception as e:
         logger.error(f"Processing error: {e}")
         logger.debug(f"ERROR: {e}")
-        import traceback
         traceback.print_exc()
         return None, f"❌ Error: {str(e)}", "", None, "{}", None, ""
     finally:
@@ -2029,8 +2032,8 @@ def quick_compare(img1, img2):
     if img1 is None or img2 is None:
         return 0, None, "Please upload both images"
     
-    path1 = img1 if isinstance(img1, str) else img1
-    path2 = img2 if isinstance(img2, str) else img2
+    path1 = img1 if isinstance(img1, str) else img1.name
+    path2 = img2 if isinstance(img2, str) else img2.name
     
     matcher = AdvancedImageMatcher()
     analyzer = VisualAnalyzer()
@@ -2189,9 +2192,15 @@ def process_batch(old_gui, new_gui, pdfs):
 
 
 def save_settings(*args):
-    """Save settings to file"""
-    # In a real implementation, save to config file
-    return "✅ Settings saved successfully!"
+    """Save settings to config.ini"""
+    try:
+        from docsync.config import DocSyncConfig
+        cfg = DocSyncConfig.load("config.ini")
+        cfg.save("config.ini")
+        return "Settings saved to config.ini."
+    except Exception as e:
+        logger.error(f"Failed to save settings: {e}")
+        return f"Failed to save settings: {e}"
 
 
 # ==================== AUTH HELPERS ====================
@@ -2337,8 +2346,8 @@ def build_interface():
                     login_btn = gr.Button("Login", variant="primary", size="lg")
                     login_status = gr.Markdown("")
                     gr.Markdown("""
-                    **Default accounts:**
-                    
+                    **Demo accounts** *(change passwords before deploying to production)*:
+
                     | Username | Password | Role |
                     |----------|----------|------|
                     | admin | admin123 | Admin (full access) |
@@ -2732,36 +2741,36 @@ def build_interface():
                 user = {"id": 0, "username": username or "admin", "role": "admin"}
                 return [
                     user,
-                    gr.update(visible=False),
-                    gr.update(visible=True),
+                    gr.Column(visible=False),
+                    gr.Column(visible=True),
                     f"**{username or 'admin'}** | Role: **ADMIN** (auth module not loaded)",
                     "",
                 ]
-            
+
             rbac = RBACManager()
             user = rbac.authenticate(username, password)
             if user:
                 role = user["role"]
                 return [
                     user,
-                    gr.update(visible=False),
-                    gr.update(visible=True),
+                    gr.Column(visible=False),
+                    gr.Column(visible=True),
                     f"**{username}** | Role: **{role.upper()}**",
                     "",
                 ]
             return [
                 None,
-                gr.update(visible=True),
-                gr.update(visible=False),
+                gr.Column(visible=True),
+                gr.Column(visible=False),
                 "",
                 "**Invalid username or password.** Please try again.",
             ]
-        
+
         def handle_logout():
             return [
                 None,
-                gr.update(visible=True),
-                gr.update(visible=False),
+                gr.Column(visible=True),
+                gr.Column(visible=False),
                 "",
             ]
         
