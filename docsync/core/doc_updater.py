@@ -57,7 +57,7 @@ class DocumentUpdater:
             for repl in image_replacements:
                 xref = repl.get("xref")
                 new_path = repl.get("new_image_path")
-                if not xref or not new_path:
+                if not xref or not new_path or not os.path.exists(new_path):
                     continue
 
                 for page in doc:

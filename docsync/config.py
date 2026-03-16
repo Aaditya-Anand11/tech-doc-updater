@@ -50,7 +50,7 @@ class DocSyncConfig:
     ollama_enabled: bool = True
 
     # Gemini AI settings
-    gemini_api_key: str = "AIzaSyD2dzmQCLdjTOhrP0j6mMbH3E04zSZK9AU"
+    gemini_api_key: str = os.environ.get("GEMINI_API_KEY", "")
     gemini_model: str = "gemini-2.0-flash"
     gemini_enabled: bool = False  # Set to True when Gemini quota resets
     gemini_weight: float = 0.25

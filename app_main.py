@@ -31,6 +31,7 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Any
 import tempfile
 import re
+import math
 import threading
 import uuid
 import time
@@ -482,6 +483,15 @@ class AdvancedImageMatcher:
         edge_score = self.compute_edge_similarity(img1_path, img2_path)
         template_score = self.compute_template_match(img1_path, img2_path)
         
+        # Guard against NaN / Inf from degenerate image data
+        def _safe(v):
+            return v if math.isfinite(v) else 0.0
+        
+        ssim_score = _safe(ssim_score)
+        hist_score = _safe(hist_score)
+        edge_score = _safe(edge_score)
+        template_score = _safe(template_score)
+        
         combined = (
             ssim_score * self.config["ssim_weight"] +
             hist_score * self.config["histogram_weight"] +
@@ -779,6 +789,11 @@ class SmartTextProcessor:
         
         return changes
     
+    @staticmethod
+    def _sanitize_text(text: str) -> str:
+        """Strip control characters (U+0000–U+001F) except newline / tab"""
+        return ''.join(c for c in text if c in ('\n', '\t') or (ord(c) >= 0x20))
+    
     def generate_text_replacements(self, text_diff: Dict) -> List[TextChange]:
         """Generate text replacements from diff"""
         replacements = []
@@ -790,9 +805,14 @@ class SmartTextProcessor:
         
         # HIGH PRIORITY: Add OCR replacements (these are the most reliable)
         for change in text_diff.get("ocr_replacements", []):
+            new_text = self._sanitize_text(change["new"])
+            # Guard: reject empty / whitespace-only replacements
+            if not new_text.strip():
+                logger.debug(f"Skipping empty replacement for '{change['old']}'")
+                continue
             replacements.append(TextChange(
                 old_text=change["old"],
-                new_text=change["new"],
+                new_text=new_text,
                 page=0,
                 confidence=change["confidence"],
                 context=change["category"],
@@ -801,9 +821,12 @@ class SmartTextProcessor:
         
         # Add UI term changes
         for change in text_diff.get("ui_changes", []):
+            new_text = self._sanitize_text(change["new"])
+            if not new_text.strip():
+                continue
             replacements.append(TextChange(
                 old_text=change["old"],
-                new_text=change["new"],
+                new_text=new_text,
                 page=0,
                 confidence=change["confidence"],
                 context=change["category"],
@@ -814,9 +837,12 @@ class SmartTextProcessor:
         for change in text_diff.get("phrase_changes", []):
             # Only add if sufficiently confident
             if change["confidence"] > 0.5:
+                new_text = self._sanitize_text(change["new"])
+                if not new_text.strip():
+                    continue
                 replacements.append(TextChange(
                     old_text=change["old"],
-                    new_text=change["new"],
+                    new_text=new_text,
                     page=0,
                     confidence=change["confidence"],
                     context="phrase",
@@ -824,7 +850,7 @@ class SmartTextProcessor:
                 ))
         
         # DELETED: Word pairing loop removed - it caused single-word replacements
-    # that corrupted text (e.g., "Devices" → "Active devices" mid-sentence)
+        # that corrupted text (e.g., "Devices" → "Active devices" mid-sentence)
         
         logger.debug(f"Total replacements generated: {len(replacements)}")
         for r in replacements:
@@ -1698,6 +1724,13 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
     # Get PDF path
     pdf_path = old_pdf if isinstance(old_pdf, str) else old_pdf.name
     
+    # Validate PDF file exists and is not too large (500 MB limit)
+    if not os.path.exists(pdf_path):
+        return None, "❌ PDF file not found. Please re-upload.", "", None, "{}", None, ""
+    pdf_size_mb = os.path.getsize(pdf_path) / (1024 * 1024)
+    if pdf_size_mb > 500:
+        return None, f"❌ PDF too large ({pdf_size_mb:.0f} MB). Max 500 MB.", "", None, "{}", None, ""
+    
     # Page hints no longer used (auto-detection only)
     page_hints = {}
     
@@ -1845,6 +1878,15 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
                                 if len(parts) == 2:
                                     old_text = parts[0].strip()
                                     new_text = parts[1].strip()
+                                    # Validate: non-empty, reasonable length, no control chars
+                                    if not old_text or not new_text:
+                                        continue
+                                    if len(old_text) > 1000 or len(new_text) > 1000:
+                                        logger.warning(f"Custom replacement text too long (>{1000} chars), skipping")
+                                        continue
+                                    # Strip control characters
+                                    new_text = ''.join(c for c in new_text if c in ('\n', '\t') or ord(c) >= 0x20)
+                                    old_text = ''.join(c for c in old_text if c in ('\n', '\t') or ord(c) >= 0x20)
                                     if old_text and new_text:
                                         logger.debug(f"Custom replacement: '{old_text}' -> '{new_text}'")
                                         text_changes.append(TextChange(
@@ -1957,9 +1999,6 @@ DETECTED REPLACEMENTS:
         if validator:
             ai_report = validator.generate_validation_summary()
         
-        # Cleanup
-        pdf_processor.cleanup()
-        
         logger.info("Processing complete.")
         return (
             output_pdf_path,
@@ -1977,6 +2016,12 @@ DETECTED REPLACEMENTS:
         import traceback
         traceback.print_exc()
         return None, f"❌ Error: {str(e)}", "", None, "{}", None, ""
+    finally:
+        # Always clean up temp files, even on error
+        try:
+            pdf_processor.cleanup()
+        except Exception:
+            pass
 
 
 def quick_compare(img1, img2):

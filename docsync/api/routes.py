@@ -54,10 +54,15 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         description="Documentation Synchronization Engine – REST API",
     )
 
-    # CORS
+    # CORS — restrict to local development origins
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=[
+            "http://localhost:7870",
+            "http://127.0.0.1:7870",
+            "http://localhost:8000",
+            "http://127.0.0.1:8000",
+        ],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -98,7 +103,15 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     # Auth manager & session store
     rbac = RBACManager()
-    sessions: Dict[str, Dict] = {}  # token -> user info
+    sessions: Dict[str, Dict] = {}  # token -> {user info + "_created": timestamp}
+    SESSION_TTL = 3600 * 8  # 8-hour session lifetime
+
+    def _cleanup_expired_sessions():
+        """Remove sessions older than SESSION_TTL"""
+        now = time.time()
+        expired = [t for t, s in sessions.items() if now - s.get("_created", 0) > SESSION_TTL]
+        for t in expired:
+            sessions.pop(t, None)
 
     class LoginRequest(BaseModel):
         username: str
@@ -144,8 +157,9 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         user = rbac.authenticate(body.username, body.password)
         if not user:
             raise HTTPException(status_code=401, detail="Invalid credentials")
+        _cleanup_expired_sessions()
         token = secrets.token_hex(32)
-        sessions[token] = user
+        sessions[token] = {**user, "_created": time.time()}
         return {"token": token, "user": user}
 
     @app.get("/api/auth/me")
@@ -293,7 +307,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         except Exception as e:
             logger.error(f"Processing error: {e}")
             shutil.rmtree(tmp, ignore_errors=True)
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail="Internal processing error. Check server logs.")
 
     class ApplyRequest(BaseModel):
         session_id: str
@@ -379,7 +393,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
         except Exception as e:
             logger.error(f"Apply error: {e}")
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail="Internal processing error. Check server logs.")
         finally:
             shutil.rmtree(session.get("tmp", ""), ignore_errors=True)
 
@@ -512,10 +526,18 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     @app.get("/api/pdf/info")
     async def pdf_info_endpoint(path: str = Query(...)):
-        """Get PDF metadata"""
-        if not os.path.exists(path):
+        """Get PDF metadata — path must be under allowed directories"""
+        # Security: prevent path traversal attacks
+        real_path = os.path.realpath(path)
+        allowed_roots = [
+            os.path.realpath(config.data_dir),
+            os.path.realpath(config.output_dir),
+        ]
+        if not any(real_path.startswith(root) for root in allowed_roots):
+            raise HTTPException(status_code=403, detail="Access denied: path outside allowed directory")
+        if not os.path.exists(real_path):
             raise HTTPException(status_code=404, detail="File not found")
-        return parser.get_pdf_info(path)
+        return parser.get_pdf_info(real_path)
 
     @app.get("/api/download/pdf")
     async def download_pdf():

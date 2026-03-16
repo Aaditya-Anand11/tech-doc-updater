@@ -1,3 +1,7 @@
 2026-03-16 13:42:32,710 - WARNING - pytesseract not installed. OCR disabled.
 2026-03-16 13:49:16,294 - INFO - Tesseract found at: C:\Program Files\Tesseract-OCR\tesseract.exe
 2026-03-16 13:49:16,322 - INFO - Tesseract version: 5.5.0.20241111
+2026-03-16 14:14:00,373 - INFO - Tesseract found at: C:\Program Files\Tesseract-OCR\tesseract.exe
+2026-03-16 14:14:00,391 - INFO - Tesseract version: 5.5.0.20241111
+2026-03-16 15:32:44,102 - INFO - Tesseract found at: C:\Program Files\Tesseract-OCR\tesseract.exe
+2026-03-16 15:32:44,127 - INFO - Tesseract version: 5.5.0.20241111

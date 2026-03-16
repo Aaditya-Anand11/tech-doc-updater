@@ -156,6 +156,10 @@ class RBACManager:
         """Create a new user"""
         if role not in (Role.VIEWER, Role.EDITOR, Role.ADMIN):
             return False
+        if not username or not username.strip():
+            return False
+        if not password or len(password.strip()) < 4:
+            return False
 
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()

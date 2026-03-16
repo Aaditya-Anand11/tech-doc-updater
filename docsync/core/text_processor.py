@@ -61,8 +61,11 @@ class SmartTextProcessor:
         # DISABLED: Single-word matching causes Scunthorpe problem
         self.ui_terms = {}
 
+        # Only safe multi-char patterns — single-char corrections like
+        # |→I, 0→O, 1→l corrupt normal text (numbers, punctuation)
         self.ocr_corrections = {
-            "|": "I", "0": "O", "rn": "m", "vv": "w", "1": "l", "!": "i",
+            "rn": "m",
+            "vv": "w",
         }
 
         # Load phrase pairs from external config
