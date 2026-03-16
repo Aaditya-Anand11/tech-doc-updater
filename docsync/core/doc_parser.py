@@ -141,6 +141,35 @@ class DocumentParser:
 
         return text_by_page
 
+    def render_pdf_pages(self, pdf_path: str, output_dir: str = None) -> List[Dict]:
+        """Render each PDF page as an image for fallback comparison"""
+        if not PDF_SUPPORT:
+            return []
+
+        if output_dir is None:
+            output_dir = os.path.join(self.temp_dir, "rendered")
+        os.makedirs(output_dir, exist_ok=True)
+
+        rendered = []
+        try:
+            doc = fitz.open(pdf_path)
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                mat = fitz.Matrix(150 / 72, 150 / 72)  # 150 DPI
+                pix = page.get_pixmap(matrix=mat)
+                img_path = os.path.join(output_dir, f"page_{page_num + 1}.png")
+                pix.save(img_path)
+                rendered.append({
+                    "page": page_num + 1,
+                    "path": img_path,
+                    "filename": f"page_{page_num + 1}.png",
+                })
+            doc.close()
+            logger.info(f"Rendered {len(rendered)} PDF pages as images")
+        except Exception as e:
+            logger.error(f"Error rendering PDF pages: {e}")
+        return rendered
+
     def cleanup(self):
         """Remove temporary files"""
         try:

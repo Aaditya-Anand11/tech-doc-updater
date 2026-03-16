@@ -34,12 +34,12 @@ def run_api_server(config: DocSyncConfig):
             app.mount("/", StaticFiles(directory=dashboard_dir, html=True), name="dashboard")
 
         print(f"""
-╔═══════════════════════════════════════════════════════╗
-║          ⚡ DocSync Engine v4.0                       ║
-╠═══════════════════════════════════════════════════════╣
-║  Dashboard:  http://{config.api_host}:{config.api_port}        ║
-║  API Docs:   http://{config.api_host}:{config.api_port}/docs   ║
-╚═══════════════════════════════════════════════════════╝
+========================================================
+          DocSync Engine v3.0
+========================================================
+  Dashboard:  http://{config.api_host}:{config.api_port}
+  API Docs:   http://{config.api_host}:{config.api_port}/docs
+========================================================
         """)
 
         uvicorn.run(app, host=config.api_host, port=config.api_port)
@@ -77,7 +77,7 @@ def main():
         default="api",
         help="Run mode: api (dashboard + REST), legacy (Gradio), cli (command line)"
     )
-    parser.add_argument("--config", default="config.json", help="Config file path")
+    parser.add_argument("--config", default="config.ini", help="Config file path")
     parser.add_argument("--host", default=None, help="API host override")
     parser.add_argument("--port", type=int, default=None, help="API port override")
     parser.add_argument("--verbose", "-v", action="store_true")

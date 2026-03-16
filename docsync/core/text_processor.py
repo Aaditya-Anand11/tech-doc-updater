@@ -6,6 +6,7 @@ Extracted from SmartTextProcessor in app_main.py.
 """
 
 import os
+import re
 import json
 import logging
 from typing import List, Dict
@@ -61,12 +62,11 @@ class SmartTextProcessor:
         # DISABLED: Single-word matching causes Scunthorpe problem
         self.ui_terms = {}
 
-        # Only safe multi-char patterns — single-char corrections like
-        # |→I, 0→O, 1→l corrupt normal text (numbers, punctuation)
-        self.ocr_corrections = {
-            "rn": "m",
-            "vv": "w",
-        }
+        # DISABLED: naive substring replacement corrupts normal words
+        # (e.g. "return" → "retum", "warning" → "waming").
+        # Only add patterns here if they use word-boundary regex via
+        # correct_ocr_errors() below.
+        self.ocr_corrections = {}
 
         # Load phrase pairs from external config
         self.common_phrase_pairs = self._load_phrase_pairs(replacements_file)
@@ -106,10 +106,10 @@ class SmartTextProcessor:
             return ""
 
     def correct_ocr_errors(self, text: str) -> str:
-        """Apply common OCR error corrections"""
+        """Apply common OCR error corrections using word-boundary-safe regex"""
         corrected = text
         for error, correction in self.ocr_corrections.items():
-            corrected = corrected.replace(error, correction)
+            corrected = re.sub(rf'\b{re.escape(error)}\b', correction, corrected)
         return corrected
 
     def find_text_differences(self, old_img_path: str, new_img_path: str) -> Dict:

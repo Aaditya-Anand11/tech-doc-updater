@@ -50,7 +50,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     app = FastAPI(
         title="DocSync API",
-        version="4.0.0",
+        version="3.0.0",
         description="Documentation Synchronization Engine – REST API",
     )
 
@@ -148,7 +148,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     @app.get("/health")
     async def health():
-        return {"status": "ok", "version": "4.0.0", "plugins": registry.list_plugins()}
+        return {"status": "ok", "version": "3.0.0", "plugins": registry.list_plugins()}
 
     # ─── Auth ───────────────────────────────────────────
 
@@ -243,7 +243,43 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             extract_dir = os.path.join(tmp, "extracted")
             pdf_images = parser.extract_all_images(pdf_path, output_dir=extract_dir)
 
-            all_matches = comparator.find_best_matches(new_paths, pdf_images)
+            # CRITICAL: Match OLD screenshot against PDF to find WHERE
+            # the image is, then replace with the NEW screenshot.
+            # If no old screenshot, fall back to matching new (compare mode).
+            match_sources = [old_path] if old_path else new_paths
+            all_matches = comparator.find_best_matches(match_sources, pdf_images)
+
+            # If we matched old_gui, set the new_gui as the replacement image
+            if old_path and new_paths:
+                for m in all_matches:
+                    if m.is_good_match:
+                        m.new_image_path = new_paths[0]
+                        m.new_image_name = os.path.basename(new_paths[0])
+
+            # Fallback: if no match with extracted images, try rendered pages
+            if not any(m.is_good_match for m in all_matches):
+                logger.info("No match with extracted images, trying rendered PDF pages...")
+                render_dir = os.path.join(tmp, "rendered")
+                rendered_pages = parser.render_pdf_pages(pdf_path, output_dir=render_dir)
+                if rendered_pages:
+                    page_matches = comparator.find_best_matches(match_sources, rendered_pages)
+                    for pm in page_matches:
+                        if pm.is_good_match:
+                            target_page = pm.matched_pdf_image.get("page")
+                            page_imgs = [i for i in pdf_images if i.get("page") == target_page]
+                            if page_imgs:
+                                from docsync.models import MatchResult
+                                match = MatchResult(
+                                    new_image_path=new_paths[0] if new_paths else match_sources[0],
+                                    new_image_name=os.path.basename(new_paths[0]) if new_paths else "old_gui",
+                                    matched_pdf_image=page_imgs[0],
+                                    is_good_match=True,
+                                    target_page=target_page,
+                                    confidence=pm.confidence,
+                                    combined_score=pm.combined_score,
+                                )
+                                all_matches = [match]
+                                break
 
             # Text differences (only if old screenshot provided)
             all_text_changes = []
@@ -255,6 +291,16 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                         all_text_changes.extend(changes)
                     except Exception as e:
                         logger.warning(f"Text diff failed for {np}: {e}")
+
+            # Validate matches
+            for m in all_matches:
+                if m.matched_pdf_image:
+                    val_result = validator.validate_image_match(
+                        m, m.matched_pdf_image.get("path", "")
+                    )
+                    m.validation_status = val_result["status"]
+                    m.confidence = val_result["confidence"]
+                    m.issues = val_result.get("issues", [])
 
             # Build per-match details for frontend review
             matches_detail = []
@@ -276,7 +322,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                         "histogram": round(m.histogram_score, 4),
                         "edge": round(m.edge_score, 4),
                         "template": round(m.template_score, 4),
-                        "ocr": round(m.ocr_score, 4),
+                        "ocr": round(getattr(m, 'ocr_score', 0), 4),
                     },
                     "issues": m.issues,
                 })

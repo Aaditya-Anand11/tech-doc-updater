@@ -192,7 +192,7 @@ class ReportGenerator:
     <div class="container">
         <div class="header">
             <h1>📄 Document Update Report</h1>
-            <p>DocSync Engine v4.0</p>
+            <p>DocSync Engine v3.0</p>
             <p style="color: #888; margin-top: 10px;">{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
             <div class="status-badge">{status_text}</div>
         </div>
