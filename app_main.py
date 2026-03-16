@@ -232,7 +232,13 @@ class HistoryManager:
         if os.path.exists(self.history_file):
             try:
                 with open(self.history_file, 'r') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                if isinstance(data, list):
+                    return data
+                # Handle {"versions": [...]} format from older versions
+                if isinstance(data, dict) and "versions" in data:
+                    return data["versions"]
+                return []
             except Exception:
                 return []
         return []
@@ -2300,10 +2306,59 @@ def _process_with_auth(old_gui, old_pdf, new_gui, custom_replacements, user_stat
 
 
 def _compare_with_auth(img1, img2, user_state):
-    """Auth-gated comparison"""
+    """Auth-gated comparison - viewers and above can compare"""
     if user_state is None:
         return 0, None, "Please login first."
+    if AUTH_AVAILABLE:
+        rbac = RBACManager()
+        rbac._log_audit(user_state["username"], "compare_images", "Image comparison")
     return quick_compare(img1, img2)
+
+
+def _batch_with_auth(old_gui, new_gui, pdfs, user_state):
+    """Auth-gated batch processing"""
+    if user_state is None:
+        return "Please login first.", None
+    if AUTH_AVAILABLE:
+        rbac = RBACManager()
+        if not rbac.authorize(user_state, "process_document"):
+            return "Access denied. Editor or Admin role required.", None
+        rbac._log_audit(user_state["username"], "batch_process", f"Batch processing {len(pdfs) if pdfs else 0} documents")
+    return process_batch(old_gui, new_gui, pdfs)
+
+
+def _rollback_with_auth(version_id, user_state):
+    """Auth-gated rollback"""
+    if user_state is None:
+        return None, "Please login first."
+    if AUTH_AVAILABLE:
+        rbac = RBACManager()
+        if not rbac.authorize(user_state, "rollback"):
+            return None, "Access denied. Editor or Admin role required."
+        rbac._log_audit(user_state["username"], "rollback", f"Rollback to {version_id}")
+    return rollback_version(version_id)
+
+
+def _logs_with_auth(user_state):
+    """Auth-gated log viewing"""
+    if user_state is None:
+        return "Please login first."
+    if AUTH_AVAILABLE:
+        rbac = RBACManager()
+        if not rbac.authorize(user_state, "manage_users"):
+            return "Access denied. Admin role required."
+    return _read_log_files()
+
+
+def _audit_with_auth(user_state):
+    """Auth-gated audit log viewing"""
+    if user_state is None:
+        return "Please login first."
+    if AUTH_AVAILABLE:
+        rbac = RBACManager()
+        if not rbac.authorize(user_state, "manage_users"):
+            return "Access denied. Admin role required."
+    return _get_audit_log()
 
 
 # ==================== GRADIO INTERFACE ====================
@@ -2317,11 +2372,6 @@ def build_interface():
     
     with gr.Blocks(
         title="Document Updater - Schneider Electric",
-        theme=gr.themes.Soft(),
-        css="""
-        .gradio-container { max-width: 1200px !important; }
-        .header-text { text-align: center; }
-        """
     ) as interface:
         
         # Auth state
@@ -2556,8 +2606,8 @@ def build_interface():
                 )
                 
                 rollback_btn.click(
-                    fn=rollback_version,
-                    inputs=[version_id_input],
+                    fn=_rollback_with_auth,
+                    inputs=[version_id_input, current_user],
                     outputs=[rollback_output, rollback_status]
                 )
             
@@ -2598,8 +2648,8 @@ def build_interface():
                 batch_output = gr.File(label="Download Results")
                 
                 batch_btn.click(
-                    fn=process_batch,
-                    inputs=[batch_old_gui, batch_new_gui, batch_pdfs],
+                    fn=_batch_with_auth,
+                    inputs=[batch_old_gui, batch_new_gui, batch_pdfs, current_user],
                     outputs=[batch_progress, batch_output]
                 )
             
@@ -2608,6 +2658,8 @@ def build_interface():
                 gr.Markdown("""
                 ### Application Logs & Audit Trail
                 View recent application logs and user audit trail.
+
+                *Admin access required to view logs.*
                 """)
                 
                 with gr.Row():
@@ -2629,12 +2681,14 @@ def build_interface():
                 )
                 
                 refresh_logs_btn.click(
-                    fn=_read_log_files,
+                    fn=_logs_with_auth,
+                    inputs=[current_user],
                     outputs=[app_logs_display]
                 )
-                
+
                 refresh_audit_btn.click(
-                    fn=_get_audit_log,
+                    fn=_audit_with_auth,
+                    inputs=[current_user],
                     outputs=[audit_log_display]
                 )
             
@@ -2665,8 +2719,18 @@ def build_interface():
                 create_user_btn = gr.Button("Create User", variant="primary")
                 create_user_status = gr.Textbox(label="Status", lines=1, interactive=False)
                 
+                def _list_users_with_auth(user_state):
+                    if user_state is None:
+                        return "Please login first."
+                    if AUTH_AVAILABLE:
+                        rbac = RBACManager()
+                        if not rbac.authorize(user_state, "manage_users"):
+                            return "Access denied. Admin role required."
+                    return _list_users_display()
+
                 refresh_users_btn.click(
-                    fn=_list_users_display,
+                    fn=_list_users_with_auth,
+                    inputs=[current_user],
                     outputs=[users_display]
                 )
                 
@@ -2692,12 +2756,12 @@ def build_interface():
                 ---
                 
                 ### User Roles
-                
+
                 | Role | Permissions |
                 |------|-------------|
-                | **Viewer** | View reports, history, and comparisons |
-                | **Editor** | All viewer permissions + process documents, rollback |
-                | **Admin** | All editor permissions + manage users, view logs |
+                | **Viewer** | View reports, history, compare images, list plugins |
+                | **Editor** | All Viewer permissions + process documents, batch process, rollback versions |
+                | **Admin** | All Editor permissions + manage users, view logs & audit trail, manage plugins & config |
                 
                 ---
                 
@@ -2751,11 +2815,16 @@ def build_interface():
             user = rbac.authenticate(username, password)
             if user:
                 role = user["role"]
+                role_desc = {
+                    "admin": "Full access: process, manage users, logs, config",
+                    "editor": "Process documents, compare, rollback, batch",
+                    "viewer": "View reports, history, compare images (read-only)",
+                }
                 return [
                     user,
                     gr.Column(visible=False),
                     gr.Column(visible=True),
-                    f"**{username}** | Role: **{role.upper()}**",
+                    f"**{username}** | Role: **{role.upper()}** | {role_desc.get(role, '')}",
                     "",
                 ]
             return [
@@ -2863,7 +2932,9 @@ def main():
         server_name="127.0.0.1",
         server_port=7870,
         share=False,
-        show_error=True
+        show_error=True,
+        theme=gr.themes.Soft(),
+        css=".gradio-container { max-width: 1200px !important; } .header-text { text-align: center; }",
     )
 
 

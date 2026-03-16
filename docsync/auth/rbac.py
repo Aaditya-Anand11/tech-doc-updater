@@ -24,7 +24,7 @@ class Role:
 
 # Permissions mapping
 ROLE_PERMISSIONS = {
-    Role.VIEWER: {"view_reports", "view_history", "list_plugins"},
+    Role.VIEWER: {"view_reports", "view_history", "list_plugins", "compare_images"},
     Role.EDITOR: {
         "view_reports", "view_history", "list_plugins",
         "process_document", "compare_images", "rollback",
@@ -33,6 +33,7 @@ ROLE_PERMISSIONS = {
         "view_reports", "view_history", "list_plugins",
         "process_document", "compare_images", "rollback",
         "manage_users", "manage_plugins", "manage_config",
+        "view_logs",
     },
 }
 
