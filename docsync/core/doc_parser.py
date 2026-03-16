@@ -141,8 +141,8 @@ class DocumentParser:
 
         return text_by_page
 
-    def render_pdf_pages(self, pdf_path: str, output_dir: str = None) -> List[Dict]:
-        """Render each PDF page as an image for fallback comparison"""
+    def render_pdf_pages(self, pdf_path: str, output_dir: str = None, max_pages: int = 50) -> List[Dict]:
+        """Render PDF pages as images for fallback comparison (capped at max_pages)"""
         if not PDF_SUPPORT:
             return []
 
@@ -153,7 +153,10 @@ class DocumentParser:
         rendered = []
         try:
             doc = fitz.open(pdf_path)
-            for page_num in range(len(doc)):
+            total = min(len(doc), max_pages)
+            if len(doc) > max_pages:
+                logger.info(f"PDF has {len(doc)} pages, rendering only first {max_pages} for fallback")
+            for page_num in range(total):
                 page = doc[page_num]
                 mat = fitz.Matrix(150 / 72, 150 / 72)  # 150 DPI
                 pix = page.get_pixmap(matrix=mat)

@@ -240,8 +240,11 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
             # ── Pipeline: match only (don't apply) ──
             pdf_info = parser.get_pdf_info(pdf_path)
+            logger.info(f"PDF: {pdf_info.get('pages', '?')} pages, "
+                        f"{pdf_info.get('total_images', '?')} images")
             extract_dir = os.path.join(tmp, "extracted")
             pdf_images = parser.extract_all_images(pdf_path, output_dir=extract_dir)
+            logger.info(f"Extracted {len(pdf_images)} images, starting matching...")
 
             # CRITICAL: Match OLD screenshot against PDF to find WHERE
             # the image is, then replace with the NEW screenshot.
@@ -283,6 +286,8 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
             # Text differences (only if old screenshot provided)
             all_text_changes = []
+            all_color_changes = []
+            color_summary = {}
             if old_path:
                 for np in new_paths:
                     try:
@@ -291,6 +296,16 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                         all_text_changes.extend(changes)
                     except Exception as e:
                         logger.warning(f"Text diff failed for {np}: {e}")
+
+                    # Color detection between old and new screenshots
+                    try:
+                        cc = visual.detect_color_changes(old_path, np)
+                        all_color_changes.extend(cc)
+                        cs = visual.get_overall_color_summary(old_path, np)
+                        if cs:
+                            color_summary = cs
+                    except Exception as e:
+                        logger.warning(f"Color detection failed for {np}: {e}")
 
             # Validate matches
             for m in all_matches:
@@ -335,17 +350,39 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                 "pdf_info": pdf_info,
                 "all_matches": all_matches,
                 "all_text_changes": all_text_changes,
+                "all_color_changes": all_color_changes,
+                "color_summary": color_summary,
                 "new_paths": new_paths,
+                "old_path": old_path,
                 "created": time.time(),
             }
 
             overall_conf = sum(m.confidence for m in all_matches) / max(len(all_matches), 1)
+
+            # Serialize text changes for frontend review
+            text_changes_detail = []
+            for i, tc in enumerate(all_text_changes):
+                text_changes_detail.append({
+                    "index": i,
+                    "old_text": tc.old_text,
+                    "new_text": tc.new_text,
+                    "page": tc.page,
+                    "confidence": round(tc.confidence * 100, 1),
+                    "context": tc.context,
+                    "approved": tc.approved,
+                })
+
+            # Serialize color changes (top 15)
+            color_changes_detail = all_color_changes[:15]
 
             return JSONResponse({
                 "session_id": session_id,
                 "screenshots_uploaded": len(new_paths),
                 "matches": matches_detail,
                 "text_changes_found": len(all_text_changes),
+                "text_changes": text_changes_detail,
+                "color_changes": color_changes_detail,
+                "color_summary": color_summary,
                 "overall_confidence": round(overall_conf * 100, 1),
                 "processing_time": round(time.time() - start, 2),
             })
@@ -358,12 +395,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
     class ApplyRequest(BaseModel):
         session_id: str
         decisions: List[Dict]  # [{"index": 0, "action": "approve"}, ...]
+        text_decisions: List[Dict] = []  # [{"index": 0, "approved": true}, ...]
 
     @app.post("/api/process/apply")
     async def apply_decisions(body: ApplyRequest):
         """
         Phase 2: Apply user-approved replacements to the PDF.
-        Accepts decisions: [{index, action: "approve"|"reject"}]
+        Accepts decisions for images and text changes.
         """
         session = pending_sessions.pop(body.session_id, None)
         if not session:
@@ -374,12 +412,21 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             pdf_path = session["pdf_path"]
             pdf_info = session["pdf_info"]
             all_text_changes = session["all_text_changes"]
+            all_color_changes = session.get("all_color_changes", [])
+            color_summary = session.get("color_summary", {})
 
-            # Build a set of approved indices
+            # Build a set of approved image indices
             approved_indices = set()
             for d in body.decisions:
                 if d.get("action") == "approve":
                     approved_indices.add(d["index"])
+
+            # Apply text change decisions from frontend
+            if body.text_decisions:
+                for td in body.text_decisions:
+                    idx = td.get("index", -1)
+                    if 0 <= idx < len(all_text_changes):
+                        all_text_changes[idx].approved = td.get("approved", all_text_changes[idx].approved)
 
             # Build image replacements from approved matches only
             image_repls = []
@@ -395,7 +442,7 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                         })
                         used_xrefs.add(xref)
                         approved_count += 1
-                        logger.info(f"Approved: {m.new_image_name} → PDF xref={xref} "
+                        logger.info(f"Approved: {m.new_image_name} -> PDF xref={xref} "
                                     f"(page {m.matched_pdf_image.get('page', '?')})")
 
             output_pdf = os.path.join(config.output_dir, "updated_output.pdf")
@@ -416,15 +463,33 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                 processing_time=0,
             )
 
-            # Reports
-            summary = report_gen.generate_summary(result, pdf_info)
-            json_report = report_gen.generate_json(result, pdf_info)
+            # Generate summary report (with color changes)
+            summary = report_gen.generate_summary(
+                result, pdf_info,
+                color_changes=all_color_changes,
+                color_summary=color_summary,
+            )
+
+            # Save summary report to file
+            report_path = report_gen.save_summary_report(summary)
+            last_output["report"] = os.path.abspath(report_path)
 
             # History
             history.add_version(pdf_path, {}, result)
 
             # Store for download
             last_output["pdf"] = os.path.abspath(output_pdf)
+
+            # Serialize text changes for the response
+            text_changes_applied = []
+            for tc in all_text_changes:
+                text_changes_applied.append({
+                    "old_text": tc.old_text,
+                    "new_text": tc.new_text,
+                    "page": tc.page,
+                    "applied": tc.approved,
+                    "confidence": round(tc.confidence * 100, 1),
+                })
 
             return JSONResponse({
                 "success": result.success,
@@ -434,7 +499,9 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
                 "rejected_count": len(all_matches) - approved_count,
                 "output_pdf": os.path.abspath(output_pdf),
                 "summary": summary,
-                "report": json_report,
+                "text_changes_applied": text_changes_applied,
+                "color_changes": all_color_changes[:15],
+                "color_summary": color_summary,
             })
 
         except Exception as e:
@@ -494,8 +561,10 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
     async def save_gemini_key(body: GeminiSettingsRequest):
         nonlocal comparator
         config.gemini_api_key = body.api_key
+        # Auto-enable Gemini when a key is provided
+        config.gemini_enabled = bool(body.api_key.strip())
         config.save()
-        # Reinitialize comparator with new key
+        # Reinitialize comparator with new key and enabled=True
         g = {
             "enabled": config.gemini_enabled,
             "api_key": config.gemini_api_key,
@@ -595,6 +664,18 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             pdf_path,
             filename="updated_output.pdf",
             media_type="application/pdf",
+        )
+
+    @app.get("/api/download/report")
+    async def download_report():
+        """Download the last generated summary report"""
+        report_path = last_output.get("report")
+        if not report_path or not os.path.exists(report_path):
+            raise HTTPException(status_code=404, detail="No report available. Process a document first.")
+        return FileResponse(
+            report_path,
+            filename="change_summary_report.txt",
+            media_type="text/plain",
         )
 
     return app

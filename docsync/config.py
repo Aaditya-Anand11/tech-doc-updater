@@ -25,6 +25,9 @@ _INI_MAP = {
     ("Analysis", "similarity_threshold"): "similarity_threshold",
     ("Database", "path"): "db_path",
     ("AI_Validation", "model"): "gemini_model",
+    ("AI_Validation", "gemini_enabled"): "gemini_enabled",
+    ("AI_Validation", "gemini_api_key"): "gemini_api_key",
+    ("AI_Validation", "gemini_weight"): "gemini_weight",
     ("Logging", "level"): "_log_level",
 }
 
@@ -185,6 +188,8 @@ class DocSyncConfig:
         parser["AI_Validation"] = {
             "model": self.gemini_model,
             "gemini_enabled": str(self.gemini_enabled).lower(),
+            "gemini_api_key": self.gemini_api_key,
+            "gemini_weight": str(self.gemini_weight),
         }
 
         with open(config_path, "w") as f:

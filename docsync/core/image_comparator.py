@@ -480,6 +480,13 @@ class ImageComparator:
                 scores = self.compute_fast_score(new_img_path, pdf_path)
                 candidates.append((scores["combined"], pdf_img, scores))
 
+                # Early exit: if we find a very high confidence match, stop scanning
+                if scores["is_high_confidence"] and scores["combined"] >= 0.85:
+                    logger.info(f"Early exit: high-confidence match found "
+                                f"(score={scores['combined']:.3f}) on page "
+                                f"{pdf_img.get('page', '?')}")
+                    break
+
             # Sort candidates by combined score (best first)
             candidates.sort(reverse=True, key=lambda x: x[0])
 

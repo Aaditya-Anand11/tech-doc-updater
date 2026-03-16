@@ -4,7 +4,7 @@
    API calls, and real-time status updates.
    ═══════════════════════════════════════════════════════ */
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = window.location.origin;
 
 // ─── Auth State ────────────────────────────────────
 let authToken = sessionStorage.getItem('docsync_token') || null;
@@ -425,6 +425,57 @@ function showMatchReview(data) {
         </div>`;
     }).join('');
 
+    // ── Text Changes Section ──
+    const textChanges = data.text_changes || [];
+    if (textChanges.length > 0) {
+        list.innerHTML += `
+        <div class="text-changes-section" style="margin-top:20px;padding:20px;background:var(--bg-secondary);border-radius:12px;border:1px solid var(--border-color)">
+            <h3 style="color:var(--accent-green);margin-bottom:12px">Text Changes Detected (${textChanges.length})</h3>
+            ${textChanges.map(tc => `
+            <div class="text-change-item" data-text-index="${tc.index}" style="display:flex;align-items:center;gap:12px;padding:10px;margin-bottom:8px;background:var(--bg-primary);border-radius:8px;border:1px solid var(--border-color)">
+                <input type="checkbox" class="text-change-check" data-index="${tc.index}" ${tc.approved ? 'checked' : ''} style="width:18px;height:18px;cursor:pointer">
+                <div style="flex:1">
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                        <span style="text-decoration:line-through;color:#e74c3c">${tc.old_text}</span>
+                        <span style="color:#888">→</span>
+                        <span style="color:#27ae60;font-weight:600">${tc.new_text}</span>
+                    </div>
+                    <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px">
+                        ${tc.page ? 'Page ' + tc.page : 'All pages'} · Confidence: ${tc.confidence}% · ${tc.context || ''}
+                    </div>
+                </div>
+            </div>`).join('')}
+        </div>`;
+    }
+
+    // ── Color Changes Section ──
+    const colorChanges = data.color_changes || [];
+    const colorSummary = data.color_summary || {};
+    if (colorChanges.length > 0) {
+        list.innerHTML += `
+        <div class="color-changes-section" style="margin-top:20px;padding:20px;background:var(--bg-secondary);border-radius:12px;border:1px solid var(--border-color)">
+            <h3 style="color:var(--accent-green);margin-bottom:12px">Color Changes Detected (${colorChanges.length})</h3>
+            ${colorSummary.overall_color_shift ? `
+            <div style="margin-bottom:12px;display:flex;gap:16px;align-items:center;font-size:0.85rem">
+                <span>Overall shift: <strong>${colorSummary.overall_color_shift.toFixed(1)}</strong></span>
+                <span>Old: <span style="display:inline-block;width:14px;height:14px;background:${colorSummary.old_dominant_hex};border:1px solid #555;border-radius:3px;vertical-align:middle"></span> ${colorSummary.old_dominant_hex}</span>
+                <span>New: <span style="display:inline-block;width:14px;height:14px;background:${colorSummary.new_dominant_hex};border:1px solid #555;border-radius:3px;vertical-align:middle"></span> ${colorSummary.new_dominant_hex}</span>
+            </div>` : ''}
+            <div style="max-height:300px;overflow-y:auto">
+            ${colorChanges.slice(0, 10).map(cc => `
+            <div style="display:flex;align-items:center;gap:12px;padding:8px;margin-bottom:6px;background:var(--bg-primary);border-radius:8px;font-size:0.82rem">
+                <span style="font-weight:600;color:${cc.severity === 'major' ? '#e74c3c' : '#f39c12'};min-width:50px">${cc.severity.toUpperCase()}</span>
+                <span style="min-width:100px">${cc.location}</span>
+                <span style="display:inline-block;width:16px;height:16px;background:${cc.old_color.hex};border:1px solid #555;border-radius:3px"></span>
+                <span style="color:#888;font-size:0.75rem">RGB(${cc.old_color.rgb.join(',')}) ${cc.old_color.hex}</span>
+                <span style="color:#888">→</span>
+                <span style="display:inline-block;width:16px;height:16px;background:${cc.new_color.hex};border:1px solid #555;border-radius:3px"></span>
+                <span style="color:#888;font-size:0.75rem">RGB(${cc.new_color.rgb.join(',')}) ${cc.new_color.hex}</span>
+            </div>`).join('')}
+            </div>
+        </div>`;
+    }
+
     updateReviewSummary(matches.length);
     card.classList.remove('hidden');
 }
@@ -506,11 +557,20 @@ document.getElementById('applyBtn').addEventListener('click', async () => {
         action,
     }));
 
+    // Collect text change decisions from checkboxes
+    const textDecisions = [];
+    document.querySelectorAll('.text-change-check').forEach(cb => {
+        textDecisions.push({
+            index: parseInt(cb.dataset.index),
+            approved: cb.checked,
+        });
+    });
+
     try {
         const res = await authFetch(`${API_BASE}/api/process/apply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ session_id: currentSessionId, decisions }),
+            body: JSON.stringify({ session_id: currentSessionId, decisions, text_decisions: textDecisions }),
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -551,7 +611,49 @@ function showApplyResults(data) {
         </div>
     `;
 
-    details.textContent = data.summary || 'Changes applied successfully';
+    // Show text changes applied
+    let detailsHtml = '';
+    const textApplied = data.text_changes_applied || [];
+    if (textApplied.length > 0) {
+        detailsHtml += '<div style="margin-bottom:16px"><h3 style="color:var(--accent-green);margin-bottom:8px">Text Changes</h3>';
+        textApplied.forEach(tc => {
+            const tag = tc.applied ? 'Applied' : 'Skipped';
+            const tagColor = tc.applied ? '#27ae60' : '#888';
+            detailsHtml += `<div style="padding:6px 0;font-size:0.85rem;border-bottom:1px solid var(--border-color)">
+                <span style="color:${tagColor};font-weight:600">[${tag}]</span>
+                ${tc.page ? 'Page ' + tc.page : ''} —
+                <span style="text-decoration:line-through;color:#e74c3c">${tc.old_text}</span> →
+                <span style="color:#27ae60">${tc.new_text}</span>
+            </div>`;
+        });
+        detailsHtml += '</div>';
+    }
+
+    // Show color changes
+    const colorChanges = data.color_changes || [];
+    if (colorChanges.length > 0) {
+        detailsHtml += '<div style="margin-bottom:16px"><h3 style="color:var(--accent-green);margin-bottom:8px">Color Changes</h3>';
+        colorChanges.slice(0, 8).forEach(cc => {
+            detailsHtml += `<div style="padding:6px 0;font-size:0.82rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border-color)">
+                <span style="font-weight:600;color:${cc.severity === 'major' ? '#e74c3c' : '#f39c12'}">[${cc.severity.toUpperCase()}]</span>
+                <span>${cc.location}</span>
+                <span style="display:inline-block;width:14px;height:14px;background:${cc.old_color.hex};border:1px solid #555;border-radius:3px"></span>
+                <span style="color:#888">${cc.old_color.hex}</span> →
+                <span style="display:inline-block;width:14px;height:14px;background:${cc.new_color.hex};border:1px solid #555;border-radius:3px"></span>
+                <span style="color:#888">${cc.new_color.hex}</span>
+            </div>`;
+        });
+        detailsHtml += '</div>';
+    }
+
+    // Summary report (plain text, in a pre block)
+    if (data.summary) {
+        detailsHtml += `<details style="margin-top:12px"><summary style="cursor:pointer;color:var(--accent-green);font-weight:600">View Full Summary Report</summary>
+            <pre style="margin-top:8px;padding:12px;background:var(--bg-primary);border-radius:8px;font-size:0.78rem;max-height:400px;overflow:auto;white-space:pre-wrap">${data.summary}</pre>
+        </details>`;
+    }
+
+    details.innerHTML = detailsHtml || 'Changes applied successfully';
     card.classList.remove('hidden');
 
     // Wire up download buttons
@@ -565,15 +667,11 @@ function showApplyResults(data) {
         downloadPdfBtn.disabled = false;
     }
 
-    if (data.report) {
+    // Download summary report (not JSON)
+    if (data.summary) {
+        downloadReportBtn.textContent = 'Download Summary Report';
         downloadReportBtn.onclick = () => {
-            const blob = new Blob([JSON.stringify(data.report, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'docsync_report.json';
-            a.click();
-            URL.revokeObjectURL(url);
+            window.open(`${API_BASE}/api/download/report`, '_blank');
         };
         downloadReportBtn.disabled = false;
     }
