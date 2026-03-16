@@ -32,6 +32,7 @@ from typing import List, Dict, Tuple, Optional, Any
 import tempfile
 import re
 import threading
+import uuid
 import time
 from dataclasses import dataclass, field
 from enum import Enum
@@ -429,6 +430,12 @@ class AdvancedImageMatcher:
             margin_h = common_h // 8
             margin_w = common_w // 8
             template = img1[margin_h:common_h - margin_h, margin_w:common_w - margin_w]
+            
+            # Prevent "Solid Color" false positives (Edge Case #4)
+            _, stddev = cv2.meanStdDev(template)
+            if stddev[0][0] < 5.0:
+                logger.debug("Template crop variance too low (solid color), rejecting match")
+                return 0.0
             
             # Match template against img2
             result = cv2.matchTemplate(img2, template, cv2.TM_CCOEFF_NORMED)
@@ -1130,7 +1137,12 @@ class EnhancedPDFProcessor:
                             if rects:
                                 rect = rects[0]
                                 try:
-                                    page.delete_image(xref)
+                                    try:
+                                        page.delete_image(xref)
+                                    except Exception:
+                                        # Fallback for flattened/complex images (Edge Case #7)
+                                        page.draw_rect(rect, color=(1,1,1), fill=(1,1,1))
+                                    
                                     page.insert_image(rect, filename=new_path)
                                     images_replaced += 1
                                     pg = page_details.setdefault(page_num + 1, {"images": 0, "texts": []})
@@ -1158,33 +1170,56 @@ class EnhancedPDFProcessor:
                     for variant in search_variants:
                         instances = page.search_for(variant)
                         if instances:
-                            logger.info(f"  Found {len(instances)} matches for '{variant}' on page {page_num+1}")
+                            valid_instances = []
                             for inst in instances:
-                                if page_num not in page_redactions:
-                                    page_redactions[page_num] = []
-                                page_redactions[page_num].append((inst, new_text))
-                                text_replaced += 1
-                                pg = page_details.setdefault(page_num + 1, {"images": 0, "texts": []})
-                                pg["texts"].append((old_text, new_text))
-                            break  # Use first variant that matches
+                                # Quick boundary check to prevent replacing part of a larger word (Edge Case #2)
+                                ext_rect = fitz.Rect(max(0, inst.x0 - 2), inst.y0, inst.x1 + 2, inst.y1)
+                                word_in_context = page.get_text("text", clip=ext_rect).strip()
+                                # Only replace if it matches standalone word length roughly
+                                if len(word_in_context) <= len(variant) + 3:
+                                    valid_instances.append(inst)
+                                
+                            if valid_instances:
+                                logger.info(f"  Found {len(valid_instances)} safe matches for '{variant}' on page {page_num+1}")
+                                for inst in valid_instances:
+                                    if page_num not in page_redactions:
+                                        page_redactions[page_num] = []
+                                    page_redactions[page_num].append((inst, new_text))
+                                    text_replaced += 1
+                                    pg = page_details.setdefault(page_num + 1, {"images": 0, "texts": []})
+                                    pg["texts"].append((old_text, new_text))
+                                break  # Use first variant that matches
             
             # ── Pass 2b: Apply all redactions per page at once ──
             for page_num, redactions in page_redactions.items():
                 page = doc[page_num]
-                for rect, new_text in redactions:
-                    try:
-                        page.add_redact_annot(
-                            rect,
-                            text=new_text,
-                            fontname="helv",
-                            fontsize=0,  # auto-size to fit rect
-                        )
-                    except Exception as e:
-                        logger.error(f"Redaction annotation error on page {page_num+1}: {e}")
+                # First, mark all redactions
+                for rect, _ in redactions:
+                    page.add_redact_annot(rect)
+                
                 try:
+                    # Apply redactions to wipe old text
                     page.apply_redactions()
                 except Exception as e:
                     logger.error(f"Apply redactions error on page {page_num+1}: {e}")
+                    
+                # Now add the new text overlays
+                for rect, new_text in redactions:
+                    try:
+                        # Edge Case #1 Fix: Use FreeText to prevent squishing and show as tracked change
+                        # Widen the rect to allow natural text flow
+                        new_rect = fitz.Rect(rect.x0, rect.y0, rect.x0 + max(rect.width, len(new_text)*5.5), rect.y1 + 12)
+                        annot = page.add_freetext_annot(
+                            new_rect,
+                            new_text,
+                            fontsize=max(8, rect.height * 0.75),
+                            fontname="helv",
+                            text_color=(0.8, 0, 0), # Dark red change
+                            fill_color=(1, 1, 0.9)  # Light yellow bg
+                        )
+                        annot.update()
+                    except Exception as e:
+                        logger.error(f"Text overlay error on page {page_num+1}: {e}")
             
             logger.info(f"Total: {images_replaced} images replaced, {text_replaced} text replacements")
             
@@ -1614,7 +1649,9 @@ def process_document_v3(
     start_time = time.time()
     output_dir = "./data/output"
     os.makedirs(output_dir, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Edge Case #5: Append UUID to prevent multi-user write collisions
+    timestamp = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
     
     # Initialize result
     result = ProcessingResult(success=False)
@@ -1776,49 +1813,52 @@ Without the new screenshot, there's nothing to update.""", "", None, "{}", None,
         text_report = "Text replacement disabled."
         
         if enable_text_replacement:
-            # Use old GUI as reference (it's now required)
-            reference_image = old_gui_path
-            
-            if reference_image and new_paths:
-                logger.debug(f"Comparing text: {reference_image} vs {new_paths}")
-                for new_path in new_paths:
-                    logger.debug(f"Processing text for: {new_path}")
-                    text_diff = text_processor.find_text_differences(reference_image, new_path)
-                    logger.debug(f"Text diff result: {text_diff.get('total_changes', 0)} changes")
-                    changes = text_processor.generate_text_replacements(text_diff)
-                    
-                    # Validate text changes if AI validation enabled
-                    if validator:
-                        for change in changes:
-                            validation = validator.validate_text_change(change)
-                            change.approved = validation["approved"]
-                            change.confidence = validation["confidence"]
-                    
-                    text_changes.extend(changes)
+            if not OCR_SUPPORT:
+                text_report = "⚠️ OCR missing (Tesseract not installed or path invalid). Text replacement skipped entirely."
+            else:
+                # Use old GUI as reference (it's now required)
+                reference_image = old_gui_path
                 
-                # Add custom replacements from user input
-                if custom_replacements and custom_replacements.strip():
-                    logger.debug(f"Parsing custom replacements...")
-                    for line in custom_replacements.strip().split("\n"):
-                        if "->" in line:
-                            parts = line.split("->", 1)
-                            if len(parts) == 2:
-                                old_text = parts[0].strip()
-                                new_text = parts[1].strip()
-                                if old_text and new_text:
-                                    logger.debug(f"Custom replacement: '{old_text}' -> '{new_text}'")
-                                    text_changes.append(TextChange(
-                                        old_text=old_text,
-                                        new_text=new_text,
-                                        page=0,
-                                        confidence=1.0,
-                                        context="custom",
-                                        approved=True  # Always approve custom user replacements
-                                    ))
-                
-                # Generate text report
-                if text_changes:
-                    text_report = f"""
+                if reference_image and new_paths:
+                    logger.debug(f"Comparing text: {reference_image} vs {new_paths}")
+                    for new_path in new_paths:
+                        logger.debug(f"Processing text for: {new_path}")
+                        text_diff = text_processor.find_text_differences(reference_image, new_path)
+                        logger.debug(f"Text diff result: {text_diff.get('total_changes', 0)} changes")
+                        changes = text_processor.generate_text_replacements(text_diff)
+                        
+                        # Validate text changes if AI validation enabled
+                        if validator:
+                            for change in changes:
+                                validation = validator.validate_text_change(change)
+                                change.approved = validation["approved"]
+                                change.confidence = validation["confidence"]
+                        
+                        text_changes.extend(changes)
+                    
+                    # Add custom replacements from user input
+                    if custom_replacements and custom_replacements.strip():
+                        logger.debug(f"Parsing custom replacements...")
+                        for line in custom_replacements.strip().split("\n"):
+                            if "->" in line:
+                                parts = line.split("->", 1)
+                                if len(parts) == 2:
+                                    old_text = parts[0].strip()
+                                    new_text = parts[1].strip()
+                                    if old_text and new_text:
+                                        logger.debug(f"Custom replacement: '{old_text}' -> '{new_text}'")
+                                        text_changes.append(TextChange(
+                                            old_text=old_text,
+                                            new_text=new_text,
+                                            page=0,
+                                            confidence=1.0,
+                                            context="custom",
+                                            approved=True  # Always approve custom user replacements
+                                        ))
+                    
+                    # Generate text report
+                    if text_changes:
+                        text_report = f"""
 📝 TEXT CHANGE ANALYSIS
 ═══════════════════════
 
@@ -1828,11 +1868,11 @@ Approved for Replacement: {sum(1 for c in text_changes if c.approved)}
 DETECTED REPLACEMENTS:
 ──────────────────────
 """
-                    for i, change in enumerate(text_changes[:15], 1):
-                        status = "✅" if change.approved else "⚠️"
-                        text_report += f'{status} "{change.old_text}" → "{change.new_text}" ({change.confidence:.0%})\n'
-                else:
-                    text_report = "No significant text changes detected."
+                        for i, change in enumerate(text_changes[:15], 1):
+                            status = "✅" if change.approved else "⚠️"
+                            text_report += f'{status} "{change.old_text}" → "{change.new_text}" ({change.confidence:.0%})\n'
+                    else:
+                        text_report = "No significant text changes detected."
         
         # Prepare image replacements
         image_replacements = []
@@ -2050,25 +2090,18 @@ def export_all_outputs(pdf_path, html_path, highlight_path):
     return zip_path, f"✅ Exported {len(files)} files to ZIP"
 
 
-def process_batch(screenshots, pdfs):
-    """Process multiple PDFs with screenshots"""
-    if not screenshots or not pdfs:
-        return "❌ Please upload screenshots and PDFs", None
+def process_batch(old_gui, new_gui, pdfs):
+    """Process multiple PDFs with the same GUI update"""
+    if not old_gui or not new_gui or not pdfs:
+        return "❌ Please upload both screenshots and at least one PDF", None
     
     results = []
     output_files = []
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
     
     # Get screenshot paths
-    screenshot_paths = []
-    if isinstance(screenshots, list):
-        for s in screenshots:
-            if s is not None:
-                path = s if isinstance(s, str) else s.name
-                screenshot_paths.append(path)
-    else:
-        path = screenshots if isinstance(screenshots, str) else screenshots.name
-        screenshot_paths.append(path)
+    old_gui_path = old_gui if isinstance(old_gui, str) else old_gui.name
+    new_gui_path = new_gui if isinstance(new_gui, str) else new_gui.name
     
     # Process each PDF
     pdf_list = pdfs if isinstance(pdfs, list) else [pdfs]
@@ -2083,14 +2116,10 @@ def process_batch(screenshots, pdfs):
         results.append(f"📄 Processing: {pdf_name}...")
         
         try:
-            # Use first screenshot as old_gui reference, rest as new_gui for batch
-            old_gui_path = screenshot_paths[0] if screenshot_paths else None
-            new_gui_path = screenshot_paths[1] if len(screenshot_paths) > 1 else None
-            
             output = process_document_v3(
                 old_gui_path,  # old_gui (required)
                 pdf_path,      # old_pdf (required)
-                new_gui_path   # new_gui (optional)
+                new_gui_path   # new_gui (required)
             )
             
             if output[0]:
@@ -2478,19 +2507,24 @@ def build_interface():
                     outputs=[rollback_output, rollback_status]
                 )
             
-            # ==================== TAB: BATCH ====================
             with gr.Tab("Batch Processing"):
                 gr.Markdown("""
                 ### Process Multiple Documents
-                Update several PDF documents at once.
+                Apply the **same GUI update** across multiple PDF documents at once.
                 """)
                 
-                batch_screenshots = gr.File(
-                    label="Screenshots (Upload Multiple)",
-                    file_types=["image"],
-                    file_count="multiple",
-                    type="filepath"
-                )
+                with gr.Row():
+                    batch_old_gui = gr.File(
+                        label="Current Screenshot (Required)",
+                        file_types=["image"],
+                        type="filepath"
+                    )
+                    
+                    batch_new_gui = gr.File(
+                        label="New Screenshot (Required)",
+                        file_types=["image"],
+                        type="filepath"
+                    )
                 
                 batch_pdfs = gr.File(
                     label="PDF Documents (Upload Multiple)",
@@ -2511,7 +2545,7 @@ def build_interface():
                 
                 batch_btn.click(
                     fn=process_batch,
-                    inputs=[batch_screenshots, batch_pdfs],
+                    inputs=[batch_old_gui, batch_new_gui, batch_pdfs],
                     outputs=[batch_progress, batch_output]
                 )
             
