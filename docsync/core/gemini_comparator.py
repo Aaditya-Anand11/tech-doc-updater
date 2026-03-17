@@ -131,5 +131,27 @@ class GeminiComparator:
             logger.warning(f"Gemini returned non-JSON: {e}")
             return {"score": 0.0, "explanation": "Could not parse AI response", "success": False}
         except Exception as e:
+            err_str = str(e)
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                logger.warning("Gemini API rate limit exceeded — falling back to local algorithms")
+                return {"score": 0.0, "explanation": "Rate limit exceeded, using local algorithms", "success": False}
             logger.warning(f"Gemini comparison error: {e}")
-            return {"score": 0.0, "explanation": str(e), "success": False}
+            return {"score": 0.0, "explanation": err_str, "success": False}
+
+    def validate_key(self) -> Dict:
+        """Test the API key with a minimal request."""
+        if not self.is_available:
+            return {"valid": False, "error": "Client not initialized"}
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents="Reply with just: OK",
+            )
+            return {"valid": True, "response": response.text.strip()}
+        except Exception as e:
+            err_str = str(e)
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                return {"valid": True, "error": "Rate limit exceeded (key is valid but quota used up)"}
+            if "401" in err_str or "403" in err_str or "INVALID" in err_str.upper():
+                return {"valid": False, "error": "Invalid API key"}
+            return {"valid": False, "error": err_str}

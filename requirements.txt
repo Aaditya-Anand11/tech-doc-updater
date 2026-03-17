@@ -15,5 +15,10 @@ pdf2image
 # ─── New Dependencies (GenAI validation enabled but optional) ──
 google-genai
 
-# ─── Web UI ──────────────────────────────
+# ─── Web Framework (Dashboard + REST API) ──
+fastapi
+uvicorn
+python-multipart
+
+# ─── Legacy Web UI ──────────────────────────────
 gradio

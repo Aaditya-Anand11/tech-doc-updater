@@ -191,6 +191,12 @@ class DocSyncConfig:
             "gemini_api_key": self.gemini_api_key,
             "gemini_weight": str(self.gemini_weight),
         }
+        parser["Ollama"] = {
+            "base_url": self.ollama_base_url,
+            "model": self.ollama_model,
+            "vision_model": self.ollama_vision_model,
+            "enabled": str(self.ollama_enabled).lower(),
+        }
 
         with open(config_path, "w") as f:
             parser.write(f)

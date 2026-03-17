@@ -1377,6 +1377,38 @@ body {
     display: block;
 }
 
+.editor-only {
+    display: none;
+}
+
+.editor-only.visible {
+    display: flex;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+.role-select {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
 /* ─── Optional Upload Zone ────────────────────────── */
 .upload-zone.optional {
     border-style: dashed;

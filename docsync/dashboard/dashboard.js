@@ -36,10 +36,32 @@ function updateUserUI(user) {
     document.getElementById('currentRole').textContent = user.role;
     document.getElementById('userAvatar').textContent = user.username.charAt(0).toUpperCase();
 
-    // Show/hide admin-only sections
+    const isAdmin = user.role === 'admin';
+    const isEditor = user.role === 'editor';
+    const canEdit = isAdmin || isEditor;
+
+    // Show/hide admin-only sections (user management, plugin toggles)
     document.querySelectorAll('.admin-only').forEach(el => {
-        el.classList.toggle('visible', user.role === 'admin');
+        el.classList.toggle('visible', isAdmin);
     });
+
+    // Show/hide editor-only sections (process document, rollback)
+    document.querySelectorAll('.editor-only').forEach(el => {
+        el.classList.toggle('visible', canEdit);
+    });
+
+    // Disable process button for viewers
+    const processBtn = document.getElementById('processBtn');
+    if (processBtn && !canEdit) {
+        processBtn.disabled = true;
+        processBtn.title = 'Editor or Admin access required';
+    }
+
+    // Hide settings tab for non-admins
+    const settingsNav = document.querySelector('[data-tab="settings"]');
+    if (settingsNav) {
+        settingsNav.style.display = isAdmin ? '' : 'none';
+    }
 }
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -259,6 +281,12 @@ function checkProcessReady() {
 }
 
 document.getElementById('processBtn').addEventListener('click', async () => {
+    // RBAC: only editors and admins can process
+    if (currentUser && currentUser.role === 'viewer') {
+        alert('Editor or Admin access required to process documents');
+        return;
+    }
+
     const btn = document.getElementById('processBtn');
     const progress = document.getElementById('progressSection');
     const progressBar = document.getElementById('progressBar');
@@ -882,6 +910,10 @@ async function loadHistory() {
 }
 
 async function rollbackVersion(versionId) {
+    if (currentUser && currentUser.role === 'viewer') {
+        alert('Editor or Admin access required to rollback');
+        return;
+    }
     if (!confirm(`Rollback to version ${versionId}?`)) return;
 
     try {
@@ -1035,14 +1067,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 body: JSON.stringify({ api_key: key }),
             });
             const data = await res.json();
-            if (data.gemini_available) {
+            if (data.gemini_available && data.key_valid) {
                 statusEl.textContent = '✅ Key saved — Gemini AI is now active!';
                 statusEl.style.color = '#22c55e';
                 document.getElementById('healthGemini').textContent = '✅';
                 document.getElementById('geminiKeyInput').value = '';
-            } else {
-                statusEl.textContent = '⚠️ Key saved but Gemini could not connect — check your key';
+            } else if (data.gemini_available && data.validation_message) {
+                // Key is valid but rate-limited
+                statusEl.textContent = '⚠️ Key saved — ' + data.validation_message;
                 statusEl.style.color = '#f59e0b';
+                document.getElementById('healthGemini').textContent = '⚠️';
+                document.getElementById('geminiKeyInput').value = '';
+            } else {
+                statusEl.textContent = '❌ Invalid API key — check your key and try again';
+                statusEl.style.color = '#ef4444';
             }
         } catch (e) {
             statusEl.textContent = '❌ Error saving key';
@@ -1136,11 +1174,45 @@ async function loadUsers() {
         list.innerHTML = (data.users || []).map(u => `
             <div class="user-row">
                 <span class="user-name-col">${u.username}</span>
-                <span class="role-badge ${u.role}">${u.role}</span>
+                <select class="role-select" data-username="${u.username}" ${u.username === 'admin' ? 'disabled' : ''}
+                    onchange="changeUserRole('${u.username}', this.value)">
+                    <option value="viewer" ${u.role === 'viewer' ? 'selected' : ''}>Viewer</option>
+                    <option value="editor" ${u.role === 'editor' ? 'selected' : ''}>Editor</option>
+                    <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                </select>
                 <span class="user-status">${u.active ? '🟢 Active' : '🔴 Inactive'}</span>
+                ${u.username !== 'admin' ? `<button class="btn-sm btn-danger" onclick="deactivateUser('${u.username}')" title="Deactivate">✕</button>` : ''}
             </div>
         `).join('');
     } catch { }
+}
+
+async function changeUserRole(username, newRole) {
+    try {
+        const res = await authFetch(`${API_BASE}/api/auth/users/${username}/role`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ role: newRole }),
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            alert(err.detail || 'Failed to update role');
+            loadUsers();
+        }
+    } catch { alert('API error'); loadUsers(); }
+}
+
+async function deactivateUser(username) {
+    if (!confirm(`Deactivate user "${username}"? They will no longer be able to log in.`)) return;
+    try {
+        const res = await authFetch(`${API_BASE}/api/auth/users/${username}`, { method: 'DELETE' });
+        if (res.ok) {
+            loadUsers();
+        } else {
+            const err = await res.json();
+            alert(err.detail || 'Failed to deactivate user');
+        }
+    } catch { alert('API error'); }
 }
 
 document.getElementById('addUserBtn')?.addEventListener('click', async () => {

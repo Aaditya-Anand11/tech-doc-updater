@@ -144,6 +144,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             raise HTTPException(status_code=403, detail="Admin access required")
         return user
 
+    def require_editor(request: Request) -> Dict:
+        """Require editor or admin role"""
+        user = require_user(request)
+        if user.get("role") not in ("editor", "admin"):
+            raise HTTPException(status_code=403, detail="Editor access required")
+        return user
+
     # ── Endpoints ────────────────────────────────────────
 
     @app.get("/health")
@@ -180,6 +187,31 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             raise HTTPException(status_code=400, detail="User already exists or invalid role")
         return {"success": True}
 
+    @app.delete("/api/auth/users/{username}")
+    async def deactivate_user(username: str, request: Request):
+        """Deactivate a user account (admin only)"""
+        require_admin(request)
+        if username == "admin":
+            raise HTTPException(status_code=400, detail="Cannot deactivate the admin account")
+        ok = rbac.deactivate_user(username)
+        if not ok:
+            raise HTTPException(status_code=404, detail="User not found")
+        rbac._log_audit(require_user(request)["username"], "deactivate_user", f"Deactivated {username}")
+        return {"success": True}
+
+    class UpdateRoleRequest(BaseModel):
+        role: str
+
+    @app.put("/api/auth/users/{username}/role")
+    async def update_user_role(username: str, body: UpdateRoleRequest, request: Request):
+        """Update a user's role (admin only)"""
+        require_admin(request)
+        ok = rbac.update_role(username, body.role)
+        if not ok:
+            raise HTTPException(status_code=400, detail="Invalid role or user not found")
+        rbac._log_audit(require_user(request)["username"], "update_role", f"{username} -> {body.role}")
+        return {"success": True}
+
     @app.post("/api/auth/logout")
     async def logout(request: Request):
         auth = request.headers.get("Authorization", "")
@@ -204,10 +236,12 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     @app.post("/api/process")
     async def process_document(
+        request: Request,
         pdf_document: UploadFile = File(...),
         new_screenshots: List[UploadFile] = File(...),
         old_screenshot: UploadFile = File(None),
     ):
+        require_editor(request)
         """
         Phase 1: Upload, extract, match — return match preview (don't apply yet).
         The user reviews matches and then calls /api/process/apply.
@@ -398,11 +432,12 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         text_decisions: List[Dict] = []  # [{"index": 0, "approved": true}, ...]
 
     @app.post("/api/process/apply")
-    async def apply_decisions(body: ApplyRequest):
+    async def apply_decisions(body: ApplyRequest, request: Request):
         """
         Phase 2: Apply user-approved replacements to the PDF.
         Accepts decisions for images and text changes.
         """
+        require_editor(request)
         session = pending_sessions.pop(body.session_id, None)
         if not session:
             raise HTTPException(status_code=404, detail="Session expired or not found")
@@ -543,11 +578,13 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
 
     @app.get("/api/history")
-    async def get_history():
+    async def get_history(request: Request):
+        require_user(request)
         return {"versions": history.get_history()}
 
     @app.post("/api/rollback/{version_id}")
-    async def rollback(version_id: int):
+    async def rollback(version_id: int, request: Request):
+        require_editor(request)
         result = history.rollback(version_id)
         if result:
             return {"success": True, "restored": result}
@@ -558,7 +595,8 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         api_key: str
 
     @app.post("/api/settings/gemini")
-    async def save_gemini_key(body: GeminiSettingsRequest):
+    async def save_gemini_key(body: GeminiSettingsRequest, request: Request):
+        require_admin(request)
         nonlocal comparator
         config.gemini_api_key = body.api_key
         # Auto-enable Gemini when a key is provided
@@ -578,14 +616,23 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
             "weight": 0.25,
         }
         comparator = ImageComparator(gemini_config=g, ollama_config=o)
+
+        # Validate the key with a test request
+        validation = {"valid": False, "error": "Gemini not initialized"}
+        if comparator.ai_comparator and hasattr(comparator.ai_comparator, 'validate_key'):
+            validation = comparator.ai_comparator.validate_key()
+
         return {
             "success": True,
             "gemini_available": comparator.ai_name == "Gemini",
             "ai_backend": comparator.ai_name or "none",
+            "key_valid": validation.get("valid", False),
+            "validation_message": validation.get("error", ""),
         }
 
     @app.get("/api/settings/gemini")
-    async def get_gemini_status():
+    async def get_gemini_status(request: Request):
+        require_user(request)
         return {
             "enabled": config.gemini_enabled,
             "has_key": bool(config.gemini_api_key),
@@ -596,12 +643,14 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
 
     @app.post("/api/compare")
     async def compare_images(
+        request: Request,
         images: List[UploadFile] = File(...),
     ):
         """
         Batch comparison: upload multiple images and automatically
         compare every pair. Returns pairwise similarity scores.
         """
+        require_user(request)  # All roles can compare
         if len(images) < 2:
             raise HTTPException(status_code=400, detail="Upload at least 2 images")
 
@@ -655,8 +704,9 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         return parser.get_pdf_info(real_path)
 
     @app.get("/api/download/pdf")
-    async def download_pdf():
+    async def download_pdf(request: Request):
         """Download the last generated PDF"""
+        require_user(request)
         pdf_path = last_output.get("pdf")
         if not pdf_path or not os.path.exists(pdf_path):
             raise HTTPException(status_code=404, detail="No PDF available. Process a document first.")
@@ -667,8 +717,9 @@ def create_app(config: DocSyncConfig = None) -> "FastAPI":
         )
 
     @app.get("/api/download/report")
-    async def download_report():
+    async def download_report(request: Request):
         """Download the last generated summary report"""
+        require_user(request)
         report_path = last_output.get("report")
         if not report_path or not os.path.exists(report_path):
             raise HTTPException(status_code=404, detail="No report available. Process a document first.")
